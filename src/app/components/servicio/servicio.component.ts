@@ -1,17 +1,19 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ServicioService } from 'src/app/services/servicio.service';
+
 
 @Component({
   selector: 'app-servicio',
-  standalone: true,  // <-- Importante para componentes independientes
+  standalone: true,
   templateUrl: './servicio.component.html',
   styleUrls: ['./servicio.component.css'],
-  imports: [ReactiveFormsModule] // <-- ¡Importa ReactiveFormsModule aquí!
+  imports: [ReactiveFormsModule]
 })
 export class ServicioComponent {
   servicioForm: FormGroup;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private servicioService: ServicioService) {
     this.servicioForm = this.fb.group({
       fechaServicio: ['', Validators.required],
       descripcion: ['', Validators.required],
@@ -25,7 +27,10 @@ export class ServicioComponent {
 
   onSubmit() {
     if (this.servicioForm.valid) {
-      console.log('Servicio registrado:', this.servicioForm.value);
+      this.servicioService.createServicio(this.servicioForm.value).subscribe(
+        response => console.log('Servicio registrado:', response),
+        error => console.error('Error al registrar el servicio:', error)
+      );
     }
   }
 }
