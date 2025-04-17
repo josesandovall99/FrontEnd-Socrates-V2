@@ -31,7 +31,7 @@ import { AuthService } from 'src/app/services/auth.service';
             
             <form class="login-form"(ngSubmit)="login()">
                 <div class="form-group">
-                    <input type="text" id="username" placeholder="Nombre de Usuario" [(ngModel)]="numeroDocumento" name="numeroDocumento" required>
+                    <input type="text" id="username" placeholder="Nombre de Usuario" [(ngModel)]="codigoEmpleado" name="codigoEmpleado" required>
                 </div>
                 <div class="form-group">
                     <input type="password" id="password" placeholder="Contraseña" [(ngModel)]="password" name="password" required>
@@ -251,12 +251,12 @@ body {
     `]
 })
 export class LoginComponent {
-    numeroDocumento: string = '123456789';
+    codigoEmpleado: string = '123456789';
     password: string = '123456789';
     message: string = '';
 
     constructor(private authService: AuthService, private router: Router) { }
-    
+    /*
       login() {//LOGIN CON 123
         // Verifica si el username y el password son "123"
         if (this.numeroDocumento === '123' && this.password === '123') {
@@ -283,12 +283,12 @@ export class LoginComponent {
           this.message = 'Credenciales ERRONEAS';
         }
       }
-  
+  */
 
-      /*
+      
     //LOGIN CON TIPOS DE CARGO
     login() {
-        this.authService.login(this.numeroDocumento, this.password).subscribe(
+        this.authService.login(this.codigoEmpleado, this.password).subscribe(
             response => {
                 console.log(response.message)
                 console.log(response.userType)
@@ -321,6 +321,6 @@ export class LoginComponent {
 
     togglePassword(): void {
         this.isPasswordVisible = !this.isPasswordVisible;
-    }*/
+    }
 
 }

@@ -12,10 +12,10 @@ export class AuthService {
   constructor(private http: HttpClient) {}
 
   // Método para realizar el login y guardar usuario en localStorage
-  login(numeroDocumento: string, password: string): Observable<any> {
+  login(codigoEmpleado: string, password: string): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' });
     const body = new URLSearchParams();
-    body.set('numeroDocumento', numeroDocumento);
+    body.set('codigoEmpleado', codigoEmpleado);
     body.set('password', password);
 
     return this.http.post(this.apiUrl, body.toString(), { headers }).pipe(
