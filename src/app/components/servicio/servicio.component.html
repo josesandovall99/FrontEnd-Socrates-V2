@@ -1,27 +1,33 @@
-<form [formGroup]="servicioForm" (ngSubmit)="onSubmit()">
-    <label for="fechaServicio">Fecha del Servicio:</label>
-    <input type="date" id="fechaServicio" formControlName="fechaServicio" required>
+<form [formGroup]="servicioForm" (ngSubmit)="onSubmit()" class="formulario">
+    <div class="columna">
+      <label for="fechaServicio">Fecha del Servicio:</label>
+      <input type="date" id="fechaServicio" formControlName="fechaServicio" required>
   
-    <label for="descripcion">Descripción:</label>
-    <textarea id="descripcion" formControlName="descripcion" required></textarea>
+      <label for="descripcion">Descripción:</label>
+      <textarea id="descripcion" formControlName="descripcion" required></textarea>
+    </div>
   
-    <label for="horaServicio">Hora del Servicio:</label>
-    <input type="time" id="horaServicio" formControlName="horaServicio" required>
+    <div class="columna">
+      <label for="horaServicio">Hora del Servicio:</label>
+      <input type="time" id="horaServicio" formControlName="horaServicio" required>
   
-    <label for="estado">Estado:</label>
-    <input type="text" id="estado" formControlName="estado" required>
+      <label for="estado">Estado:</label>
+      <input type="text" id="estado" formControlName="estado" required>
+    </div>
   
-    <label for="tipoPlan">Tipo de Plan:</label>
-    <select id="tipoPlan" formControlName="tipoPlan" required>
-      <option value="Plan A">Plan A</option>
-      <option value="Plan B">Plan B</option>
-    </select>
+    <div class="columna">
+      <label for="tipoPlan">Tipo de Plan:</label>
+      <select id="tipoPlan" formControlName="tipoPlan" required>
+        <option value="Plan A">Plan A</option>
+        <option value="Plan B">Plan B</option>
+      </select>
   
-    <label for="tecnico">Técnico:</label>
-    <input type="text" id="tecnico" formControlName="tecnico">
+      <label for="tecnico">Técnico:</label>
+      <input type="text" id="tecnico" formControlName="tecnico">
   
-    <label for="fechaRegistro">Fecha de Registro:</label>
-    <input type="date" id="fechaRegistro" formControlName="fechaRegistro" required>
+      <label for="fechaRegistro">Fecha de Registro:</label>
+      <input type="date" id="fechaRegistro" formControlName="fechaRegistro" required>
+    </div>
   
     <button type="submit">Registrar Servicio</button>
   </form>
