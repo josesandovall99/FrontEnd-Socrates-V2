@@ -1,1 +1,23 @@
-<p>tipo-plan works!</p>
+<form [formGroup]="tipoPlanForm" (ngSubmit)="onSubmit()" class="formulario">
+    <div class="columna">
+      <label for="nombre">Nombre:</label>
+      <input type="text" id="nombre" formControlName="nombre" required>
+  
+      <label for="descripcion">Descripción:</label>
+      <textarea id="descripcion" formControlName="descripcion" required></textarea>
+    </div>
+  
+    <div class="columna">
+      <label for="precio">Precio:</label>
+      <input type="number" id="precio" formControlName="precio" required min="0">
+  
+      <label for="estado">Estado:</label>
+      <select id="estado" formControlName="estado">
+        <option [value]="true">Activo</option>
+        <option [value]="false">Inactivo</option>
+      </select>
+    </div>
+  
+    <button type="submit">Registrar Tipo de Plan</button>
+  </form>
+  
