@@ -2,11 +2,13 @@ import { Routes } from '@angular/router';
 import { ServicioComponent } from './components/servicio/servicio.component';
 import { LoginComponent } from './components/login/login.component';
 import { TipoPlanComponent } from './components/tipo-plan/tipo-plan.component';
+import { ClienteComponent } from './components/cliente/cliente.component';
 
 
 export const routes: Routes = [
   { path: 'solicitudservicio', component: ServicioComponent },
   { path: 'tipo-plan', component: TipoPlanComponent },
+  { path: 'clientes', component: ClienteComponent},
 
 
   // Ruta por defecto redirige al formulario de servicio
