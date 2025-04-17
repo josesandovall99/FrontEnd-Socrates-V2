@@ -1,0 +1,38 @@
+.formulario {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Divide en 3 columnas */
+    gap: 20px; /* Espacio entre columnas */
+    max-width: 1000px; /* Ancho máximo */
+    margin: auto;
+  }
+  
+  .columna {
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Espacio entre inputs */
+  }
+  
+  label {
+    font-weight: bold;
+  }
+  
+  input, textarea, select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  button {
+    grid-column: span 3; /* Botón ocupa toda la anchura */
+    background-color: #007bff;
+    color: white;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #0056b3;
+  }
+  
