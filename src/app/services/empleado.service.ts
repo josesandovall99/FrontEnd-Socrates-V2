@@ -35,4 +35,8 @@ export class EmpleadoService {
   verificarCedula(cedula: string): Observable<boolean> {
     return this.http.get<boolean>(`${this.baseUrl}/verificar-cedula/${cedula}`);
   }
+
+  getTecnicos(): Observable<Empleado[]> {
+    return this.http.get<Empleado[]>(`http://localhost:8080/api/v1/empleados?cargo=Tecnico`);
+  }
 }

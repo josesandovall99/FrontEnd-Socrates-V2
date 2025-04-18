@@ -10,33 +10,33 @@
           <small *ngIf="servicioForm.controls['fechaServicio'].hasError('fechaInvalida')">
             ⚠ La fecha del servicio no puede ser anterior a la fecha actual.
           </small>
-  
+
           <label>Descripción:</label>
           <textarea formControlName="descripcion" required></textarea>
-  
+
           <label>Hora del Servicio:</label>
           <input type="time" formControlName="horaServicio" required>
         </div>
-  
+
         <div class="columna">
           <label>Estado:</label>
           <input type="text" formControlName="estado" [disabled]="true">
-  
+
           <label>Tipo de Plan:</label>
           <select formControlName="tipoPlan">
             <option *ngFor="let plan of listaTipoPlanes" [value]="plan.id">{{ plan.nombre }}</option>
           </select>
-  
-          <!-- <label>Técnico:</label> -->
-          <!-- <select formControlName="tecnico"> -->
-          <!--   <option value="">Seleccionar técnico</option> -->
-          <!--   <option *ngFor="let tecnico of listaTecnicos" [value]="tecnico.id">{{ tecnico.nombre }}</option> -->
-          <!-- </select> -->
-  
+
+          <label>Técnico:</label>
+          <select formControlName="tecnico">
+            <option value="">Seleccionar técnico</option>
+            <option *ngFor="let tecnico of listaTecnicos" [value]="tecnico.id">{{ tecnico.primerNombre }}</option>
+          </select>
+
           <label>Fecha de Registro:</label>
           <input type="date" formControlName="fechaRegistro" [disabled]="true">
         </div>
-  
+
         <button type="submit" *ngIf="!servicioSeleccionado">Registrar Servicio</button>
         <button type="button" *ngIf="servicioSeleccionado" (click)="guardarEdicion()">Guardar cambios</button>
       </form>
