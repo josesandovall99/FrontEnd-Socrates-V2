@@ -1,38 +1,78 @@
 .formulario {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr); /* Divide en 3 columnas */
-    gap: 20px; /* Espacio entre columnas */
-    max-width: 1000px; /* Ancho máximo */
-    margin: auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 columnas */
+  gap: 30px; /* Espacio entre columnas */
+  max-width: 1200px; /* Ancho máximo */
+  margin: 50px auto 0 auto; /* Espacio superior añadido */
+  padding: 30px;
+  background-color: #f8f8f8; /* Fondo suave */
+  border-radius: 10px; /* Bordes más suaves */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1); /* Sombra ligera pero moderna */
+}
+
+.columna {
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* Espacio entre inputs */
+}
+
+label {
+  font-weight: 600; /* Leve un aumento en el grosor */
+  font-size: 15px;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+input, textarea, select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px; /* Bordes redondeados */
+  font-size: 15px;
+  background-color: #fff;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  outline: none;
+}
+
+input:focus, textarea:focus, select:focus {
+  border-color: #3498db; /* Cambio a azul suave al enfocar */
+  box-shadow: 0 0 8px rgba(52, 152, 219, 0.4); /* Efecto de sombra al hacer foco */
+}
+
+textarea {
+  height: 130px; /* Ajustamos la altura del área de texto */
+  resize: vertical; /* Permite el ajuste de altura */
+}
+
+button {
+  grid-column: span 4; /* El botón ocupa toda la anchura */
+  background-color: #3498db; /* Azul elegante */
+  color: white;
+  padding: 14px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 4px 8px rgba(52, 152, 219, 0.2); /* Sombra suave */
+}
+
+button:hover {
+  background-color: #2980b9; /* Cambio al hacer hover */
+}
+
+button:active {
+  background-color: #21618c; /* Color al hacer clic */
+}
+
+@media (max-width: 800px) {
+  .formulario {
+      grid-template-columns: 1fr; /* En pantallas pequeñas, una sola columna */
+      gap: 15px;
   }
-  
-  .columna {
-    display: flex;
-    flex-direction: column;
-    gap: 10px; /* Espacio entre inputs */
-  }
-  
-  label {
-    font-weight: bold;
-  }
-  
-  input, textarea, select {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-  }
-  
+
   button {
-    grid-column: span 3; /* Botón ocupa toda la anchura */
-    background-color: #007bff;
-    color: white;
-    padding: 10px;
-    border: none;
-    cursor: pointer;
+      padding: 12px;
   }
-  
-  button:hover {
-    background-color: #0056b3;
-  }
-  
+}

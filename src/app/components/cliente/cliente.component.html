@@ -1,73 +1,112 @@
+<h2>Registro de Clientes</h2>
+
 <form [formGroup]="servicioForm" (ngSubmit)="onSubmit()" class="formulario">
-    <div class="columna">
-      <label for="fechaServicio">Fecha del Servicio:</label>
-      <input type="date" id="fechaServicio" formControlName="fechaServicio" required>
-  
-      <label for="descripcion">Descripción:</label>
-      <textarea id="descripcion" formControlName="descripcion" required></textarea>
-  
-      <label for="primerNombre">Primer Nombre:</label>
-      <input type="text" id="primerNombre" formControlName="primerNombre" required>
-  
-      <label for="segundoNombre">Segundo Nombre:</label>
-      <input type="text" id="segundoNombre" formControlName="segundoNombre">
-  
-      <label for="primerApellido">Primer Apellido:</label>
-      <input type="text" id="primerApellido" formControlName="primerApellido" required>
-  
-      <label for="segundoApellido">Segundo Apellido:</label>
-      <input type="text" id="segundoApellido" formControlName="segundoApellido">
+
+  <!-- Nombres y Apellidos -->
+  <div class="columna">
+    <label for="primerNombre">Primer Nombre:</label>
+    <input type="text" id="primerNombre" formControlName="primerNombre"
+      [ngClass]="{'input-error': servicioForm.get('primerNombre')?.invalid && servicioForm.get('primerNombre')?.touched}"
+      required />
+    <div *ngIf="servicioForm.get('primerNombre')?.invalid && servicioForm.get('primerNombre')?.touched"
+      class="error-message">
+      El primer nombre es obligatorio.
     </div>
-  
-    <div class="columna">
-      <label for="horaServicio">Hora del Servicio:</label>
-      <input type="time" id="horaServicio" formControlName="horaServicio" required>
-  
-      <label for="estado">Estado:</label>
-      <input type="text" id="estado" formControlName="estado" required>
-  
-      <label for="tipoIdentificacion">Tipo de Identificación:</label>
-      <input type="text" id="tipoIdentificacion" formControlName="tipoIdentificacion" required>
-  
-      <label for="numeroIdentificacion">Número de Identificación:</label>
-      <input type="text" id="numeroIdentificacion" formControlName="numeroIdentificacion" required>
-  
-      <label for="sexo">Sexo:</label>
-      <select id="sexo" formControlName="sexo" required>
-        <option value="Masculino">Masculino</option>
-        <option value="Femenino">Femenino</option>
-      </select>
-  
-      <label for="correoElectronico">Correo Electrónico:</label>
-      <input type="email" id="correoElectronico" formControlName="correoElectronico" required>
+
+    <label for="segundoNombre">Segundo Nombre:</label>
+    <input type="text" id="segundoNombre" formControlName="segundoNombre">
+
+    <label for="primerApellido">Primer Apellido:</label>
+    <input type="text" id="primerApellido" formControlName="primerApellido"
+      [ngClass]="{'input-error': servicioForm.get('primerApellido')?.invalid && servicioForm.get('primerApellido')?.touched}"
+      required />
+    <div *ngIf="servicioForm.get('primerApellido')?.invalid && servicioForm.get('primerApellido')?.touched"
+      class="error-message">
+      El primer apellido es obligatorio.
     </div>
-  
-    <div class="columna">
-      <label for="telefono">Teléfono:</label>
-      <input type="tel" id="telefono" formControlName="telefono" required>
-  
-      <label for="fechaNacimiento">Fecha de Nacimiento:</label>
-      <input type="date" id="fechaNacimiento" formControlName="fechaNacimiento" required>
-  
-      <label for="lugarResidencia">Lugar de Residencia:</label>
-      <input type="text" id="lugarResidencia" formControlName="lugarResidencia" required>
-  
-      <label for="direccionCasa">Dirección de Casa:</label>
-      <input type="text" id="direccionCasa" formControlName="direccionCasa" required>
-  
-      <label for="barrio">Barrio:</label>
-      <input type="text" id="barrio" formControlName="barrio" required>
-  
-      <label for="tipoCliente">Tipo de Cliente:</label>
-      <select id="tipoCliente" formControlName="tipoCliente" required>
-        <option value="Regular">Regular</option>
-        <option value="VIP">VIP</option>
-      </select>
-  
-      <label for="fechaRegistro">Fecha de Registro:</label>
-      <input type="date" id="fechaRegistro" formControlName="fechaRegistro" required>
+
+    <label for="segundoApellido">Segundo Apellido:</label>
+    <input type="text" id="segundoApellido" formControlName="segundoApellido">
+  </div>
+
+  <!-- Identificación, contacto y sexo -->
+  <div class="columna">
+    <label for="tipoIdentificacion">Tipo de Identificación:</label>
+    <input type="text" id="tipoIdentificacion" formControlName="tipoIdentificacion"
+      [ngClass]="{'input-error': servicioForm.get('tipoIdentificacion')?.invalid && servicioForm.get('tipoIdentificacion')?.touched}"
+      required />
+    <div *ngIf="servicioForm.get('tipoIdentificacion')?.invalid && servicioForm.get('tipoIdentificacion')?.touched"
+      class="error-message">
+      El tipo de identificación es obligatorio.
     </div>
-  
-    <button type="submit">Registrar Cliente</button>
-  </form>
-  
+
+    <label for="numeroIdentificacion">Número de Identificación:</label>
+    <input type="text" id="numeroIdentificacion" formControlName="numeroIdentificacion"
+      [ngClass]="{'input-error': servicioForm.get('numeroIdentificacion')?.invalid && servicioForm.get('numeroIdentificacion')?.touched}"
+      required />
+    <div *ngIf="servicioForm.get('numeroIdentificacion')?.invalid && servicioForm.get('numeroIdentificacion')?.touched"
+      class="error-message">
+      El número de identificación es obligatorio.
+    </div>
+
+    <label for="correoElectronico">Correo Electrónico:</label>
+    <input type="email" id="correoElectronico" formControlName="correoElectronico"
+      [ngClass]="{'input-error': servicioForm.get('correoElectronico')?.invalid && servicioForm.get('correoElectronico')?.touched}"
+      required [pattern]="'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'" />
+    <div *ngIf="servicioForm.get('correoElectronico')?.invalid && servicioForm.get('correoElectronico')?.touched"
+      class="error-message">
+      El correo electrónico debe ser válido.
+    </div>
+
+
+
+    <label for="telefono">Teléfono:</label>
+    <input type="tel" id="telefono" formControlName="telefono"
+      [ngClass]="{'input-error': servicioForm.get('telefono')?.invalid && servicioForm.get('telefono')?.touched}"
+      required />
+    <div *ngIf="servicioForm.get('telefono')?.invalid && servicioForm.get('telefono')?.touched" class="error-message">
+      El teléfono es obligatorio.
+    </div>
+  </div>
+
+  <!-- Ubicación y descripción -->
+  <div class="columna">
+    <label for="lugarResidencia">Lugar de Residencia:</label>
+    <input type="text" id="lugarResidencia" formControlName="lugarResidencia" required>
+
+    <label for="direccionCasa">Dirección de Casa:</label>
+    <input type="text" id="direccionCasa" formControlName="direccionCasa" required>
+
+    <label for="barrio">Barrio:</label>
+    <input type="text" id="barrio" formControlName="barrio" required>
+
+    <label for="sexo">Sexo:</label>
+    <select id="sexo" formControlName="sexo" required>
+      <option value="Masculino">Masculino</option>
+      <option value="Femenino">Femenino</option>
+    </select>
+  </div>
+
+  <!-- Tipo de cliente, estado y fecha -->
+  <div class="columna">
+    <label for="tipoCliente">Tipo de Cliente:</label>
+    <select id="tipoCliente" formControlName="tipoCliente" required>
+      <option value="Regular">Regular</option>
+      <option value="VIP">VIP</option>
+    </select>
+
+    <!-- Estado (no editable) -->
+    <label for="estado">Estado:</label>
+    <input type="text" id="estado" value="Activo" disabled>
+
+    <!-- Fecha de registro (no editable) -->
+    <label for="fechaRegistro">Fecha de Registro:</label>
+    <input id="fechaRegistro" type="datetime" formControlName="fechaRegistro" readonly />
+
+    <label for="descripcion">Descripción:</label>
+    <textarea id="descripcion" formControlName="descripcion" rows="5" style="width: 100%;"
+      placeholder="Escriba aquí..."></textarea>
+  </div>
+
+  <button type="submit">{{ isEditMode ? 'Actualizar Cliente' : 'Registrar Cliente' }}</button>
+</form>
