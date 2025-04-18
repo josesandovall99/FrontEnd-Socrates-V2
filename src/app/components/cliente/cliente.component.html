@@ -6,26 +6,26 @@
     <label for="primerNombre">Primer Nombre:</label>
     <input type="text" id="primerNombre" formControlName="primerNombre"
       [ngClass]="{'input-error': servicioForm.get('primerNombre')?.invalid && servicioForm.get('primerNombre')?.touched}"
-      required />
+      required [disabled]="isEditMode" />
     <div *ngIf="servicioForm.get('primerNombre')?.invalid && servicioForm.get('primerNombre')?.touched"
       class="error-message">
       El primer nombre es obligatorio.
     </div>
 
     <label for="segundoNombre">Segundo Nombre:</label>
-    <input type="text" id="segundoNombre" formControlName="segundoNombre">
+    <input type="text" id="segundoNombre" formControlName="segundoNombre" [disabled]="isEditMode">
 
     <label for="primerApellido">Primer Apellido:</label>
     <input type="text" id="primerApellido" formControlName="primerApellido"
       [ngClass]="{'input-error': servicioForm.get('primerApellido')?.invalid && servicioForm.get('primerApellido')?.touched}"
-      required />
+      required [disabled]="isEditMode" />
     <div *ngIf="servicioForm.get('primerApellido')?.invalid && servicioForm.get('primerApellido')?.touched"
       class="error-message">
       El primer apellido es obligatorio.
     </div>
 
     <label for="segundoApellido">Segundo Apellido:</label>
-    <input type="text" id="segundoApellido" formControlName="segundoApellido">
+    <input type="text" id="segundoApellido" formControlName="segundoApellido" [disabled]="isEditMode">
   </div>
 
   <!-- Identificación, contacto y sexo -->
@@ -33,7 +33,7 @@
     <label for="tipoIdentificacion">Tipo de Identificación:</label>
     <select id="tipoIdentificacion" formControlName="tipoIdentificacion"
       [ngClass]="{'input-error': servicioForm.get('tipoIdentificacion')?.invalid && servicioForm.get('tipoIdentificacion')?.touched}"
-      required>
+      required [disabled]="isEditMode">
       <option value="">Seleccione...</option>
       <option value="Cédula">Cédula</option>
       <option value="Pasaporte">Pasaporte</option>
@@ -43,11 +43,10 @@
       El tipo de identificación es obligatorio.
     </div>
 
-
     <label for="numeroIdentificacion">Número de Identificación:</label>
     <input type="text" id="numeroIdentificacion" formControlName="numeroIdentificacion"
       [ngClass]="{'input-error': servicioForm.get('numeroIdentificacion')?.invalid && servicioForm.get('numeroIdentificacion')?.touched}"
-      required />
+      required [disabled]="isEditMode" />
     <div *ngIf="servicioForm.get('numeroIdentificacion')?.invalid && servicioForm.get('numeroIdentificacion')?.touched"
       class="error-message">
       El número de identificación ya existe.
@@ -83,7 +82,7 @@
     <input type="text" id="barrio" formControlName="barrio" required>
 
     <label for="sexo">Sexo:</label>
-    <select id="sexo" formControlName="sexo" required>
+    <select id="sexo" formControlName="sexo" required [disabled]="isEditMode">
       <option value="Masculino">Masculino</option>
       <option value="Femenino">Femenino</option>
     </select>
@@ -104,8 +103,6 @@
     <!-- Fecha de registro (no editable) -->
     <label for="fechaRegistro">Fecha de Registro:</label>
     <input id="fechaRegistro" type="datetime" formControlName="fechaRegistro" readonly />
-
-
   </div>
 
   <!-- Botón de envío: cambia entre "Registrar Cliente" y "Actualizar Cliente" -->
