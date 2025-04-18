@@ -1,23 +1,61 @@
-<form [formGroup]="tipoPlanForm" (ngSubmit)="onSubmit()" class="formulario">
-    <div class="columna">
-      <label for="nombre">Nombre:</label>
-      <input type="text" id="nombre" formControlName="nombre" required>
-  
-      <label for="descripcion">Descripción:</label>
-      <textarea id="descripcion" formControlName="descripcion" required></textarea>
-    </div>
-  
-    <div class="columna">
-      <label for="precio">Precio:</label>
-      <input type="number" id="precio" formControlName="precio" required min="0">
-  
-      <label for="estado">Estado:</label>
-      <select id="estado" formControlName="estado">
-        <option [value]="true">Activo</option>
-        <option [value]="false">Inactivo</option>
-      </select>
-    </div>
-  
-    <button type="submit">Registrar Tipo de Plan</button>
+<div class="contenedor">
+  <!-- Sección 1: Título y Formulario -->
+  <!-- Sección del formulario -->
+<div class="seccion-formulario">
+  <h2>Bienvenido a la sección de tipo plan</h2>
+  <form [formGroup]="tipoPlanForm" (ngSubmit)="onSubmit()">
+    <label for="nombre">Nombre:</label>
+    <input type="text" id="nombre" formControlName="nombre" required>
+
+    <label for="descripcion">Descripción:</label>
+    <textarea id="descripcion" formControlName="descripcion" required></textarea>
+
+    <label for="precio">Precio:</label>
+    <input type="number" id="precio" formControlName="precio" required min="0">
+
+    <button type="submit" *ngIf="!tipoPlanSeleccionado">Registrar Tipo de Plan</button>
+    <button type="button" *ngIf="tipoPlanSeleccionado" (click)="guardarEdicion()">Guardar cambios</button>
   </form>
-  
+</div>
+
+
+  <!-- Sección 2: Tabla debajo del formulario -->
+  <div class="seccion-tabla">
+    <h2>Lista de Tipos de Plan</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Descripción</th>
+          <th>Precio</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let tipoPlan of listaTipoPlanes">
+          <td>{{ tipoPlan.nombre }}</td>
+          <td>{{ tipoPlan.descripcion }}</td>
+          <td>{{ tipoPlan.precio }}</td>
+          <td>{{ tipoPlan.estado ? 'Activo' : 'Inactivo' }}</td>
+          <td>
+            <!-- Botón de editar (Solo si el tipo de plan está activo) -->
+            <button (click)="editarTipoPlan(tipoPlan)" [disabled]="!tipoPlan.estado">
+              <i class="fas fa-pencil-alt"></i> <!-- Ícono de lápiz -->
+            </button>
+          
+            <!-- Botón de eliminar (Solo si el tipo de plan está activo) -->
+            <button *ngIf="tipoPlan.estado" (click)="eliminarTipoPlan(tipoPlan)">
+              <i class="fas fa-trash"></i> <!-- Ícono de basura -->
+            </button>
+          
+            <!-- Botón de reactivar (Solo si el tipo de plan está inactivo) -->
+            <button *ngIf="!tipoPlan.estado" (click)="reactivarTipoPlan(tipoPlan)">
+              <i class="fas fa-check-circle"></i> <!-- Ícono verde de check -->
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

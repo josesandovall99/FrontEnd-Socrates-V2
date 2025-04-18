@@ -1,38 +1,75 @@
-.formulario {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr); /* Divide en 2 columnas */
-    gap: 20px;
-    max-width: 600px;
-    margin: auto;
-  }
-  
-  .columna {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-  
-  label {
-    font-weight: bold;
-  }
-  
-  input, textarea, select {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-  }
-  
-  button {
-    grid-column: span 2; /* Botón ocupa toda la anchura */
-    background-color: #007bff;
-    color: white;
-    padding: 10px;
-    border: none;
-    cursor: pointer;
-  }
-  
-  button:hover {
-    background-color: #0056b3;
-  }
-  
+.contenedor {
+  display: flex;
+  flex-direction: column; /* Ahora los elementos se apilan verticalmente */
+  gap: 40px;
+  padding: 20px;
+}
+
+.seccion-formulario {
+  padding: 20px;
+  background-color: #f4f4f4;
+  border-radius: 8px;
+}
+
+.seccion-tabla {
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 8px;
+}
+
+h2 {
+  margin-bottom: 15px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+}
+
+th {
+  background-color: #007bff;
+  color: white;
+}
+
+td {
+  background-color: #f9f9f9;
+}
+
+button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  margin: 5px;
+}
+
+button i {
+  color: #007bff; /* Azul para editar */
+}
+
+button:hover i {
+  color: #0056b3;
+}
+
+button:last-child i {
+  color: red; /* Rojo para eliminar */
+}
+
+button:last-child:hover i {
+  color: darkred;
+}
+
+/* Estilos para el botón de reactivación */
+button i.fa-check-circle {
+  color: green;
+}
+
+button:hover i.fa-check-circle {
+  color: darkgreen;
+}
