@@ -19,6 +19,26 @@ export class ClienteComponent implements OnInit {
   isEditMode: boolean = false;
   today: string = new Date().toISOString().split('T')[0]; // yyyy-MM-dd
   cedulaExistente: boolean = false;  // Variable para controlar el estado de la cédula existente
+  clientes: Cliente[] = [];  // Lista de clientes
+  displayedColumns: string[] = [
+    'primerNombre',
+    'segundoNombre',
+    'primerApellido',
+    'segundoApellido',
+    'tipoIdentificacion',
+    'numeroIdentificacion',
+    'sexo',
+    'correoElectronico',
+    'telefono',
+    'lugarResidencia',
+    'direccionCasa',
+    'barrio',
+    'tipoCliente',
+    'estado',
+    'fechaRegistro',
+    'descripcion',
+    'acciones'
+  ];  // Columnas a mostrar en la tabla
 
   constructor(
     private fb: FormBuilder,
@@ -53,14 +73,33 @@ export class ClienteComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.clienteId = Number(this.route.snapshot.paramMap.get('id'));
+    // Aseguramos que clienteId sea un número o null
+    const idFromRoute = this.route.snapshot.paramMap.get('id');
+    this.clienteId = idFromRoute ? Number(idFromRoute) : null;
     this.isEditMode = !!this.clienteId;
 
-    if (this.isEditMode) {
+    // Si estamos en modo edición, cargamos el cliente
+    if (this.isEditMode && this.clienteId !== null) {
       this.loadCliente();
+    } else {
+      this.loadClientes();  // Cargar la lista de clientes al inicializar el componente
     }
   }
 
+  // Método para cargar los clientes desde la base de datos
+  loadClientes(): void {
+    this.clienteService.listarClientes().subscribe(
+      (clientes: Cliente[]) => {
+        this.clientes = clientes;
+      },
+      (error) => {
+        console.error('Error al cargar los clientes', error);
+        alert('Error al cargar los clientes');
+      }
+    );
+  }
+
+  // Método para cargar el cliente por su ID
   loadCliente(): void {
     if (this.clienteId !== null) {
       this.clienteService.obtenerClientePorId(this.clienteId).subscribe(
@@ -77,39 +116,38 @@ export class ClienteComponent implements OnInit {
           this.router.navigate(['/clientes']);
         }
       );
+    } else {
+      alert('ID de cliente no válido');
+      this.router.navigate(['/clientes']);
     }
   }
 
-  // Verifica si la cédula ya está registrada en la base de datos
-  async verificarCedula(): Promise<boolean> {
-    const cedula = this.servicioForm.get('numeroIdentificacion')?.value;
-    if (cedula) {
-      try {
-        const existe: boolean = (await this.clienteService.verificarCedulaExistente(cedula).toPromise()) ?? false;
-        return existe;  // Si es undefined, se asigna false como valor por defecto
-      } catch (error) {
-        console.error('Error al verificar cédula', error);
-        return false;  // Si hay un error, asumimos que la cédula no existe
+  // Validar si la cédula ya existe
+  verificarCedulaExistente(): void {
+    const numeroIdentificacion = this.servicioForm.get('numeroIdentificacion')?.value;
+    if (numeroIdentificacion) {
+      // Verificamos si la cédula ya está en la lista de clientes
+      const clienteExistente = this.clientes.find(cliente => cliente.numeroIdentificacion === numeroIdentificacion);
+      this.cedulaExistente = !!clienteExistente;
+      if (this.cedulaExistente) {
+        this.servicioForm.get('numeroIdentificacion')?.setErrors({ cedulaExistente: true });
+      } else {
+        this.servicioForm.get('numeroIdentificacion')?.setErrors(null);
       }
     }
-    return false;  // Si no hay cédula, retornamos false
   }
 
+  // Llamada al servicio para crear o actualizar cliente
   async onSubmit(): Promise<void> {
-    if (this.servicioForm.valid) {
-      // Primero verificamos si la cédula ya está registrada
-      const cedulaExistente = await this.verificarCedula();
+    // Validamos la cédula antes de proceder con el envío del formulario
+    this.verificarCedulaExistente();
 
-      if (cedulaExistente) {
-        alert('Ya existe un cliente con esta cédula. Por favor, verifique los datos.');
-        return;  // Evitamos que el cliente sea creado o actualizado
-      }
-
+    if (this.servicioForm.valid && !this.cedulaExistente) {
       const formData = this.servicioForm.getRawValue();
-  
+
       // Asegurar el formato de fecha
       formData.fechaRegistro = formData.fechaRegistro?.split('T')[0] || this.today;
-  
+
       if (this.isEditMode && this.clienteId !== null) {
         this.clienteService.actualizarCliente(this.clienteId, formData).subscribe(
           () => {
@@ -125,15 +163,9 @@ export class ClienteComponent implements OnInit {
         this.clienteService.crearCliente(formData).subscribe(
           () => {
             alert('Cliente creado exitosamente');
-  
-            // ✅ Limpiar formulario
+            // Limpiar formulario y restablecer valores
             this.servicioForm.reset();
-  
-            // ✅ Restablecer valores por defecto
-            this.servicioForm.patchValue({
-              estado: true,
-              fechaRegistro: this.today
-            });
+            this.loadClientes();  // Recargar la lista después de crear
           },
           (error) => {
             console.error('Error al crear cliente', error);
@@ -143,6 +175,31 @@ export class ClienteComponent implements OnInit {
       }
     } else {
       alert('Formulario inválido. Revisa los campos requeridos.');
+    }
+  }
+
+  // Método para editar un cliente
+  editarCliente(clienteId: number): void {
+    if (clienteId != null) {
+      this.router.navigate([`/clientes/editar/${clienteId}`]);
+    } else {
+      alert('ID de cliente no válido');
+    }
+  }
+
+  // Método para eliminar un cliente
+  eliminarCliente(clienteId: number): void {
+    if (confirm('¿Estás seguro de que deseas eliminar este cliente?')) {
+      this.clienteService.eliminarCliente(clienteId).subscribe(
+        () => {
+          alert('Cliente eliminado exitosamente');
+          this.loadClientes();  // Recargar la lista después de eliminar
+        },
+        (error) => {
+          console.error('Error al eliminar cliente', error);
+          alert('Error al eliminar cliente');
+        }
+      );
     }
   }
 }

@@ -1,5 +1,5 @@
 export interface Cliente {
-    id?: number; // El ID es opcional, ya que no lo necesitamos al crear un nuevo cliente.
+    id: number; // El ID es opcional, ya que no lo necesitamos al crear un nuevo cliente.
     primerNombre: string;
     segundoNombre: string;
     primerApellido: string;
