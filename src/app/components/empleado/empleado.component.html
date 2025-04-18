@@ -18,9 +18,7 @@
       <div class="error" *ngIf="servicioForm.get('segundoNombre')?.touched && servicioForm.get('segundoNombre')?.errors">
         <small *ngIf="servicioForm.get('segundoNombre')?.errors?.['pattern']">Solo letras</small>
       </div>
-    </div>
 
-    <div class="columna">
       <label for="primerApellido">Primer Apellido:</label>
       <input type="text" id="primerApellido" formControlName="primerApellido" required />
       <div class="error" *ngIf="servicioForm.get('primerApellido')?.touched && servicioForm.get('primerApellido')?.errors">
@@ -35,6 +33,23 @@
       </div>
     </div>
 
+    <div class="columna">
+      <label for="sexo">Sexo:</label>
+      <select id="sexo" formControlName="sexo" required>
+        <option value="">Selecciona</option>
+        <option value="Masculino">Masculino</option>
+        <option value="Femenino">Femenino</option>
+        <option value="Otro">Otro</option>
+      </select>
+
+      <label for="fechaNacimiento">Fecha de Nacimiento:</label>
+      <input type="date" id="fechaNacimiento" formControlName="fechaNacimiento" required [max]="today">
+    </div>
+  </div>
+
+  <!-- Contacto e Identificación -->
+  <div class="seccion-titulo">Identificación y Contacto</div>
+  <div class="fila">
     <div class="columna">
       <label for="tipoIdentificacion">Tipo de Identificación</label>
       <select formControlName="tipoIdentificacion" id="tipoIdentificacion">
@@ -74,43 +89,32 @@
     </div>
   </div>
 
-  <!-- Información del Empleado -->
-  <div class="seccion-titulo">Información del Empleado</div>
+  <!-- Residencia -->
+  <div class="seccion-titulo">Residencia</div>
   <div class="fila">
     <div class="columna">
-      <label for="sexo">Sexo:</label>
-      <select id="sexo" formControlName="sexo" required>
-        <option value="">Selecciona</option>
-        <option value="Masculino">Masculino</option>
-        <option value="Femenino">Femenino</option>
-        <option value="Otro">Otro</option>
-      </select>
-
       <label for="lugarResidencia">Lugar de Residencia:</label>
       <input type="text" id="lugarResidencia" formControlName="lugarResidencia" required>
-    </div>
 
-    <div class="columna">
       <label for="direccionCasa">Dirección de Casa:</label>
       <input type="text" id="direccionCasa" formControlName="direccionCasa" required>
 
       <label for="barrio">Barrio:</label>
       <input type="text" id="barrio" formControlName="barrio" required>
     </div>
+  </div>
 
+  <!-- Información del Empleado -->
+  <div class="seccion-titulo">Datos Laborales</div>
+  <div class="fila">
     <div class="columna">
-      <label for="fechaNacimiento">Fecha de Nacimiento:</label>
-      <input type="date" id="fechaNacimiento" formControlName="fechaNacimiento" required [max]="today">
-
       <label for="codigoEmpleado">Código de Empleado:</label>
       <input type="text" id="codigoEmpleado" formControlName="codigoEmpleado" required>
       <div class="error" *ngIf="servicioForm.get('codigoEmpleado')?.touched && servicioForm.get('codigoEmpleado')?.errors">
         <small *ngIf="servicioForm.get('codigoEmpleado')?.errors?.['required']">Requerido</small>
         <small *ngIf="servicioForm.get('codigoEmpleado')?.errors?.['minlength']">Mínimo 3 caracteres</small>
       </div>
-    </div>
 
-    <div class="columna">
       <label for="cargo">Cargo</label>
       <select formControlName="cargo" id="cargo">
         <option value="">Seleccione</option>
@@ -134,15 +138,13 @@
     </div>
   </div>
 
-  <!-- Información Laboral -->
-  <div class="seccion-titulo">Información Laboral</div>
+  <!-- Información de Emergencia y Referencias -->
+  <div class="seccion-titulo">Emergencias y Referencias</div>
   <div class="fila">
     <div class="columna">
       <label for="hojaDeVida">Hoja de Vida (URL):</label>
       <input type="text" id="hojaDeVida" formControlName="hojaDeVida">
-    </div>
 
-    <div class="columna">
       <label for="referenciaLaboral">Referencia Laboral:</label>
       <input type="text" id="referenciaLaboral" formControlName="referenciaLaboral">
     </div>
@@ -159,9 +161,7 @@
       <div class="error" *ngIf="servicioForm.get('contactoEmergenciaParentesco')?.touched && servicioForm.get('contactoEmergenciaParentesco')?.errors">
         <small *ngIf="servicioForm.get('contactoEmergenciaParentesco')?.errors?.['pattern']">Solo letras</small>
       </div>
-    </div>
 
-    <div class="columna">
       <label for="contactoEmergenciaTelefono">Teléfono de Emergencia:</label>
       <input type="tel" id="contactoEmergenciaTelefono" formControlName="contactoEmergenciaTelefono" required>
       <div class="error" *ngIf="servicioForm.get('contactoEmergenciaTelefono')?.touched && servicioForm.get('contactoEmergenciaTelefono')?.errors">
@@ -174,8 +174,6 @@
 
   <button type="submit">{{ isEditMode ? 'Actualizar Empleado' : 'Registrar Empleado' }}</button>
 </form>
-
-
 
 
 <h2 class="titulo-tabla">Tabla de Empleados</h2>
