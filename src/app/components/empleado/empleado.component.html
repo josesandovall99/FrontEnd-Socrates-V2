@@ -1,0 +1,131 @@
+<h2>Registro de Empleados</h2>
+
+<form [formGroup]="servicioForm" (ngSubmit)="onSubmit()" class="formulario">
+
+  <!-- Nombres y Apellidos -->
+  <div class="columna">
+    <label for="primerNombre">Primer Nombre:</label>
+    <input type="text" id="primerNombre" formControlName="primerNombre" required />
+
+    <label for="segundoNombre">Segundo Nombre:</label>
+    <input type="text" id="segundoNombre" formControlName="segundoNombre">
+
+    <label for="primerApellido">Primer Apellido:</label>
+    <input type="text" id="primerApellido" formControlName="primerApellido" required />
+
+    <label for="segundoApellido">Segundo Apellido:</label>
+    <input type="text" id="segundoApellido" formControlName="segundoApellido">
+  </div>
+
+  <!-- Identificación, contacto y sexo -->
+  <div class="columna">
+    <label for="tipoIdentificacion">Tipo de Identificación:</label>
+    <input type="text" id="tipoIdentificacion" formControlName="tipoIdentificacion" required />
+
+    <label for="numeroIdentificacion">Número de Identificación:</label>
+    <input type="text" id="numeroIdentificacion" formControlName="numeroIdentificacion" required />
+
+    <label for="correoElectronico">Correo Electrónico:</label>
+    <input type="email" id="correoElectronico" formControlName="correoElectronico" required />
+
+    <label for="telefono">Teléfono:</label>
+    <input type="tel" id="telefono" formControlName="telefono" required />
+
+    <label for="sexo">Sexo:</label>
+    <select id="sexo" formControlName="sexo" required>
+      <option value="Masculino">Masculino</option>
+      <option value="Femenino">Femenino</option>
+      <option value="Otro">Otro</option>
+    </select>
+  </div>
+
+  <!-- Dirección y ubicación -->
+  <div class="columna">
+    <label for="lugarResidencia">Lugar de Residencia:</label>
+    <input type="text" id="lugarResidencia" formControlName="lugarResidencia" required>
+
+    <label for="direccionCasa">Dirección de Casa:</label>
+    <input type="text" id="direccionCasa" formControlName="direccionCasa" required>
+
+    <label for="barrio">Barrio:</label>
+    <input type="text" id="barrio" formControlName="barrio" required>
+
+    <label for="fechaNacimiento">Fecha de Nacimiento:</label>
+    <input type="date" id="fechaNacimiento" formControlName="fechaNacimiento" required>
+  </div>
+
+  <!-- Datos laborales -->
+  <div class="columna">
+    <label for="codigoEmpleado">Código de Empleado:</label>
+    <input type="text" id="codigoEmpleado" formControlName="codigoEmpleado" required>
+
+    <label for="cargo">Cargo:</label>
+    <input type="text" id="cargo" formControlName="cargo" required>
+
+    <label for="tipoContrato">Tipo de Contrato:</label>
+    <select id="tipoContrato" formControlName="tipoContrato" required>
+      <option value="Término Fijo">Término Fijo</option>
+      <option value="Término Indefinido">Término Indefinido</option>
+      <option value="Prestación de Servicios">Prestación de Servicios</option>
+    </select>
+
+    <label for="estado">Estado:</label>
+    <select id="estado" formControlName="estado">
+      <option [value]="true">Activo</option>
+      <option [value]="false">Inactivo</option>
+    </select>
+  </div>
+
+  <!-- Documentos y contacto de emergencia -->
+  <div class="columna">
+    <label for="hojaDeVida">Hoja de Vida (URL o nombre archivo):</label>
+    <input type="text" id="hojaDeVida" formControlName="hojaDeVida">
+
+    <label for="referenciaLaboral">Referencia Laboral:</label>
+    <input type="text" id="referenciaLaboral" formControlName="referenciaLaboral">
+
+    <label for="contactoEmergenciaNombre">Contacto de Emergencia - Nombre:</label>
+    <input type="text" id="contactoEmergenciaNombre" formControlName="contactoEmergenciaNombre" required>
+
+    <label for="contactoEmergenciaParentesco">Parentesco:</label>
+    <input type="text" id="contactoEmergenciaParentesco" formControlName="contactoEmergenciaParentesco" required>
+
+    <label for="contactoEmergenciaTelefono">Teléfono de Emergencia:</label>
+    <input type="tel" id="contactoEmergenciaTelefono" formControlName="contactoEmergenciaTelefono" required>
+  </div>
+
+  <button type="submit">{{ isEditMode ? 'Actualizar Empleado' : 'Registrar Empleado' }}</button>
+</form>
+
+<h2>Tabla de Empleados</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Código</th>
+      <th>Nombre</th>
+      <th>Apellido</th>
+      <th>Correo</th>
+      <th>Teléfono</th>
+      <th>Cargo</th>
+      <th>Estado</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let empleado of empleados">
+      <td>{{ empleado.codigoEmpleado }}</td>
+      <td>{{ empleado.primerNombre }}</td>
+      <td>{{ empleado.primerApellido }}</td>
+      <td>{{ empleado.correoElectronico }}</td>
+      <td>{{ empleado.telefono }}</td>
+      <td>{{ empleado.cargo }}</td>
+      <td>{{ empleado.estado ? 'Activo' : 'Inactivo' }}</td>
+      <td>
+        <button (click)="editarEmpleado(empleado.id)">Editar</button>
+        <button (click)="eliminarEmpleado(empleado.id)">Eliminar</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+

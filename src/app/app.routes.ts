@@ -3,12 +3,14 @@ import { ServicioComponent } from './components/servicio/servicio.component';
 import { LoginComponent } from './components/login/login.component';
 import { TipoPlanComponent } from './components/tipo-plan/tipo-plan.component';
 import { ClienteComponent } from './components/cliente/cliente.component';
+import { EmpleadoComponent } from './components/empleado/empleado.component';
 
 
 export const routes: Routes = [
   { path: 'solicitudservicio', component: ServicioComponent },
   { path: 'tipo-plan', component: TipoPlanComponent },
   { path: 'clientes', component: ClienteComponent},
+  { path: 'empleados', component: EmpleadoComponent},
 
 
   // Ruta por defecto redirige al formulario de servicio
@@ -18,6 +20,10 @@ export const routes: Routes = [
   //{ path: '**', redirectTo: 'solicitudservicio' },
   { path: 'login', component: LoginComponent },
     
+  {
+    path: 'empleados/editar/:id',
+    component: EmpleadoComponent
+  },
   //{path: 'servicio', component:ServicioComponent},
   
   // Ruta por defecto redirige al login
