@@ -31,13 +31,18 @@
   <!-- Identificación, contacto y sexo -->
   <div class="columna">
     <label for="tipoIdentificacion">Tipo de Identificación:</label>
-    <input type="text" id="tipoIdentificacion" formControlName="tipoIdentificacion"
+    <select id="tipoIdentificacion" formControlName="tipoIdentificacion"
       [ngClass]="{'input-error': servicioForm.get('tipoIdentificacion')?.invalid && servicioForm.get('tipoIdentificacion')?.touched}"
-      required />
+      required>
+      <option value="">Seleccione...</option>
+      <option value="Cédula">Cédula</option>
+      <option value="Pasaporte">Pasaporte</option>
+    </select>
     <div *ngIf="servicioForm.get('tipoIdentificacion')?.invalid && servicioForm.get('tipoIdentificacion')?.touched"
       class="error-message">
       El tipo de identificación es obligatorio.
     </div>
+
 
     <label for="numeroIdentificacion">Número de Identificación:</label>
     <input type="text" id="numeroIdentificacion" formControlName="numeroIdentificacion"
@@ -100,7 +105,7 @@
     <label for="fechaRegistro">Fecha de Registro:</label>
     <input id="fechaRegistro" type="datetime" formControlName="fechaRegistro" readonly />
 
-   
+
   </div>
 
   <!-- Botón de envío: cambia entre "Registrar Cliente" y "Actualizar Cliente" -->
