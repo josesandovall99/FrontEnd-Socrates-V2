@@ -1,4 +1,4 @@
-<h2>Registro de Empleados</h2>
+<h2 class="titulo-tabla">Registro de Empleados</h2>
 
 <form [formGroup]="servicioForm" (ngSubmit)="onSubmit()" class="formulario">
 
@@ -6,33 +6,73 @@
   <div class="columna">
     <label for="primerNombre">Primer Nombre:</label>
     <input type="text" id="primerNombre" formControlName="primerNombre" required />
+    <div class="error" *ngIf="servicioForm.get('primerNombre')?.touched && servicioForm.get('primerNombre')?.errors">
+      <small *ngIf="servicioForm.get('primerNombre')?.errors?.['required']">Requerido</small>
+      <small *ngIf="servicioForm.get('primerNombre')?.errors?.['pattern']">Solo letras</small>
+    </div>
 
     <label for="segundoNombre">Segundo Nombre:</label>
-    <input type="text" id="segundoNombre" formControlName="segundoNombre">
+    <input type="text" id="segundoNombre" formControlName="segundoNombre" />
+    <div class="error" *ngIf="servicioForm.get('segundoNombre')?.touched && servicioForm.get('segundoNombre')?.errors">
+      <small *ngIf="servicioForm.get('segundoNombre')?.errors?.['pattern']">Solo letras</small>
+    </div>
 
     <label for="primerApellido">Primer Apellido:</label>
     <input type="text" id="primerApellido" formControlName="primerApellido" required />
+    <div class="error" *ngIf="servicioForm.get('primerApellido')?.touched && servicioForm.get('primerApellido')?.errors">
+      <small *ngIf="servicioForm.get('primerApellido')?.errors?.['required']">Requerido</small>
+      <small *ngIf="servicioForm.get('primerApellido')?.errors?.['pattern']">Solo letras</small>
+    </div>
 
     <label for="segundoApellido">Segundo Apellido:</label>
-    <input type="text" id="segundoApellido" formControlName="segundoApellido">
+    <input type="text" id="segundoApellido" formControlName="segundoApellido" />
+    <div class="error" *ngIf="servicioForm.get('segundoApellido')?.touched && servicioForm.get('segundoApellido')?.errors">
+      <small *ngIf="servicioForm.get('segundoApellido')?.errors?.['pattern']">Solo letras</small>
+    </div>
   </div>
 
   <!-- Identificación, contacto y sexo -->
   <div class="columna">
-    <label for="tipoIdentificacion">Tipo de Identificación:</label>
-    <input type="text" id="tipoIdentificacion" formControlName="tipoIdentificacion" required />
+    <!-- Tipo de Identificación -->
+    <div class="form-group">
+      <label for="tipoIdentificacion">Tipo de Identificación</label>
+      <select formControlName="tipoIdentificacion" id="tipoIdentificacion">
+        <option value="">Seleccione</option>
+        <option value="CC">Cédula de Ciudadanía</option>
+        <option value="TI">Tarjeta de Identidad</option>
+        <option value="CE">Cédula de Extranjería</option>
+        <option value="PAS">Pasaporte</option>
+      </select>
+    </div>
 
     <label for="numeroIdentificacion">Número de Identificación:</label>
     <input type="text" id="numeroIdentificacion" formControlName="numeroIdentificacion" required />
+    <div class="error" *ngIf="servicioForm.get('numeroIdentificacion')?.touched && servicioForm.get('numeroIdentificacion')?.errors">
+      <small *ngIf="servicioForm.get('numeroIdentificacion')?.errors?.['required']">Requerido</small>
+      <small *ngIf="servicioForm.get('numeroIdentificacion')?.errors?.['pattern']">Solo números</small>
+      <small *ngIf="servicioForm.get('numeroIdentificacion')?.errors?.['minlength']">Mínimo 5 dígitos</small>
+      <small *ngIf="servicioForm.get('numeroIdentificacion')?.errors?.['maxlength']">Máximo 15 dígitos</small>
+      <small *ngIf="servicioForm.get('numeroIdentificacion')?.errors?.['cedulaExistente']">Cédula ya registrada</small>
+    </div>
 
     <label for="correoElectronico">Correo Electrónico:</label>
     <input type="email" id="correoElectronico" formControlName="correoElectronico" required />
+    <div class="error" *ngIf="servicioForm.get('correoElectronico')?.touched && servicioForm.get('correoElectronico')?.errors">
+      <small *ngIf="servicioForm.get('correoElectronico')?.errors?.['required']">Requerido</small>
+      <small *ngIf="servicioForm.get('correoElectronico')?.errors?.['email'] || servicioForm.get('correoElectronico')?.errors?.['pattern']">Correo inválido</small>
+    </div>
 
     <label for="telefono">Teléfono:</label>
     <input type="tel" id="telefono" formControlName="telefono" required />
+    <div class="error" *ngIf="servicioForm.get('telefono')?.touched && servicioForm.get('telefono')?.errors">
+      <small *ngIf="servicioForm.get('telefono')?.errors?.['required']">Requerido</small>
+      <small *ngIf="servicioForm.get('telefono')?.errors?.['pattern']">Solo números</small>
+      <small *ngIf="servicioForm.get('telefono')?.errors?.['minlength']">Debe tener 10 dígitos</small>
+    </div>
 
     <label for="sexo">Sexo:</label>
     <select id="sexo" formControlName="sexo" required>
+      <option value="">Selecciona</option>
       <option value="Masculino">Masculino</option>
       <option value="Femenino">Femenino</option>
       <option value="Otro">Otro</option>
@@ -51,19 +91,31 @@
     <input type="text" id="barrio" formControlName="barrio" required>
 
     <label for="fechaNacimiento">Fecha de Nacimiento:</label>
-    <input type="date" id="fechaNacimiento" formControlName="fechaNacimiento" required>
+    <input type="date" id="fechaNacimiento" formControlName="fechaNacimiento" required [max]="today">
   </div>
 
   <!-- Datos laborales -->
   <div class="columna">
     <label for="codigoEmpleado">Código de Empleado:</label>
     <input type="text" id="codigoEmpleado" formControlName="codigoEmpleado" required>
+    <div class="error" *ngIf="servicioForm.get('codigoEmpleado')?.touched && servicioForm.get('codigoEmpleado')?.errors">
+      <small *ngIf="servicioForm.get('codigoEmpleado')?.errors?.['required']">Requerido</small>
+      <small *ngIf="servicioForm.get('codigoEmpleado')?.errors?.['minlength']">Mínimo 3 caracteres</small>
+    </div>
 
-    <label for="cargo">Cargo:</label>
-    <input type="text" id="cargo" formControlName="cargo" required>
+    <!-- Cargo -->
+    <div class="form-group">
+      <label for="cargo">Cargo</label>
+      <select formControlName="cargo" id="cargo">
+        <option value="">Seleccione</option>
+        <option value="admin">Administrador</option>
+        <option value="secretaria">Secretaria</option>
+      </select>
+    </div>
 
     <label for="tipoContrato">Tipo de Contrato:</label>
     <select id="tipoContrato" formControlName="tipoContrato" required>
+      <option value="">Selecciona</option>
       <option value="Término Fijo">Término Fijo</option>
       <option value="Término Indefinido">Término Indefinido</option>
       <option value="Prestación de Servicios">Prestación de Servicios</option>
@@ -86,20 +138,33 @@
 
     <label for="contactoEmergenciaNombre">Contacto de Emergencia - Nombre:</label>
     <input type="text" id="contactoEmergenciaNombre" formControlName="contactoEmergenciaNombre" required>
+    <div class="error" *ngIf="servicioForm.get('contactoEmergenciaNombre')?.touched && servicioForm.get('contactoEmergenciaNombre')?.errors">
+      <small *ngIf="servicioForm.get('contactoEmergenciaNombre')?.errors?.['pattern']">Solo letras</small>
+    </div>
 
     <label for="contactoEmergenciaParentesco">Parentesco:</label>
     <input type="text" id="contactoEmergenciaParentesco" formControlName="contactoEmergenciaParentesco" required>
+    <div class="error" *ngIf="servicioForm.get('contactoEmergenciaParentesco')?.touched && servicioForm.get('contactoEmergenciaParentesco')?.errors">
+      <small *ngIf="servicioForm.get('contactoEmergenciaParentesco')?.errors?.['pattern']">Solo letras</small>
+    </div>
 
     <label for="contactoEmergenciaTelefono">Teléfono de Emergencia:</label>
     <input type="tel" id="contactoEmergenciaTelefono" formControlName="contactoEmergenciaTelefono" required>
+    <div class="error" *ngIf="servicioForm.get('contactoEmergenciaTelefono')?.touched && servicioForm.get('contactoEmergenciaTelefono')?.errors">
+      <small *ngIf="servicioForm.get('contactoEmergenciaTelefono')?.errors?.['required']">Requerido</small>
+      <small *ngIf="servicioForm.get('contactoEmergenciaTelefono')?.errors?.['pattern']">Solo números</small>
+      <small *ngIf="servicioForm.get('contactoEmergenciaTelefono')?.errors?.['minlength']">Debe tener 10 dígitos</small>
+    </div>
   </div>
 
   <button type="submit">{{ isEditMode ? 'Actualizar Empleado' : 'Registrar Empleado' }}</button>
 </form>
 
-<h2>Tabla de Empleados</h2>
 
-<table>
+
+<h2 class="titulo-tabla">Tabla de Empleados</h2>
+
+<table class="tabla-empleados">
   <thead>
     <tr>
       <th>Código</th>
@@ -122,10 +187,23 @@
       <td>{{ empleado.cargo }}</td>
       <td>{{ empleado.estado ? 'Activo' : 'Inactivo' }}</td>
       <td>
-        <button (click)="editarEmpleado(empleado.id)">Editar</button>
-        <button (click)="eliminarEmpleado(empleado.id)">Eliminar</button>
+        <!-- Botón de editar (solo si está activo) -->
+        <button (click)="editarEmpleado(empleado.id)" [disabled]="!empleado.estado">
+          <i class="fas fa-pencil-alt"></i>
+        </button>
+
+        <!-- Botón de eliminar (solo si está activo) -->
+        <button *ngIf="empleado.estado" (click)="eliminarEmpleado(empleado)">
+          <i class="fas fa-trash"></i>
+        </button>
+
+        <!-- Botón de reactivar (solo si está inactivo) -->
+        <button *ngIf="!empleado.estado" (click)="reactivarEmpleado(empleado)">
+          <i class="fas fa-check-circle"></i>
+        </button>
       </td>
     </tr>
   </tbody>
 </table>
+
 
