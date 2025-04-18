@@ -54,7 +54,6 @@ export class ClienteComponent implements OnInit {
       tipoCliente: ['', Validators.required],
       estado: [true, Validators.required],
       fechaRegistro: [this.today, Validators.required],
-      descripcion: ['', Validators.required]
     });
   }
 
@@ -106,7 +105,6 @@ export class ClienteComponent implements OnInit {
             tipoCliente: cliente.tipoCliente,
             estado: cliente.estado,
             fechaRegistro: fechaFormateada,
-            descripcion: cliente.descripcion
           });
           this.isLoading = false;
         },
