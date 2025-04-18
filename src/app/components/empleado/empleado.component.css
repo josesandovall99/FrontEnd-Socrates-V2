@@ -91,3 +91,114 @@
     }
   }
   
+  input.ng-touched.ng-invalid,
+select.ng-touched.ng-invalid {
+  border: 2px solid #dc3545; /* rojo */
+  background-color: #ffe5e5;
+}
+
+input.ng-touched.ng-valid,
+select.ng-touched.ng-valid {
+  border: 2px solid #28a745; /* verde */
+  background-color: #e6ffe6;
+}
+
+.error {
+  color: #dc3545;
+  font-size: 0.85em;
+  margin-top: 0.25rem;
+  margin-bottom: 0.75rem;
+}
+
+.error small {
+  display: block;
+  line-height: 1.2;
+}
+.tabla-empleados {
+  width: 100%;
+  max-width: 1200px;
+  margin: 40px auto;
+  border-collapse: collapse;
+  background-color: #f8f8f8;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.tabla-empleados thead {
+  background-color: #3498db;
+  color: white;
+}
+
+.tabla-empleados th, 
+.tabla-empleados td {
+  padding: 14px 18px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+  font-size: 15px;
+}
+
+.tabla-empleados tbody tr:hover {
+  background-color: #f0f8ff;
+}
+
+.tabla-empleados td:last-child {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.tabla-empleados button {
+  background-color: #3498db;
+  border: none;
+  color: white;
+  padding: 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 2px 6px rgba(52, 152, 219, 0.2);
+}
+
+.tabla-empleados button:hover {
+  background-color: #2980b9;
+}
+
+.tabla-empleados button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* Iconos */
+.tabla-empleados i {
+  pointer-events: none;
+}
+
+/* Responsive */
+@media (max-width: 800px) {
+  .tabla-empleados th, 
+  .tabla-empleados td {
+    padding: 10px;
+    font-size: 13px;
+  }
+
+  .tabla-empleados td:last-child {
+    flex-wrap: wrap;
+    justify-content: start;
+  }
+}
+
+.titulo-tabla {
+  text-align: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: #2c3e50;
+  margin-top: 40px;
+  margin-bottom: 20px;
+  font-family: 'Segoe UI', sans-serif;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+

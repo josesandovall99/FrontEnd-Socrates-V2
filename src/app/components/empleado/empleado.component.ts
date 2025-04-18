@@ -27,32 +27,35 @@ export class EmpleadoComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute
   ) {
-    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+    const soloLetras = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/;
+const soloNumeros = /^[0-9]+$/;
+const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 
-    this.servicioForm = this.fb.group({
-      primerNombre: ['', Validators.required],
-      segundoNombre: [''],
-      primerApellido: ['', Validators.required],
-      segundoApellido: [''],
-      tipoIdentificacion: ['', Validators.required],
-      numeroIdentificacion: ['', Validators.required],
-      sexo: ['', Validators.required],
-      correoElectronico: ['', [Validators.required, Validators.email, Validators.pattern(emailPattern)]],
-      telefono: ['', Validators.required],
-      fechaNacimiento: ['', Validators.required],
-      lugarResidencia: ['', Validators.required],
-      direccionCasa: ['', Validators.required],
-      barrio: ['', Validators.required],
-      estado: [true, Validators.required],
-      codigoEmpleado: ['', Validators.required],
-      cargo: ['', Validators.required],
-      tipoContrato: ['', Validators.required],
-      hojaDeVida: ['', Validators.required],
-      referenciaLaboral: ['', Validators.required],
-      contactoEmergenciaNombre: ['', Validators.required],
-      contactoEmergenciaParentesco: ['', Validators.required],
-      contactoEmergenciaTelefono: ['', Validators.required]
-    });
+this.servicioForm = this.fb.group({
+  primerNombre: ['', [Validators.required, Validators.pattern(soloLetras)]],
+  segundoNombre: ['', [Validators.pattern(soloLetras)]],
+  primerApellido: ['', [Validators.required, Validators.pattern(soloLetras)]],
+  segundoApellido: ['', [Validators.pattern(soloLetras)]],
+  tipoIdentificacion: ['', Validators.required],
+  numeroIdentificacion: ['', [Validators.required, Validators.pattern(soloNumeros), Validators.minLength(5), Validators.maxLength(15)]],
+  sexo: ['', Validators.required],
+  correoElectronico: ['', [Validators.required, Validators.email, Validators.pattern(emailPattern)]],
+  telefono: ['', [Validators.required, Validators.pattern(soloNumeros), Validators.minLength(10), Validators.maxLength(10)]],
+  fechaNacimiento: ['', Validators.required],
+  lugarResidencia: ['', Validators.required],
+  direccionCasa: ['', Validators.required],
+  barrio: ['', Validators.required],
+  estado: [{ value: true, disabled: true }],
+  codigoEmpleado: ['', [Validators.required, Validators.minLength(3)]],
+  cargo: ['', [Validators.required, Validators.pattern(soloLetras)]],
+  tipoContrato: ['', Validators.required],
+  hojaDeVida: ['', Validators.required],
+  referenciaLaboral: ['', Validators.required],
+  contactoEmergenciaNombre: ['', [Validators.required, Validators.pattern(soloLetras)]],
+  contactoEmergenciaParentesco: ['', [Validators.required, Validators.pattern(soloLetras)]],
+  contactoEmergenciaTelefono: ['', [Validators.required, Validators.pattern(soloNumeros), Validators.minLength(10), Validators.maxLength(10)]]
+});
+
   }
 
   ngOnInit(): void {
@@ -155,18 +158,34 @@ export class EmpleadoComponent implements OnInit {
     }
   }
 
-  eliminarEmpleado(empleadoId: number): void {
-    if (confirm('¿Estás seguro de que deseas eliminar este empleado?')) {
-      this.empleadoService.eliminarEmpleado(empleadoId).subscribe(
-        () => {
-          alert('Empleado eliminado exitosamente');
-          this.loadEmpleados();
-        },
-        (error) => {
-          console.error('Error al eliminar empleado', error);
-          alert('Error al eliminar empleado');
-        }
-      );
-    }
+  eliminarEmpleado(empleado: Empleado) {
+    const empleadoInactivo: Empleado = { ...empleado, estado: false };
+  
+    this.empleadoService.actualizarEmpleado(empleado.id, empleadoInactivo).subscribe(
+      response => {
+        window.alert('✔ Empleado marcado como inactivo.');
+        this.loadEmpleados(); // Método que recarga la lista
+      },
+      error => {
+        window.alert('❌ Error al inhabilitar el empleado.');
+        console.error('Error al inhabilitar empleado:', error);
+      }
+    );
   }
+  
+  reactivarEmpleado(empleado: Empleado) {
+    const empleadoActivo: Empleado = { ...empleado, estado: true };
+  
+    this.empleadoService.actualizarEmpleado(empleado.id, empleadoActivo).subscribe(
+      response => {
+        window.alert('✔ Empleado reactivado correctamente.');
+        this.loadEmpleados();
+      },
+      error => {
+        window.alert('❌ Error al reactivar el empleado.');
+        console.error('Error al reactivar empleado:', error);
+      }
+    );
+  }
+  
 }
