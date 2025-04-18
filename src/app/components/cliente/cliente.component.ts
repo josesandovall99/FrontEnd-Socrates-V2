@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ClienteService } from '../../services/cliente.service';
@@ -26,6 +26,9 @@ export class ClienteComponent implements OnInit {
     'barrio', 'tipoCliente', 'estado', 'fechaRegistro', 'descripcion', 'acciones'
   ];
   isLoading: boolean = false;
+
+  // ✅ Referencia al input para enfocar
+  @ViewChild('primerNombreInput') primerNombreInput!: ElementRef;
 
   constructor(
     private fb: FormBuilder,
@@ -164,7 +167,18 @@ export class ClienteComponent implements OnInit {
           (nuevoCliente) => {
             this.isLoading = false;
             alert('Cliente creado exitosamente');
-            this.servicioForm.reset();
+
+            // ✅ Reset personalizado
+            this.servicioForm.reset({
+              fechaRegistro: this.today,
+              estado: true
+            });
+
+            // ✅ Enfocar primer campo
+            setTimeout(() => {
+              this.primerNombreInput?.nativeElement.focus();
+            }, 0);
+
             this.loadClientes();
             this.router.navigate(['/clientes']);
           },
@@ -179,9 +193,8 @@ export class ClienteComponent implements OnInit {
     }
   }
 
-   editarCliente(clienteId: number): void {
+  editarCliente(clienteId: number): void {
     if (clienteId != null) {
-      // Redirigir a la página de edición del cliente con el ID correspondiente
       this.router.navigate([`/clientes/editar/${clienteId}`]);
     } else {
       alert('ID de cliente no válido');
