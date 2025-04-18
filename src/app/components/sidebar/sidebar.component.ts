@@ -36,7 +36,7 @@ interface MenuItem {
   styles: [`
     .sidebar {
       width: 250px;
-      height: 100vh;
+      height: 100%;
       background: #1a237e;
       color: white;
       padding: 1rem;
