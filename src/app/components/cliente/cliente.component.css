@@ -66,6 +66,55 @@ button:active {
   background-color: #21618c; /* Color al hacer clic */
 }
 
+/* Estilos para la tabla */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 30px;
+}
+
+th, td {
+  padding: 10px 12px; /* Espaciado más sutil */
+  text-align: center; /* Centra el contenido de las celdas */
+  border: 1px solid #e0e0e0; /* Bordes más sutiles */
+}
+
+th {
+  background-color: #3498db; /* Azul suave de fondo para los encabezados */
+  color: white;
+  font-weight: 600;
+}
+
+tr:hover {
+  background-color: #fafafa; /* Fondo gris muy claro al pasar el ratón por encima */
+}
+
+/* Asegurar que los botones dentro de la tabla tengan el mismo tamaño */
+button {
+  width: 100%; /* Asegura que los botones tengan el mismo tamaño */
+  padding: 12px;
+  font-size: 14px;
+  border-radius: 8px;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #2980b9; /* Cambio al hacer hover */
+}
+
+button:active {
+  background-color: #21618c; /* Color al hacer clic */
+}
+
+button:focus {
+  outline: none;
+}
+
+/* Estilos para pantallas pequeñas (800px o menos) */
 @media (max-width: 800px) {
   .formulario {
       grid-template-columns: 1fr; /* En pantallas pequeñas, una sola columna */
@@ -74,5 +123,25 @@ button:active {
 
   button {
       padding: 12px;
+  }
+
+  table {
+    font-size: 14px; /* Reducir el tamaño de la fuente para pantallas pequeñas */
+  }
+}
+
+/* Estilos para pantallas muy pequeñas (500px o menos) */
+@media (max-width: 500px) {
+  label {
+      font-size: 14px; /* Etiquetas más pequeñas en pantallas pequeñas */
+  }
+
+  input, textarea, select {
+      font-size: 14px; /* Entrada más pequeña */
+  }
+
+  button {
+      font-size: 14px; /* Botón más pequeño en pantallas pequeñas */
+      padding: 10px; /* Menos padding en pantallas pequeñas */
   }
 }

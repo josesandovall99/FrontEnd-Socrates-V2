@@ -105,38 +105,55 @@
       placeholder="Escriba aquí..."></textarea>
   </div>
 
-  <button type="submit">{{ isEditMode ? 'Actualizar Cliente' : 'Registrar Cliente' }}</button>
+  <!-- Botón de envío: cambia entre "Registrar Cliente" y "Actualizar Cliente" -->
+  <button type="submit" [disabled]="isLoading">
+    {{ isEditMode ? 'Actualizar Cliente' : 'Registrar Cliente' }}
+  </button>
+
 </form>
 
-<!-- Tabla de Clientes -->
-<h3>Lista de Clientes</h3>
 <table>
   <thead>
     <tr>
       <th>Primer Nombre</th>
+      <th>Segundo Nombre</th>
       <th>Primer Apellido</th>
+      <th>Segundo Apellido</th>
       <th>Tipo de Identificación</th>
       <th>Número de Identificación</th>
+      <th>Sexo</th>
       <th>Correo Electrónico</th>
-      <th>Dirección</th>
       <th>Teléfono</th>
+      <th>Lugar de Residencia</th>
+      <th>Dirección Casa</th>
+      <th>Barrio</th>
+      <th>Tipo Cliente</th>
       <th>Estado</th>
+      <th>Fecha Registro</th>
+      <th>Descripción</th>
       <th>Acciones</th>
     </tr>
   </thead>
   <tbody>
     <tr *ngFor="let cliente of clientes">
       <td>{{ cliente.primerNombre }}</td>
+      <td>{{ cliente.segundoNombre }}</td>
       <td>{{ cliente.primerApellido }}</td>
+      <td>{{ cliente.segundoApellido }}</td>
       <td>{{ cliente.tipoIdentificacion }}</td>
       <td>{{ cliente.numeroIdentificacion }}</td>
+      <td>{{ cliente.sexo }}</td>
       <td>{{ cliente.correoElectronico }}</td>
-      <td>{{ cliente.direccionCasa }}</td>
       <td>{{ cliente.telefono }}</td>
-      <td>{{ cliente.estado ? 'Activo' : 'Inactivo' }}</td>
+      <td>{{ cliente.lugarResidencia }}</td>
+      <td>{{ cliente.direccionCasa }}</td>
+      <td>{{ cliente.barrio }}</td>
+      <td>{{ cliente.tipoCliente }}</td>
+      <td>{{ cliente.estado }}</td>
+      <td>{{ cliente.fechaRegistro }}</td>
+      <td>{{ cliente.descripcion }}</td>
       <td>
         <button (click)="editarCliente(cliente.id)">Editar</button>
-        <button (click)="eliminarCliente(cliente.id)">Eliminar</button>
       </td>
     </tr>
   </tbody>

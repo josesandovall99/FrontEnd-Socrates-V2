@@ -17,28 +17,15 @@ export class ClienteComponent implements OnInit {
   servicioForm: FormGroup;
   clienteId: number | null = null;
   isEditMode: boolean = false;
-  today: string = new Date().toISOString().split('T')[0]; // yyyy-MM-dd
-  cedulaExistente: boolean = false;  // Variable para controlar el estado de la cédula existente
-  clientes: Cliente[] = [];  // Lista de clientes
+  today: string = new Date().toISOString().split('T')[0];
+  cedulaExistente: boolean = false;
+  clientes: Cliente[] = [];
   displayedColumns: string[] = [
-    'primerNombre',
-    'segundoNombre',
-    'primerApellido',
-    'segundoApellido',
-    'tipoIdentificacion',
-    'numeroIdentificacion',
-    'sexo',
-    'correoElectronico',
-    'telefono',
-    'lugarResidencia',
-    'direccionCasa',
-    'barrio',
-    'tipoCliente',
-    'estado',
-    'fechaRegistro',
-    'descripcion',
-    'acciones'
-  ];  // Columnas a mostrar en la tabla
+    'primerNombre', 'segundoNombre', 'primerApellido', 'segundoApellido', 'tipoIdentificacion',
+    'numeroIdentificacion', 'sexo', 'correoElectronico', 'telefono', 'lugarResidencia', 'direccionCasa',
+    'barrio', 'tipoCliente', 'estado', 'fechaRegistro', 'descripcion', 'acciones'
+  ];
+  isLoading: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -46,7 +33,6 @@ export class ClienteComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute
   ) {
-    // Expresión regular para validar un correo electrónico más estricto
     const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 
     this.servicioForm = this.fb.group({
@@ -59,7 +45,7 @@ export class ClienteComponent implements OnInit {
       sexo: ['', Validators.required],
       correoElectronico: [
         '',
-        [Validators.required, Validators.email, Validators.pattern(emailPattern)] // Validación con regex
+        [Validators.required, Validators.email, Validators.pattern(emailPattern)]
       ],
       telefono: ['', Validators.required],
       lugarResidencia: ['', Validators.required],
@@ -73,46 +59,60 @@ export class ClienteComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Aseguramos que clienteId sea un número o null
     const idFromRoute = this.route.snapshot.paramMap.get('id');
     this.clienteId = idFromRoute ? Number(idFromRoute) : null;
     this.isEditMode = !!this.clienteId;
 
-    // Si estamos en modo edición, cargamos el cliente
     if (this.isEditMode && this.clienteId !== null) {
       this.loadCliente();
     } else {
-      this.loadClientes();  // Cargar la lista de clientes al inicializar el componente
+      this.loadClientes();
     }
   }
 
-  // Método para cargar los clientes desde la base de datos
   loadClientes(): void {
+    this.isLoading = true;
     this.clienteService.listarClientes().subscribe(
       (clientes: Cliente[]) => {
         this.clientes = clientes;
+        this.isLoading = false;
       },
       (error) => {
-        console.error('Error al cargar los clientes', error);
-        alert('Error al cargar los clientes');
+        this.isLoading = false;
+        this.handleError(error, 'Error al cargar los clientes');
       }
     );
   }
 
-  // Método para cargar el cliente por su ID
   loadCliente(): void {
     if (this.clienteId !== null) {
+      this.isLoading = true;
       this.clienteService.obtenerClientePorId(this.clienteId).subscribe(
         (cliente: Cliente) => {
           const fechaFormateada = cliente.fechaRegistro?.split('T')[0];
           this.servicioForm.patchValue({
-            ...cliente,
-            fechaRegistro: fechaFormateada
+            primerNombre: cliente.primerNombre,
+            segundoNombre: cliente.segundoNombre,
+            primerApellido: cliente.primerApellido,
+            segundoApellido: cliente.segundoApellido,
+            tipoIdentificacion: cliente.tipoIdentificacion,
+            numeroIdentificacion: cliente.numeroIdentificacion,
+            sexo: cliente.sexo,
+            correoElectronico: cliente.correoElectronico,
+            telefono: cliente.telefono,
+            lugarResidencia: cliente.lugarResidencia,
+            direccionCasa: cliente.direccionCasa,
+            barrio: cliente.barrio,
+            tipoCliente: cliente.tipoCliente,
+            estado: cliente.estado,
+            fechaRegistro: fechaFormateada,
+            descripcion: cliente.descripcion
           });
+          this.isLoading = false;
         },
         (error) => {
-          console.error('Error al cargar cliente', error);
-          alert('No se pudo cargar el cliente.');
+          this.isLoading = false;
+          this.handleError(error, 'No se pudo cargar el cliente');
           this.router.navigate(['/clientes']);
         }
       );
@@ -122,11 +122,9 @@ export class ClienteComponent implements OnInit {
     }
   }
 
-  // Validar si la cédula ya existe
   verificarCedulaExistente(): void {
     const numeroIdentificacion = this.servicioForm.get('numeroIdentificacion')?.value;
     if (numeroIdentificacion) {
-      // Verificamos si la cédula ya está en la lista de clientes
       const clienteExistente = this.clientes.find(cliente => cliente.numeroIdentificacion === numeroIdentificacion);
       this.cedulaExistente = !!clienteExistente;
       if (this.cedulaExistente) {
@@ -137,39 +135,44 @@ export class ClienteComponent implements OnInit {
     }
   }
 
-  // Llamada al servicio para crear o actualizar cliente
   async onSubmit(): Promise<void> {
-    // Validamos la cédula antes de proceder con el envío del formulario
     this.verificarCedulaExistente();
 
     if (this.servicioForm.valid && !this.cedulaExistente) {
       const formData = this.servicioForm.getRawValue();
-
-      // Asegurar el formato de fecha
       formData.fechaRegistro = formData.fechaRegistro?.split('T')[0] || this.today;
 
+      this.isLoading = true;
+
       if (this.isEditMode && this.clienteId !== null) {
+        console.log("Cliente ID para edición:", this.clienteId);
+        console.log("Datos del formulario:", formData);
+
         this.clienteService.actualizarCliente(this.clienteId, formData).subscribe(
-          () => {
+          (clienteActualizado) => {
+            this.isLoading = false;
             alert('Cliente actualizado exitosamente');
             this.router.navigate(['/clientes']);
           },
           (error) => {
-            console.error('Error al actualizar cliente', error);
-            alert('Error al actualizar cliente');
+            this.isLoading = false;
+            this.handleError(error, 'Error al actualizar cliente');
           }
         );
       } else {
+        console.log("Creando nuevo cliente");
+
         this.clienteService.crearCliente(formData).subscribe(
-          () => {
+          (nuevoCliente) => {
+            this.isLoading = false;
             alert('Cliente creado exitosamente');
-            // Limpiar formulario y restablecer valores
             this.servicioForm.reset();
-            this.loadClientes();  // Recargar la lista después de crear
+            this.loadClientes();
+            this.router.navigate(['/clientes']);
           },
           (error) => {
-            console.error('Error al crear cliente', error);
-            alert('Error al crear cliente');
+            this.isLoading = false;
+            this.handleError(error, 'Error al crear cliente');
           }
         );
       }
@@ -178,28 +181,47 @@ export class ClienteComponent implements OnInit {
     }
   }
 
-  // Método para editar un cliente
   editarCliente(clienteId: number): void {
-    if (clienteId != null) {
-      this.router.navigate([`/clientes/editar/${clienteId}`]);
-    } else {
-      alert('ID de cliente no válido');
+    const cliente = this.clientes.find(c => c.id === clienteId);
+    if (cliente) {
+      this.servicioForm.patchValue({
+        primerNombre: cliente.primerNombre,
+        segundoNombre: cliente.segundoNombre,
+        primerApellido: cliente.primerApellido,
+        segundoApellido: cliente.segundoApellido,
+        tipoIdentificacion: cliente.tipoIdentificacion,
+        numeroIdentificacion: cliente.numeroIdentificacion,
+        correoElectronico: cliente.correoElectronico,
+        telefono: cliente.telefono,
+        lugarResidencia: cliente.lugarResidencia,
+        direccionCasa: cliente.direccionCasa,
+        barrio: cliente.barrio,
+        sexo: cliente.sexo,
+        tipoCliente: cliente.tipoCliente,
+        estado: cliente.estado,
+        fechaRegistro: cliente.fechaRegistro,
+        descripcion: cliente.descripcion
+      });
+      this.isEditMode = true;
     }
   }
 
-  // Método para eliminar un cliente
   eliminarCliente(clienteId: number): void {
     if (confirm('¿Estás seguro de que deseas eliminar este cliente?')) {
       this.clienteService.eliminarCliente(clienteId).subscribe(
         () => {
           alert('Cliente eliminado exitosamente');
-          this.loadClientes();  // Recargar la lista después de eliminar
+          this.loadClientes();
         },
         (error) => {
-          console.error('Error al eliminar cliente', error);
-          alert('Error al eliminar cliente');
+          this.handleError(error, 'Error al eliminar cliente');
         }
       );
     }
+  }
+
+  handleError(error: any, message: string): void {
+    console.error(message, error);
+    alert(message);
   }
 }

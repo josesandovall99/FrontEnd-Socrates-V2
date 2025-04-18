@@ -15,6 +15,6 @@ export interface Cliente {
     tipoCliente: string;
     estado: string;
     fechaRegistro: string; // Formato de fecha: yyyy-MM-dd
-    descripcion: string;
+    descripcion: Text;
   }
   
