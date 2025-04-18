@@ -99,10 +99,6 @@
     <!-- Fecha de registro (no editable) -->
     <label for="fechaRegistro">Fecha de Registro:</label>
     <input id="fechaRegistro" type="datetime" formControlName="fechaRegistro" readonly />
-
-    <label for="descripcion">Descripción:</label>
-    <textarea id="descripcion" formControlName="descripcion" rows="5" style="width: 100%;"
-      placeholder="Escriba aquí..."></textarea>
   </div>
 
   <!-- Botón de envío: cambia entre "Registrar Cliente" y "Actualizar Cliente" -->
@@ -130,7 +126,6 @@
       <th>Tipo Cliente</th>
       <th>Estado</th>
       <th>Fecha Registro</th>
-      <th>Descripción</th>
       <th>Acciones</th>
     </tr>
   </thead>
@@ -151,7 +146,6 @@
       <td>{{ cliente.tipoCliente }}</td>
       <td>{{ cliente.estado }}</td>
       <td>{{ cliente.fechaRegistro }}</td>
-      <td>{{ cliente.descripcion }}</td>
       <td>
         <button (click)="editarCliente(cliente.id)">Editar</button>
       </td>

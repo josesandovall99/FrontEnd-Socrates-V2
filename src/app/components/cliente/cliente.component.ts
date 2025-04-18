@@ -181,28 +181,12 @@ export class ClienteComponent implements OnInit {
     }
   }
 
-  editarCliente(clienteId: number): void {
-    const cliente = this.clientes.find(c => c.id === clienteId);
-    if (cliente) {
-      this.servicioForm.patchValue({
-        primerNombre: cliente.primerNombre,
-        segundoNombre: cliente.segundoNombre,
-        primerApellido: cliente.primerApellido,
-        segundoApellido: cliente.segundoApellido,
-        tipoIdentificacion: cliente.tipoIdentificacion,
-        numeroIdentificacion: cliente.numeroIdentificacion,
-        correoElectronico: cliente.correoElectronico,
-        telefono: cliente.telefono,
-        lugarResidencia: cliente.lugarResidencia,
-        direccionCasa: cliente.direccionCasa,
-        barrio: cliente.barrio,
-        sexo: cliente.sexo,
-        tipoCliente: cliente.tipoCliente,
-        estado: cliente.estado,
-        fechaRegistro: cliente.fechaRegistro,
-        descripcion: cliente.descripcion
-      });
-      this.isEditMode = true;
+   editarCliente(clienteId: number): void {
+    if (clienteId != null) {
+      // Redirigir a la página de edición del cliente con el ID correspondiente
+      this.router.navigate([`/clientes/editar/${clienteId}`]);
+    } else {
+      alert('ID de cliente no válido');
     }
   }
 

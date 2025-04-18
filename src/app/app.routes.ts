@@ -24,6 +24,10 @@ export const routes: Routes = [
     path: 'empleados/editar/:id',
     component: EmpleadoComponent
   },
+  {
+    path: 'clientes/editar/:id',
+    component: ClienteComponent
+  },
   //{path: 'servicio', component:ServicioComponent},
   
   // Ruta por defecto redirige al login
