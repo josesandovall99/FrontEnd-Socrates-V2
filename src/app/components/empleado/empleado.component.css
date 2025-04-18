@@ -1,119 +1,108 @@
+/* Contenedor principal del formulario con borde */
 .formulario {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr); /* 4 columnas para secciones */
-    gap: 30px;
-    max-width: 1200px;
-    margin: 50px auto 0 auto;
-    padding: 30px;
-    background-color: #f8f8f8;
-    border-radius: 10px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-  }
-  
-  .columna {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-  }
-  
-  label {
-    font-weight: 600;
-    font-size: 15px;
-    color: #333;
-    margin-bottom: 8px;
-  }
-  
-  input, textarea, select {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-size: 15px;
-    background-color: #fff;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
-    outline: none;
-  }
-  
-  input:focus, textarea:focus, select:focus {
-    border-color: #3498db;
-    box-shadow: 0 0 8px rgba(52, 152, 219, 0.4);
-  }
-  
-  textarea {
-    height: 130px;
-    resize: vertical;
-  }
-  
-  button {
-    grid-column: span 4; /* Ocupa todo el ancho del grid */
-    background-color: #3498db;
-    color: white;
-    padding: 14px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: 600;
-    transition: background-color 0.3s ease;
-    box-shadow: 0 4px 8px rgba(52, 152, 219, 0.2);
-  }
-  
-  button:hover {
-    background-color: #2980b9;
-  }
-  
-  button:active {
-    background-color: #21618c;
-  }
-  
-  /* Estilo para campos con error */
-  .input-error {
-    border-color: red;
-  }
-  
-  /* Mensaje de error */
-  .error-message {
-    color: red;
-    font-size: 13px;
-    margin-top: -10px;
-    margin-bottom: 5px;
-  }
-  
-  /* Responsive */
-  @media (max-width: 800px) {
-    .formulario {
-      grid-template-columns: 1fr;
-      gap: 15px;
-    }
-  
-    button {
-      padding: 12px;
-    }
-  }
-  
-  input.ng-touched.ng-invalid,
-select.ng-touched.ng-invalid {
-  border: 2px solid #dc3545; /* rojo */
-  background-color: #ffe5e5;
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  font-family: Arial, sans-serif;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  background-color: #f9f9f9;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
 }
 
-input.ng-touched.ng-valid,
-select.ng-touched.ng-valid {
-  border: 2px solid #28a745; /* verde */
-  background-color: #e6ffe6;
+/* Fila de campos */
+.fila {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
 }
 
-.error {
-  color: #dc3545;
-  font-size: 0.85em;
-  margin-top: 0.25rem;
-  margin-bottom: 0.75rem;
+/* Columna individual */
+.columna {
+  flex: 1 1 calc(25% - 1rem); /* Hasta 4 columnas por fila */
+  min-width: 220px;
+  display: flex;
+  flex-direction: column;
 }
 
+/* Etiquetas de campos */
+label {
+  margin-bottom: 0.3rem;
+  font-weight: bold;
+  color: #333;
+}
+
+/* Inputs y selects */
+input, select {
+  padding: 0.5rem;
+  font-size: 0.9rem;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  transition: border-color 0.3s;
+}
+
+input:focus, select:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+/* Mensaje de error */
 .error small {
-  display: block;
-  line-height: 1.2;
+  color: red;
+  font-size: 0.75rem;
+  margin-top: 0.2rem;
 }
+
+/* Botón */
+.boton-contenedor {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 2rem;
+}
+
+button {
+  padding: 0.8rem 1.5rem;
+  background-color: #1a237e;
+  border: none;
+  color: white;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+/* Título de cada sección */
+.seccion-titulo {
+  font-size: 1.4rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  border-bottom: 2px solid #1a237e;
+  padding-bottom: 0.3rem;
+  width: 100%;
+  color: #1a237e;
+}
+
+/* Responsive para pantallas más pequeñas */
+@media (max-width: 992px) {
+  .columna {
+    flex: 1 1 calc(50% - 1rem); /* 2 columnas */
+  }
+}
+
+@media (max-width: 600px) {
+  .columna {
+    flex: 1 1 100%; /* 1 columna */
+  }
+}
+
+
 .tabla-empleados {
   width: 100%;
   max-width: 1200px;
@@ -127,7 +116,7 @@ select.ng-touched.ng-valid {
 }
 
 .tabla-empleados thead {
-  background-color: #3498db;
+  background-color:  #1a237e;
   color: white;
 }
 
@@ -150,7 +139,7 @@ select.ng-touched.ng-valid {
 }
 
 .tabla-empleados button {
-  background-color: #3498db;
+  background-color:  #1a237e;
   border: none;
   color: white;
   padding: 10px;
@@ -200,5 +189,21 @@ select.ng-touched.ng-valid {
   font-family: 'Segoe UI', sans-serif;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.05);
 }
+
+.subcolumna {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px 30px;
+}
+
+.subcolumna label {
+  grid-column: span 2;
+}
+
+.subcolumna > div {
+  display: flex;
+  flex-direction: column;
+}
+
 
 
