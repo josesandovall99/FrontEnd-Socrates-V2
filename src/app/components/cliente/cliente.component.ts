@@ -109,6 +109,16 @@ export class ClienteComponent implements OnInit {
             estado: cliente.estado,
             fechaRegistro: fechaFormateada,
           });
+  
+          // Deshabilitar campos cuando está en modo edición
+          this.servicioForm.get('primerNombre')?.disable();
+          this.servicioForm.get('segundoNombre')?.disable();
+          this.servicioForm.get('primerApellido')?.disable();
+          this.servicioForm.get('segundoApellido')?.disable();
+          this.servicioForm.get('tipoIdentificacion')?.disable();
+          this.servicioForm.get('numeroIdentificacion')?.disable();
+          this.servicioForm.get('sexo')?.disable();
+  
           this.isLoading = false;
         },
         (error) => {
@@ -122,6 +132,7 @@ export class ClienteComponent implements OnInit {
       this.router.navigate(['/clientes']);
     }
   }
+  
 
   verificarCedulaExistente(): void {
     const numeroIdentificacion = this.servicioForm.get('numeroIdentificacion')?.value;
@@ -214,6 +225,8 @@ export class ClienteComponent implements OnInit {
       );
     }
   }
+
+  
 
   handleError(error: any, message: string): void {
     console.error(message, error);
