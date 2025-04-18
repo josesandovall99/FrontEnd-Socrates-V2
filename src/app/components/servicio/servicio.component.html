@@ -1,34 +1,84 @@
-<form [formGroup]="servicioForm" (ngSubmit)="onSubmit()" class="formulario">
-    <div class="columna">
-      <label for="fechaServicio">Fecha del Servicio:</label>
-      <input type="date" id="fechaServicio" formControlName="fechaServicio" required>
+<div class="contenedor">
+  <!-- Sección 1: Formulario de Servicio -->
+  <div class="contenedor">
+    <div class="seccion-formulario">
+      <h2>Administración de Servicios</h2>
+      <form [formGroup]="servicioForm" (ngSubmit)="onSubmit()" class="formulario">
+        <div class="columna">
+          <label>Fecha del Servicio:</label>
+          <input type="date" formControlName="fechaServicio" required>
+          <small *ngIf="servicioForm.controls['fechaServicio'].hasError('fechaInvalida')">
+            ⚠ La fecha del servicio no puede ser anterior a la fecha actual.
+          </small>
   
-      <label for="descripcion">Descripción:</label>
-      <textarea id="descripcion" formControlName="descripcion" required></textarea>
+          <label>Descripción:</label>
+          <textarea formControlName="descripcion" required></textarea>
+  
+          <label>Hora del Servicio:</label>
+          <input type="time" formControlName="horaServicio" required>
+        </div>
+  
+        <div class="columna">
+          <label>Estado:</label>
+          <input type="text" formControlName="estado" [disabled]="true">
+  
+          <label>Tipo de Plan:</label>
+          <select formControlName="tipoPlan">
+            <option *ngFor="let plan of listaTipoPlanes" [value]="plan.id">{{ plan.nombre }}</option>
+          </select>
+  
+          <!-- <label>Técnico:</label> -->
+          <!-- <select formControlName="tecnico"> -->
+          <!--   <option value="">Seleccionar técnico</option> -->
+          <!--   <option *ngFor="let tecnico of listaTecnicos" [value]="tecnico.id">{{ tecnico.nombre }}</option> -->
+          <!-- </select> -->
+  
+          <label>Fecha de Registro:</label>
+          <input type="date" formControlName="fechaRegistro" [disabled]="true">
+        </div>
+  
+        <button type="submit" *ngIf="!servicioSeleccionado">Registrar Servicio</button>
+        <button type="button" *ngIf="servicioSeleccionado" (click)="guardarEdicion()">Guardar cambios</button>
+      </form>
     </div>
-  
-    <div class="columna">
-      <label for="horaServicio">Hora del Servicio:</label>
-      <input type="time" id="horaServicio" formControlName="horaServicio" required>
-  
-      <label for="estado">Estado:</label>
-      <input type="text" id="estado" formControlName="estado" required>
-    </div>
-  
-    <div class="columna">
-      <label for="tipoPlan">Tipo de Plan:</label>
-      <select id="tipoPlan" formControlName="tipoPlan" required>
-        <option value="Plan A">Plan A</option>
-        <option value="Plan B">Plan B</option>
-      </select>
-  
-      <label for="tecnico">Técnico:</label>
-      <input type="text" id="tecnico" formControlName="tecnico">
-  
-      <label for="fechaRegistro">Fecha de Registro:</label>
-      <input type="date" id="fechaRegistro" formControlName="fechaRegistro" required>
-    </div>
-  
-    <button type="submit">Registrar Servicio</button>
-  </form>
-  
+  </div>
+
+  <!-- Sección 2: Tabla de Servicios -->
+  <div class="seccion-tabla">
+    <h2>Lista de Servicios</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Fecha</th>
+          <th>Descripción</th>
+          <th>Hora</th>
+          <th>Estado</th>
+          <th>Tipo de Plan</th>
+          <th>Técnico</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let servicio of listaServicios">
+          <td>{{ servicio.fechaServicio }}</td>
+          <td>{{ servicio.descripcion }}</td>
+          <td>{{ servicio.horaServicio }}</td>
+          <td>{{ servicio.estado }}</td>
+          <td>{{ servicio.tipoPlan }}</td>
+          <td>{{ servicio.tecnico ? servicio.tecnico : 'No asignado' }}</td>
+          <td>
+            <button (click)="editarServicio(servicio)" [disabled]="servicio.estado === 'Inactivo'">
+              <i class="fas fa-pencil-alt"></i>
+            </button>
+            <button *ngIf="servicio.estado === 'Activo'" (click)="cambiarEstado(servicio, 'Inactivo')">
+              <i class="fas fa-trash"></i>
+            </button>
+            <button *ngIf="servicio.estado === 'Inactivo'" (click)="cambiarEstado(servicio, 'Activo')">
+              <i class="fas fa-check-circle"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
