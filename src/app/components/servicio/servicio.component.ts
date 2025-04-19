@@ -27,12 +27,22 @@ export class ServicioComponent implements OnInit {
       fechaServicio: ['', [Validators.required, this.validarFechaServicio()]],
       descripcion: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(200)]],
       horaServicio: ['', Validators.required],
-      estado: [{ value: 'Activo', disabled: true }], // Estado fijo
-      tipoPlan: [null, Validators.required], // Se llenará dinámicamente
-      tecnico: [null, Validators.required], // 🔥 Se llenará dinámicamente con técnicos disponibles
+      estado: [{ value: 'Activo', disabled: true }],
+      tipoPlan: [null, Validators.required],
+      tecnico: [null, Validators.required],
       fechaRegistro: [{ value: this.getFechaActual(), disabled: true }]
     });
   }
+  
+  getFechaActual(): string {
+    const hoy = new Date();
+    const dia = hoy.getDate().toString().padStart(2, '0');
+    const mes = (hoy.getMonth() + 1).toString().padStart(2, '0'); // Los meses van de 0 a 11
+    const año = hoy.getFullYear();
+    return `${dia}/${mes}/${año}`; // Formato dd/MM/yyyy
+  }
+  
+  
 
   ngOnInit() {
     this.obtenerServicios();
@@ -61,11 +71,7 @@ export class ServicioComponent implements OnInit {
     );
   }
 
-  getFechaActual(): string {
-    const hoy = new Date();
-    hoy.setHours(0, 0, 0, 0);
-    return hoy.toISOString().split('T')[0]; // Formato YYYY-MM-DD
-  }
+  
 
   validarFechaServicio() {
     return (control: any) => {
@@ -85,16 +91,21 @@ export class ServicioComponent implements OnInit {
     }
   
     const formatoFecha = (fecha: string) => {
+      if (!fecha) return ''; // Asegúrate de que la fecha no sea indefinida o nula
       const partes = fecha.split("-");
       return `${partes[2]}/${partes[1]}/${partes[0]}`; // Convertir de "yyyy-MM-dd" → "dd/MM/yyyy"
     };
   
+    const fechaServicio = this.servicioForm.value.fechaServicio;
+    const fechaRegistro = this.getFechaActual(); // Usar el método ajustado para obtener la fecha actual
+  
     const nuevoServicio: Servicio = {
       ...this.servicioForm.value,
-      fechaServicio: formatoFecha(this.servicioForm.value.fechaServicio),
-      fechaRegistro: formatoFecha(this.servicioForm.value.fechaRegistro),
+      fechaServicio: formatoFecha(fechaServicio),
+      fechaRegistro: fechaRegistro, // Usar la fecha actual en el formato correcto
       tipoPlan: { id: this.servicioForm.value.tipoPlan },
-      tecnico: this.servicioForm.value.tecnico ? { id: this.servicioForm.value.tecnico } : null
+      tecnico: this.servicioForm.value.tecnico ? { id: this.servicioForm.value.tecnico } : null,
+      estado: 'Activo' // Asegurarse de que el estado se incluya
     };
   
     console.log("JSON enviado al backend:", nuevoServicio); // 👀 Verifica en consola
@@ -111,6 +122,9 @@ export class ServicioComponent implements OnInit {
       }
     );
   }
+  
+  
+  
   
   
   
