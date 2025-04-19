@@ -30,11 +30,13 @@
           <label>Técnico:</label>
           <select formControlName="tecnico">
             <option value="">Seleccionar técnico</option>
-            <option *ngFor="let tecnico of listaTecnicos" [value]="tecnico.id">{{ tecnico.primerNombre }}</option>
+            <option *ngFor="let tecnico of listaTecnicos" [value]="tecnico.id">
+              {{ tecnico.primerNombre }} - {{ tecnico.numeroIdentificacion }}
+            </option>
           </select>
 
           <label>Fecha de Registro:</label>
-          <input type="date" formControlName="fechaRegistro" [disabled]="true">
+          <input type="text" formControlName="fechaRegistro" [disabled]="true">
         </div>
 
         <button type="submit" *ngIf="!servicioSeleccionado">Registrar Servicio</button>
@@ -43,13 +45,13 @@
     </div>
   </div>
 
-  <!-- Sección 2: Tabla de Servicios -->
   <div class="seccion-tabla">
     <h2>Lista de Servicios</h2>
     <table>
       <thead>
         <tr>
-          <th>Fecha</th>
+          <th>Fecha de Registro</th>
+          <th>Fecha del Servicio</th>
           <th>Descripción</th>
           <th>Hora</th>
           <th>Estado</th>
@@ -60,25 +62,31 @@
       </thead>
       <tbody>
         <tr *ngFor="let servicio of listaServicios">
-          <td>{{ servicio.fechaServicio }}</td>
+          <td>{{ servicio.fechaRegistro }}</td> <!-- ✅ Mostrar correctamente la fecha de registro -->
+          <td>{{ servicio.fechaServicio }}</td> <!-- ✅ Mostrar la fecha del servicio -->
           <td>{{ servicio.descripcion }}</td>
           <td>{{ servicio.horaServicio }}</td>
           <td>{{ servicio.estado }}</td>
-          <td>{{ servicio.tipoPlan }}</td>
-          <td>{{ servicio.tecnico ? servicio.tecnico : 'No asignado' }}</td>
+          <td>{{ servicio.tipoPlan ? servicio.tipoPlan.nombre : 'No asignado' }}</td> <!-- ✅ Mostrar el nombre del tipo de plan -->
+          <td>
+            {{ servicio.tecnico ? servicio.tecnico.primerNombre + ' - ' + servicio.tecnico.numeroIdentificacion : 'No asignado' }}
+          </td> <!-- ✅ Mostrar el nombre y número de identificación del técnico -->
           <td>
             <button (click)="editarServicio(servicio)" [disabled]="servicio.estado === 'Inactivo'">
-              <i class="fas fa-pencil-alt"></i>
+              <i class="fas fa-pencil-alt"></i> <!-- Ícono de lápiz -->
             </button>
+  
             <button *ngIf="servicio.estado === 'Activo'" (click)="cambiarEstado(servicio, 'Inactivo')">
-              <i class="fas fa-trash"></i>
+              <i class="fas fa-trash"></i> <!-- Ícono de basura -->
             </button>
+  
             <button *ngIf="servicio.estado === 'Inactivo'" (click)="cambiarEstado(servicio, 'Activo')">
-              <i class="fas fa-check-circle"></i>
+              <i class="fas fa-check-circle"></i> <!-- Ícono verde de check -->
             </button>
           </td>
         </tr>
       </tbody>
     </table>
   </div>
+  
 </div>

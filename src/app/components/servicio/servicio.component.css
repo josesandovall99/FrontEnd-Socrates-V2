@@ -1,3 +1,4 @@
+/* 🔥 Contenedor general */
 .contenedor {
   display: flex;
   flex-direction: column;
@@ -5,12 +6,14 @@
   padding: 20px;
 }
 
+/* 🔥 Estilos de la sección de formulario */
 .seccion-formulario {
   padding: 20px;
   background-color: #f4f4f4;
   border-radius: 8px;
 }
 
+/* 🔥 Estilos de la tabla */
 .seccion-tabla {
   padding: 20px;
   background-color: #ffffff;
@@ -21,6 +24,7 @@ h2 {
   margin-bottom: 15px;
 }
 
+/* 🔥 Diseño del formulario */
 .formulario {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -39,6 +43,7 @@ label {
   font-weight: bold;
 }
 
+/* 🔥 Estilos de inputs, selects y textarea */
 input, textarea, select {
   width: 100%;
   padding: 8px;
@@ -46,6 +51,7 @@ input, textarea, select {
   border-radius: 5px;
 }
 
+/* 🔥 Estilos generales de los botones en el formulario */
 button {
   grid-column: span 2;
   background-color: #007bff;
@@ -59,6 +65,7 @@ button:hover {
   background-color: #0056b3;
 }
 
+/* 🔥 Estilos de la tabla */
 table {
   width: 100%;
   border-collapse: collapse;
@@ -79,6 +86,19 @@ td {
   background-color: #f9f9f9;
 }
 
+/* 🔥 Estilos específicos para los botones dentro de la tabla */
+.seccion-tabla button {
+  background: none; /* ✅ Elimina el fondo azul */
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+}
+
+.seccion-tabla button:hover {
+  background: none; /* ✅ Mantener sin fondo al hacer hover */
+}
+
+/* 🔥 Estilos de los íconos en los botones */
 button i {
   font-size: 18px;
 }
@@ -95,6 +115,7 @@ button i.fa-check-circle {
   color: green;
 }
 
+/* 🔥 Efectos al pasar el mouse sobre los botones */
 button:hover i.fa-pencil-alt {
   color: #0056b3;
 }
