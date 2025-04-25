@@ -22,21 +22,25 @@ export class ClienteService {
   }
 
   // Obtener un cliente por ID
-  obtenerClientePorId(id: number): Observable<Cliente> {  // Cambié a 'number'
+  obtenerClientePorId(id: number): Observable<Cliente> {
     return this.http.get<Cliente>(`${this.apiUrl}/${id}`);
   }
 
   // Eliminar cliente
-  eliminarCliente(id: number): Observable<void> {  // Cambié a 'number'
+  eliminarCliente(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 
   // Actualizar cliente
-  actualizarCliente(id: number, cliente: Cliente): Observable<Cliente> {  // Cambié a 'number'
+  actualizarCliente(id: number, cliente: Cliente): Observable<Cliente> {
     return this.http.put<Cliente>(`${this.apiUrl}/${id}`, cliente);
   }
 
+  // Verificar existencia de cédula
   verificarCedulaExistente(cedula: string): Observable<boolean> {
     return this.http.get<boolean>(`${this.apiUrl}/verificar-cedula/${cedula}`);
   }
+
+
+
 }

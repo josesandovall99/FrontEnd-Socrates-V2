@@ -1,15 +1,25 @@
+/* Formulario */
 .formulario {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 30px;
-  max-width: 1200px;
-  margin: 50px auto 0 auto;
+  width: 95%; /* Establece el mismo ancho que la tabla */
+  margin: 50px auto 0 auto; /* Centra el formulario con margen superior */
   padding: 30px;
   font-family: Arial, sans-serif;
   background-color: #f9f9f9;
   border: 2px solid #ccc;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+}
+
+/* Título centrado y espacio superior */
+h2 {
+  text-align: center;
+  font-size: 24px;
+  color: #1a237e;
+  margin-top: 50px; /* Espacio de arriba */
+  margin-bottom: 30px;
 }
 
 /* Columna individual */
@@ -75,21 +85,21 @@ button:active {
 
 /* Tabla */
 table {
-  width: 100%;
+  width: 95%;
   border-collapse: collapse;
-  margin-top: 30px;
+  margin: 30px auto; /* Centra la tabla horizontalmente y da un margen superior */
   background-color: #f8f8f8;
   border-radius: 10px;
   overflow: hidden;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
   font-family: 'Segoe UI', sans-serif;
+  padding: 10px 10px 10px 10px; /* Añadido padding de 10px a izquierda y derecha */
 }
 
 th, td {
   padding: 14px 18px;
   text-align: center;
   border-bottom: 1px solid #ddd;
-  font-size: 15px;
 }
 
 th {
@@ -98,56 +108,17 @@ th {
   font-weight: bold;
 }
 
-tr:hover {
-  background-color: #f0f8ff;
+td {
+  background-color: #ffffff;
 }
 
-/* Botones en la tabla */
-table button {
-  width: 100%;
-  padding: 10px;
-  font-size: 14px;
-  border-radius: 6px;
-  background-color: #1a237e;
-  color: white;
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  box-shadow: 0 2px 6px rgba(52, 152, 219, 0.2);
+/* Error y estilos de validación */
+.input-error {
+  border-color: red;
+  box-shadow: 0 0 5px red;
 }
 
-table button:hover {
-  background-color: #2980b9;
-}
-
-table button:active {
-  background-color: #21618c;
-}
-
-table button:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
-  box-shadow: none;
-}
-
-/* Responsive */
-@media (max-width: 992px) {
-  .formulario {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 600px) {
-  .formulario {
-    grid-template-columns: 1fr;
-    gap: 15px;
-  }
-
-  label, input, textarea, select, button {
-    font-size: 14px;
-  }
-
-  table {
-    font-size: 14px;
-  }
+.error-message {
+  color: red;
+  font-size: 0.8rem;
 }

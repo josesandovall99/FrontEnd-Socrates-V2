@@ -27,7 +27,6 @@ export class ClienteComponent implements OnInit {
   ];
   isLoading: boolean = false;
 
-  // ✅ Referencia al input para enfocar
   @ViewChild('primerNombreInput') primerNombreInput!: ElementRef;
 
   constructor(
@@ -55,7 +54,7 @@ export class ClienteComponent implements OnInit {
       direccionCasa: ['', Validators.required],
       barrio: ['', Validators.required],
       tipoCliente: ['', Validators.required],
-      estado: [true, Validators.required],
+      estado: [true, Validators.required], // true = activo, false = inactivo
       fechaRegistro: [this.today, Validators.required],
     });
   }
@@ -106,11 +105,11 @@ export class ClienteComponent implements OnInit {
             direccionCasa: cliente.direccionCasa,
             barrio: cliente.barrio,
             tipoCliente: cliente.tipoCliente,
-            estado: cliente.estado,
+            estado: cliente.estado, // estado como booleano
             fechaRegistro: fechaFormateada,
           });
-  
-          // Deshabilitar campos cuando está en modo edición
+
+          // Deshabilitar campos si es modo edición
           this.servicioForm.get('primerNombre')?.disable();
           this.servicioForm.get('segundoNombre')?.disable();
           this.servicioForm.get('primerApellido')?.disable();
@@ -118,7 +117,7 @@ export class ClienteComponent implements OnInit {
           this.servicioForm.get('tipoIdentificacion')?.disable();
           this.servicioForm.get('numeroIdentificacion')?.disable();
           this.servicioForm.get('sexo')?.disable();
-  
+
           this.isLoading = false;
         },
         (error) => {
@@ -132,7 +131,6 @@ export class ClienteComponent implements OnInit {
       this.router.navigate(['/clientes']);
     }
   }
-  
 
   verificarCedulaExistente(): void {
     const numeroIdentificacion = this.servicioForm.get('numeroIdentificacion')?.value;
@@ -147,19 +145,21 @@ export class ClienteComponent implements OnInit {
     }
   }
 
+
+
   async onSubmit(): Promise<void> {
     this.verificarCedulaExistente();
-
+  
     if (this.servicioForm.valid && !this.cedulaExistente) {
       const formData = this.servicioForm.getRawValue();
       formData.fechaRegistro = formData.fechaRegistro?.split('T')[0] || this.today;
-
+  
       this.isLoading = true;
-
+  
       if (this.isEditMode && this.clienteId !== null) {
         console.log("Cliente ID para edición:", this.clienteId);
         console.log("Datos del formulario:", formData);
-
+  
         this.clienteService.actualizarCliente(this.clienteId, formData).subscribe(
           (clienteActualizado) => {
             this.isLoading = false;
@@ -173,25 +173,19 @@ export class ClienteComponent implements OnInit {
         );
       } else {
         console.log("Creando nuevo cliente");
-
+  
         this.clienteService.crearCliente(formData).subscribe(
           (nuevoCliente) => {
             this.isLoading = false;
             alert('Cliente creado exitosamente');
-
-            // ✅ Reset personalizado
-            this.servicioForm.reset({
-              fechaRegistro: this.today,
-              estado: true
-            });
-
-            // ✅ Enfocar primer campo
-            setTimeout(() => {
-              this.primerNombreInput?.nativeElement.focus();
-            }, 0);
-
             this.loadClientes();
             this.router.navigate(['/clientes']);
+            
+            // Limpiar el formulario después de crear el cliente, excepto estado y fechaRegistro
+            this.servicioForm.reset({
+              estado: true, // Mantener estado como verdadero (activo)
+              fechaRegistro: this.today, // Mantener la fecha actual por defecto
+            });
           },
           (error) => {
             this.isLoading = false;
@@ -203,6 +197,7 @@ export class ClienteComponent implements OnInit {
       alert('Formulario inválido. Revisa los campos requeridos.');
     }
   }
+  
 
   editarCliente(clienteId: number): void {
     if (clienteId != null) {
@@ -225,8 +220,6 @@ export class ClienteComponent implements OnInit {
       );
     }
   }
-
-  
 
   handleError(error: any, message: string): void {
     console.error(message, error);
