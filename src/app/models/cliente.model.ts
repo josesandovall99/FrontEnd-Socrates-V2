@@ -1,9 +1,9 @@
 export interface Cliente {
-  id: number;
+  id?: number;
   primerNombre: string;
-  segundoNombre: string;
+  segundoNombre?: string;
   primerApellido: string;
-  segundoApellido: string;
+  segundoApellido?: string;
   tipoIdentificacion: string;
   numeroIdentificacion: string;
   sexo: string;
@@ -13,7 +13,6 @@ export interface Cliente {
   direccionCasa: string;
   barrio: string;
   tipoCliente: string;
-  estado: boolean; // Cambiar de string a boolean
-  fechaRegistro: string; // Formato de fecha: yyyy-MM-dd
-  descripcion: Text;
+  estado: boolean; // true = activo, false = inactivo
+  fechaRegistro?: string;
 }

@@ -1,155 +1,157 @@
-<h2>Registro de Clientes</h2>
+<div class="container">
+  <h2>{{ isEditMode ? 'Editar Cliente' : 'Registrar Cliente' }}</h2>
 
-<form [formGroup]="servicioForm" (ngSubmit)="onSubmit()" class="formulario">
-  <!-- Nombres y Apellidos -->
-  <div class="columna">
-    <label for="primerNombre">Primer Nombre:</label>
-    <input type="text" id="primerNombre" formControlName="primerNombre"
-      [ngClass]="{'input-error': servicioForm.get('primerNombre')?.invalid && servicioForm.get('primerNombre')?.touched}"
-      required [disabled]="isEditMode" />
-    <div *ngIf="servicioForm.get('primerNombre')?.invalid && servicioForm.get('primerNombre')?.touched"
-      class="error-message">
-      El primer nombre es obligatorio.
+  <form [formGroup]="servicioForm" (ngSubmit)="onSubmit()" class="formulario">
+    <div class="columna">
+      <label for="primerNombre">Primer Nombre *</label>
+      <input id="primerNombre" formControlName="primerNombre" type="text" #primerNombreInput>
     </div>
 
-    <label for="segundoNombre">Segundo Nombre:</label>
-    <input type="text" id="segundoNombre" formControlName="segundoNombre" [disabled]="isEditMode">
-
-    <label for="primerApellido">Primer Apellido:</label>
-    <input type="text" id="primerApellido" formControlName="primerApellido"
-      [ngClass]="{'input-error': servicioForm.get('primerApellido')?.invalid && servicioForm.get('primerApellido')?.touched}"
-      required [disabled]="isEditMode" />
-    <div *ngIf="servicioForm.get('primerApellido')?.invalid && servicioForm.get('primerApellido')?.touched"
-      class="error-message">
-      El primer apellido es obligatorio.
+    <div class="columna">
+      <label for="segundoNombre">Segundo Nombre</label>
+      <input id="segundoNombre" formControlName="segundoNombre" type="text">
     </div>
 
-    <label for="segundoApellido">Segundo Apellido:</label>
-    <input type="text" id="segundoApellido" formControlName="segundoApellido" [disabled]="isEditMode">
-  </div>
-
-  <!-- Identificación, contacto y sexo -->
-  <div class="columna">
-    <label for="tipoIdentificacion">Tipo de Identificación:</label>
-    <select id="tipoIdentificacion" formControlName="tipoIdentificacion"
-      [ngClass]="{'input-error': servicioForm.get('tipoIdentificacion')?.invalid && servicioForm.get('tipoIdentificacion')?.touched}"
-      required [disabled]="isEditMode">
-      <option value="">Seleccione...</option>
-      <option value="Cédula">Cédula</option>
-      <option value="Pasaporte">Pasaporte</option>
-    </select>
-    <div *ngIf="servicioForm.get('tipoIdentificacion')?.invalid && servicioForm.get('tipoIdentificacion')?.touched"
-      class="error-message">
-      El tipo de identificación es obligatorio.
+    <div class="columna">
+      <label for="primerApellido">Primer Apellido *</label>
+      <input id="primerApellido" formControlName="primerApellido" type="text">
     </div>
 
-    <label for="numeroIdentificacion">Número de Identificación:</label>
-    <input type="text" id="numeroIdentificacion" formControlName="numeroIdentificacion"
-      [ngClass]="{'input-error': servicioForm.get('numeroIdentificacion')?.invalid && servicioForm.get('numeroIdentificacion')?.touched}"
-      required [disabled]="isEditMode" />
-    <div *ngIf="servicioForm.get('numeroIdentificacion')?.invalid && servicioForm.get('numeroIdentificacion')?.touched"
-      class="error-message">
-      El número de identificación ya existe.
+    <div class="columna">
+      <label for="segundoApellido">Segundo Apellido</label>
+      <input id="segundoApellido" formControlName="segundoApellido" type="text">
     </div>
 
-    <label for="correoElectronico">Correo Electrónico:</label>
-    <input type="email" id="correoElectronico" formControlName="correoElectronico"
-      [ngClass]="{'input-error': servicioForm.get('correoElectronico')?.invalid && servicioForm.get('correoElectronico')?.touched}"
-      required [pattern]="'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'" />
-    <div *ngIf="servicioForm.get('correoElectronico')?.invalid && servicioForm.get('correoElectronico')?.touched"
-      class="error-message">
-      El correo electrónico debe ser válido.
+    <div class="columna">
+      <label for="tipoIdentificacion">Tipo Identificación *</label>
+      <select id="tipoIdentificacion" formControlName="tipoIdentificacion">
+        <option value="">Seleccione</option>
+        <option value="CEDULA">Cédula</option>
+        <option value="PASAPORTE">Pasaporte</option>
+        <option value="TI">Tarjeta de Identidad</option>
+      </select>
+    </div>
+    
+
+    <div class="columna">
+      <label for="numeroIdentificacion">Número Identificación *</label>
+      <input id="numeroIdentificacion" formControlName="numeroIdentificacion" type="text" (blur)="verificarCedulaExistente()">
+      <div *ngIf="cedulaExistente" class="error-message">Esta identificación ya está registrada</div>
     </div>
 
-    <label for="telefono">Teléfono:</label>
-    <input type="tel" id="telefono" formControlName="telefono"
-      [ngClass]="{'input-error': servicioForm.get('telefono')?.invalid && servicioForm.get('telefono')?.touched}"
-      required />
-    <div *ngIf="servicioForm.get('telefono')?.invalid && servicioForm.get('telefono')?.touched" class="error-message">
-      El teléfono es obligatorio.
+    <div class="columna">
+      <label for="sexo">Sexo *</label>
+      <select id="sexo" formControlName="sexo">
+        <option value="">Seleccione</option>
+        <option value="MASCULINO">Masculino</option>
+        <option value="FEMENINO">Femenino</option>
+        <option value="OTRO">Otro</option>
+      </select>
     </div>
-  </div>
 
-  <!-- Ubicación y descripción -->
-  <div class="columna">
-    <label for="lugarResidencia">Lugar de Residencia:</label>
-    <input type="text" id="lugarResidencia" formControlName="lugarResidencia" required>
+    <div class="columna">
+      <label for="correoElectronico">Correo Electrónico *</label>
+      <input id="correoElectronico" formControlName="correoElectronico" type="email">
+    </div>
 
-    <label for="direccionCasa">Dirección de Casa:</label>
-    <input type="text" id="direccionCasa" formControlName="direccionCasa" required>
+    <div class="columna">
+      <label for="telefono">Teléfono *</label>
+      <input id="telefono" formControlName="telefono" type="text">
+    </div>
 
-    <label for="barrio">Barrio:</label>
-    <input type="text" id="barrio" formControlName="barrio" required>
+    <div class="columna">
+      <label for="lugarResidencia">Lugar Residencia *</label>
+      <input id="lugarResidencia" formControlName="lugarResidencia" type="text">
+    </div>
 
-    <label for="sexo">Sexo:</label>
-    <select id="sexo" formControlName="sexo" required [disabled]="isEditMode">
-      <option value="Masculino">Masculino</option>
-      <option value="Femenino">Femenino</option>
-    </select>
-  </div>
+    <div class="columna">
+      <label for="direccionCasa">Dirección Casa *</label>
+      <input id="direccionCasa" formControlName="direccionCasa" type="text">
+    </div>
 
-  <!-- Tipo de cliente, estado y fecha -->
-  <div class="columna">
-    <label for="tipoCliente">Tipo de Cliente:</label>
-    <select id="tipoCliente" formControlName="tipoCliente" required>
-      <option value="Regular">Regular</option>
-      <option value="VIP">VIP</option>
-    </select>
+    <div class="columna">
+      <label for="barrio">Barrio *</label>
+      <input id="barrio" formControlName="barrio" type="text">
+    </div>
 
-    <!-- Estado (no editable) -->
-    <label for="estado">Estado:</label>
-    <input type="text" id="estado" value="Activo" disabled>
+    <div class="columna">
+      <label for="tipoCliente">Tipo Cliente *</label>
+      <select id="tipoCliente" formControlName="tipoCliente">
+        <option value="">Seleccione</option>
+        <option value="ESTUDIANTE">Estudiante</option>
+        <option value="EMPRESARIAL">Empresarial</option>
+        <option value="PERSONAL">Personal</option>
+      </select>
+    </div>
 
-    <!-- Fecha de registro (no editable) -->
-    <label for="fechaRegistro">Fecha de Registro:</label>
-    <input id="fechaRegistro" type="datetime" formControlName="fechaRegistro" readonly />
-  </div>
+    <div class="columna">
+      <label for="estado">Estado *</label>
+      <select id="estado" formControlName="estado" [disabled]="isEditMode">
+        <option [ngValue]="true">Activo</option>
+        <option [ngValue]="false">Inactivo</option>
+      </select>
+    </div>
+    
+    <div class="columna">
+      <label for="fechaRegistro">Fecha Registro *</label>
+      <input id="fechaRegistro" formControlName="fechaRegistro" type="date" [max]="today" [disabled]="isEditMode">
+    </div>
+    
 
-  <!-- Botón de envío: cambia entre "Registrar Cliente" y "Actualizar Cliente" -->
-  <button type="submit" [disabled]="isLoading">
-    {{ isEditMode ? 'Actualizar Cliente' : 'Registrar Cliente' }}
-  </button>
+    <button type="submit" [disabled]="!servicioForm.valid || cedulaExistente || isLoading">
+      {{ isLoading ? 'Guardando...' : isEditMode ? 'Actualizar' : 'Guardar' }}
+    </button>
+  </form>
 
-</form>
+  <h2>Listado de Clientes</h2>
 
-<table>
-  <thead>
-    <tr>
-      <th>Primer Nombre</th>
-      <th>Primer Apellido</th>
-      <th>Tipo de Identificación</th>
-      <th>Número de Identificación</th>
-      <th>Sexo</th>
-      <th>Teléfono</th>
-      <th>Barrio</th>
-      <th>Tipo Cliente</th>
-      <th>Estado</th>
-      <th>Acciones</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let cliente of clientes">
-      <td>{{ cliente.primerNombre }}</td>
-      <td>{{ cliente.primerApellido }}</td>
-      <td>{{ cliente.tipoIdentificacion }}</td>
-      <td>{{ cliente.numeroIdentificacion }}</td>
-      <td>{{ cliente.sexo }}</td>
-      <td>{{ cliente.telefono }}</td>
-      <td>{{ cliente.barrio }}</td>
-      <td>{{ cliente.tipoCliente }}</td>
-      <td>{{ cliente.estado ? 'Activo' : 'Inactivo' }}</td>
+  <table *ngIf="clientes.length > 0; else noData">
+    <thead>
+      <tr>
+        <th>Primer Nombre</th>
+        <th>Primer Apellido</th>
+        <th>Tipo ID</th>
+        <th>Número ID</th>
+        <th>Sexo</th>
+        <th>Correo</th>
+        <th>Teléfono</th>
+        <th>Barrio</th>
+        <th>Tipo Cliente</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let cliente of clientes">
+        <td>{{ cliente.primerNombre }}</td>
+        <td>{{ cliente.primerApellido }}</td>
+        <td>{{ cliente.tipoIdentificacion }}</td>
+        <td>{{ cliente.numeroIdentificacion }}</td>
+        <td>{{ cliente.sexo }}</td>
+        <td>{{ cliente.correoElectronico }}</td>
+        <td>{{ cliente.telefono }}</td>
+        <td>{{ cliente.barrio }}</td>
+        <td>{{ cliente.tipoCliente }}</td>
+        <td>{{ cliente.estado ? 'Activo' : 'Inactivo' }}</td>
+        <td>
+          <button (click)="editarCliente(cliente.id!)" style="background-color: #0056b3; margin-right: 5px">
+            <i class="fas fa-edit"></i> 
+          </button>
+          <button 
+            (click)="cambiarEstadoCliente(cliente)" 
+            [style.background-color]="cliente.estado ? '#dc3545' : '#28a745'"
+            style="margin-right: 5px">
+            <i [class]="cliente.estado ? 'fas fa-ban' : 'fas fa-check-circle'"></i> 
+          </button>
+        </td>
+        
+      </tr>
+    </tbody>
+  </table>
 
-      <td>
-        <button (click)="editarCliente(cliente.id)">Editar</button>
-      
-        <!-- Botón de estado (si está activo o inactivo) -->
-        <button (click)="reactivarCliente(cliente)">
-          <i class="fas" [ngClass]="cliente.estado ? 'fa-times-circle' : 'fa-check-circle'"></i>
-          {{ cliente.estado ? 'Inhabilitar' : 'Reactivar' }}
-        </button>
-      </td>
-      
-      
-    </tr>
-  </tbody>
-</table>
+  <ng-template #noData>
+    <p *ngIf="!isLoading" style="text-align: center; margin-top: 20px;">No hay clientes registrados</p>
+  </ng-template>
+
+  <div *ngIf="isLoading" style="text-align: center; margin-top: 20px;">Cargando...</div>
+</div>

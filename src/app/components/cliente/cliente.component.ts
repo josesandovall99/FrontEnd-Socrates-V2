@@ -117,6 +117,8 @@ export class ClienteComponent implements OnInit {
           this.servicioForm.get('tipoIdentificacion')?.disable();
           this.servicioForm.get('numeroIdentificacion')?.disable();
           this.servicioForm.get('sexo')?.disable();
+          this.servicioForm.get('estado')?.disable(); // Deshabilitar estado
+          this.servicioForm.get('fechaRegistro')?.disable(); // Deshabilitar fechaRegistro
 
           this.isLoading = false;
         },
@@ -144,8 +146,6 @@ export class ClienteComponent implements OnInit {
       }
     }
   }
-
-
 
   async onSubmit(): Promise<void> {
     this.verificarCedulaExistente();
@@ -198,7 +198,6 @@ export class ClienteComponent implements OnInit {
     }
   }
   
-
   editarCliente(clienteId: number): void {
     if (clienteId != null) {
       this.router.navigate([`/clientes/editar/${clienteId}`]);
@@ -216,6 +215,31 @@ export class ClienteComponent implements OnInit {
         },
         (error) => {
           this.handleError(error, 'Error al eliminar cliente');
+        }
+      );
+    }
+  }
+
+  cambiarEstadoCliente(cliente: Cliente): void {
+    // Crear una copia del cliente y cambiar su estado
+    const clienteActualizado = { ...cliente, estado: !cliente.estado };
+    
+    // Mostrar mensaje de confirmación con el nuevo estado
+    const nuevoEstado = clienteActualizado.estado ? 'Activo' : 'Inactivo';
+    
+    if (confirm(`¿Estás seguro de que deseas cambiar el estado del cliente a ${nuevoEstado}?`)) {
+      this.isLoading = true;
+      
+      this.clienteService.actualizarCliente(cliente.id!, clienteActualizado).subscribe(
+        () => {
+          this.isLoading = false;
+          alert(`Cliente actualizado a estado: ${nuevoEstado}`);
+          // Recargar la lista de clientes para reflejar el cambio
+          this.loadClientes();
+        },
+        (error) => {
+          this.isLoading = false;
+          this.handleError(error, 'Error al cambiar el estado del cliente');
         }
       );
     }
