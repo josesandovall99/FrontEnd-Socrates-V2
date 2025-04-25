@@ -86,11 +86,9 @@
 
     <div class="columna">
       <label for="estado">Estado *</label>
-      <select id="estado" formControlName="estado" [disabled]="isEditMode">
-        <option [ngValue]="true">Activo</option>
-        <option [ngValue]="false">Inactivo</option>
-      </select>
+      <input id="estado" type="text" [value]="servicioForm.get('estado')?.value ? 'Activo' : 'Inactivo'" [disabled]="true" />
     </div>
+    
     
     <div class="columna">
       <label for="fechaRegistro">Fecha Registro *</label>

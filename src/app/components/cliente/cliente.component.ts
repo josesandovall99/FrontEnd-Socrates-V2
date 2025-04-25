@@ -54,8 +54,8 @@ export class ClienteComponent implements OnInit {
       direccionCasa: ['', Validators.required],
       barrio: ['', Validators.required],
       tipoCliente: ['', Validators.required],
-      estado: [true, Validators.required], // true = activo, false = inactivo
-      fechaRegistro: [this.today, Validators.required],
+      estado: [{ value: true, disabled: true }, Validators.required], // Deshabilitado siempre
+      fechaRegistro: [{ value: this.today, disabled: true }, Validators.required], // Deshabilitado siempre
     });
   }
 
