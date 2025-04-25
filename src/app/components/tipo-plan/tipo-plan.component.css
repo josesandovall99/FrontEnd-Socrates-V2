@@ -1,75 +1,193 @@
+/* 🔥 Contenedor principal */
 .contenedor {
   display: flex;
-  flex-direction: column; /* Ahora los elementos se apilan verticalmente */
+  flex-direction: column;
   gap: 40px;
   padding: 20px;
 }
 
+/* 🔥 Sección del formulario con estilo refinado */
 .seccion-formulario {
-  padding: 20px;
-  background-color: #f4f4f4;
-  border-radius: 8px;
-}
-
-.seccion-tabla {
-  padding: 20px;
-  background-color: #ffffff;
-  border-radius: 8px;
-}
-
-h2 {
-  margin-bottom: 15px;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-th, td {
-  border: 1px solid #ddd;
-  padding: 8px;
-  text-align: center;
-}
-
-th {
-  background-color: #007bff;
-  color: white;
-}
-
-td {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  font-family: Arial, sans-serif;
+  border: 2px solid #ccc;
+  border-radius: 10px;
   background-color: #f9f9f9;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+}
+
+/* 🔥 Diseño del formulario */
+.fila {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.columna {
+  flex: 1 1 calc(25% - 1rem);
+  min-width: 220px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 🔥 Etiquetas y campos */
+label {
+  margin-bottom: 0.3rem;
+  font-weight: bold;
+  color: #333;
+}
+
+input, textarea, select {
+  width: 100%;
+  padding: 0.5rem;
+  font-size: 0.9rem;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  transition: border-color 0.3s;
+}
+
+input:focus, select:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+/* 🔥 Mensaje de error */
+.error small {
+  color: red;
+  font-size: 0.75rem;
+  margin-top: 0.2rem;
+}
+
+/* 🔥 Botón */
+.boton-contenedor {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 2rem;
 }
 
 button {
-  background: none;
+  padding: 0.8rem 1.5rem;
+  background-color: #1a237e;
   border: none;
+  color: white;
+  border-radius: 5px;
+  font-size: 1rem;
   cursor: pointer;
-  font-size: 18px;
-  margin: 5px;
 }
 
-button i {
-  color: #007bff; /* Azul para editar */
+button:hover {
+  background-color: #0056b3;
 }
 
-button:hover i {
-  color: #0056b3;
+/* 🔥 Títulos de sección */
+.seccion-titulo {
+  font-size: 1.4rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  border-bottom: 2px solid #1a237e;
+  padding-bottom: 0.3rem;
+  width: 100%;
+  color: #1a237e;
 }
 
-button:last-child i {
-  color: red; /* Rojo para eliminar */
+/* 🔥 Ajustamos el ancho de la tabla */
+.seccion-tabla {
+  width: 100%;
+  max-width: 100%; /* ✅ La tabla ocupará todo el ancho */
+  margin: 40px auto;
+  border-collapse: collapse;
+  background-color: #f8f8f8;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  font-family: 'Segoe UI', sans-serif;
 }
 
-button:last-child:hover i {
-  color: darkred;
+/* 🔥 Aseguramos que la tabla se expanda completamente */
+.seccion-tabla table {
+  width: 100%; /* ✅ La tabla ocupará todo el espacio disponible */
 }
 
-/* Estilos para el botón de reactivación */
-button i.fa-check-circle {
-  color: green;
+.seccion-tabla thead {
+  background-color: #1a237e;
+  color: white;
 }
 
-button:hover i.fa-check-circle {
-  color: darkgreen;
+.seccion-tabla th, 
+.seccion-tabla td {
+  padding: 14px 18px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+  font-size: 15px;
+}
+
+.seccion-tabla tbody tr:hover {
+  background-color: #f0f8ff;
+}
+
+/* 🔥 Ajustamos el área de acciones */
+.seccion-tabla td:last-child {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center; /* ✅ Centrar los botones */
+}
+
+/* 🔥 Botones dentro de la tabla */
+.seccion-tabla button {
+  background-color: #1a237e;
+  border: none;
+  color: white;
+  padding: 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 2px 6px rgba(52, 152, 219, 0.2);
+}
+
+.seccion-tabla button:hover {
+  background-color: #2980b9;
+}
+
+.seccion-tabla button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* 🔥 Íconos */
+.seccion-tabla i {
+  pointer-events: none;
+}
+
+/* 🔥 Responsive */
+@media (max-width: 800px) {
+  .seccion-tabla th, 
+  .seccion-tabla td {
+    padding: 10px;
+    font-size: 13px;
+  }
+
+  .seccion-tabla td:last-child {
+    flex-wrap: wrap;
+    justify-content: start;
+  }
+}
+
+.titulo-tabla {
+  text-align: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: #2c3e50;
+  margin-top: 40px;
+  margin-bottom: 20px;
+  font-family: 'Segoe UI', sans-serif;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.05);
 }
