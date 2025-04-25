@@ -148,8 +148,17 @@ export class ServicioComponent implements OnInit {
 
 
   editarServicio(servicio: Servicio) {
-    this.servicioForm.patchValue({ ...servicio });
+    const formatoFechaDDMMYYYY = (fecha: string) => {
+      if (!fecha) return ''; // Asegurar que la fecha no sea indefinida o nula
+      const partes = fecha.includes("-") ? fecha.split("-") : fecha.split("/"); // Manejar ambos formatos posibles
+      return partes.length === 3 ? `${partes[2]}/${partes[1]}/${partes[0]}` : ''; // Convertir a dd/MM/yyyy
+    };
+  
     this.servicioSeleccionado = servicio;
+    this.servicioForm.patchValue({
+      ...servicio,
+      fechaServicio: formatoFechaDDMMYYYY(servicio.fechaServicio) // ✅ Convertir antes de cargar al formulario
+    });
   }
 
   guardarEdicion() {
