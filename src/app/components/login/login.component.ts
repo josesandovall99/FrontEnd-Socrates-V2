@@ -251,8 +251,8 @@ body {
     `]
 })
 export class LoginComponent {
-    codigoEmpleado: string = '123456789';
-    password: string = '123456789';
+    codigoEmpleado: string = '777';
+    password: string = '777';
     message: string = '';
 
     constructor(private authService: AuthService, private router: Router) { }

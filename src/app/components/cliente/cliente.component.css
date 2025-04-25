@@ -1,147 +1,153 @@
 .formulario {
   display: grid;
-  grid-template-columns: repeat(4, 1fr); /* 4 columnas */
-  gap: 30px; /* Espacio entre columnas */
-  max-width: 1200px; /* Ancho máximo */
-  margin: 50px auto 0 auto; /* Espacio superior añadido */
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+  max-width: 1200px;
+  margin: 50px auto 0 auto;
   padding: 30px;
-  background-color: #f8f8f8; /* Fondo suave */
-  border-radius: 10px; /* Bordes más suaves */
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1); /* Sombra ligera pero moderna */
+  font-family: Arial, sans-serif;
+  background-color: #f9f9f9;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
 }
 
+/* Columna individual */
 .columna {
   display: flex;
   flex-direction: column;
-  gap: 15px; /* Espacio entre inputs */
+  gap: 12px;
+  min-width: 220px;
 }
 
+/* Etiquetas */
 label {
-  font-weight: 600; /* Leve un aumento en el grosor */
+  font-weight: bold;
   font-size: 15px;
   color: #333;
-  margin-bottom: 8px;
+  margin-bottom: 5px;
 }
 
+/* Inputs, selects y textarea */
 input, textarea, select {
   width: 100%;
-  padding: 12px;
+  padding: 10px;
+  font-size: 0.9rem;
   border: 1px solid #ccc;
-  border-radius: 8px; /* Bordes redondeados */
-  font-size: 15px;
+  border-radius: 5px;
   background-color: #fff;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
-  outline: none;
+  transition: border-color 0.3s, box-shadow 0.3s;
 }
 
 input:focus, textarea:focus, select:focus {
-  border-color: #3498db; /* Cambio a azul suave al enfocar */
-  box-shadow: 0 0 8px rgba(52, 152, 219, 0.4); /* Efecto de sombra al hacer foco */
+  border-color: #007bff;
+  outline: none;
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.25);
 }
 
 textarea {
-  height: 130px; /* Ajustamos la altura del área de texto */
-  resize: vertical; /* Permite el ajuste de altura */
+  height: 130px;
+  resize: vertical;
 }
 
+/* Botón principal */
 button {
-  grid-column: span 4; /* El botón ocupa toda la anchura */
-  background-color: #3498db; /* Azul elegante */
-  color: white;
+  grid-column: span 4;
   padding: 14px;
+  background-color: #1a237e;
+  color: white;
   border: none;
-  border-radius: 8px;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: bold;
   cursor: pointer;
-  font-size: 16px;
-  font-weight: 600;
+  box-shadow: 0 4px 8px rgba(52, 152, 219, 0.2);
   transition: background-color 0.3s ease;
-  box-shadow: 0 4px 8px rgba(52, 152, 219, 0.2); /* Sombra suave */
 }
 
 button:hover {
-  background-color: #2980b9; /* Cambio al hacer hover */
+  background-color: #0056b3;
 }
 
 button:active {
-  background-color: #21618c; /* Color al hacer clic */
+  background-color: #003f88;
 }
 
-/* Estilos para la tabla */
+/* Tabla */
 table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 30px;
+  background-color: #f8f8f8;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  font-family: 'Segoe UI', sans-serif;
 }
 
 th, td {
-  padding: 10px 12px; /* Espaciado más sutil */
-  text-align: center; /* Centra el contenido de las celdas */
-  border: 1px solid #e0e0e0; /* Bordes más sutiles */
+  padding: 14px 18px;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+  font-size: 15px;
 }
 
 th {
-  background-color: #3498db; /* Azul suave de fondo para los encabezados */
+  background-color: #1a237e;
   color: white;
-  font-weight: 600;
+  font-weight: bold;
 }
 
 tr:hover {
-  background-color: #fafafa; /* Fondo gris muy claro al pasar el ratón por encima */
+  background-color: #f0f8ff;
 }
 
-/* Asegurar que los botones dentro de la tabla tengan el mismo tamaño */
-button {
-  width: 100%; /* Asegura que los botones tengan el mismo tamaño */
-  padding: 12px;
+/* Botones en la tabla */
+table button {
+  width: 100%;
+  padding: 10px;
   font-size: 14px;
-  border-radius: 8px;
-  background-color: #3498db;
+  border-radius: 6px;
+  background-color: #1a237e;
   color: white;
   border: none;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  box-shadow: 0 2px 6px rgba(52, 152, 219, 0.2);
 }
 
-button:hover {
-  background-color: #2980b9; /* Cambio al hacer hover */
+table button:hover {
+  background-color: #2980b9;
 }
 
-button:active {
-  background-color: #21618c; /* Color al hacer clic */
+table button:active {
+  background-color: #21618c;
 }
 
-button:focus {
-  outline: none;
+table button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+  box-shadow: none;
 }
 
-/* Estilos para pantallas pequeñas (800px o menos) */
-@media (max-width: 800px) {
+/* Responsive */
+@media (max-width: 992px) {
   .formulario {
-      grid-template-columns: 1fr; /* En pantallas pequeñas, una sola columna */
-      gap: 15px;
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .formulario {
+    grid-template-columns: 1fr;
+    gap: 15px;
   }
 
-  button {
-      padding: 12px;
+  label, input, textarea, select, button {
+    font-size: 14px;
   }
 
   table {
-    font-size: 14px; /* Reducir el tamaño de la fuente para pantallas pequeñas */
-  }
-}
-
-/* Estilos para pantallas muy pequeñas (500px o menos) */
-@media (max-width: 500px) {
-  label {
-      font-size: 14px; /* Etiquetas más pequeñas en pantallas pequeñas */
-  }
-
-  input, textarea, select {
-      font-size: 14px; /* Entrada más pequeña */
-  }
-
-  button {
-      font-size: 14px; /* Botón más pequeño en pantallas pequeñas */
-      padding: 10px; /* Menos padding en pantallas pequeñas */
+    font-size: 14px;
   }
 }
