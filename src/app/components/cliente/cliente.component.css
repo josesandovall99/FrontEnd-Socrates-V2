@@ -3,8 +3,8 @@
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 30px;
-  width: 95%; /* Establece el mismo ancho que la tabla */
-  margin: 50px auto 0 auto; /* Centra el formulario con margen superior */
+  width: 95%;
+  margin: 50px auto 0 auto;
   padding: 30px;
   font-family: Arial, sans-serif;
   background-color: #f9f9f9;
@@ -18,7 +18,7 @@ h2 {
   text-align: center;
   font-size: 24px;
   color: #1a237e;
-  margin-top: 50px; /* Espacio de arriba */
+  margin-top: 50px;
   margin-bottom: 30px;
 }
 
@@ -87,13 +87,13 @@ button:active {
 table {
   width: 95%;
   border-collapse: collapse;
-  margin: 30px auto; /* Centra la tabla horizontalmente y da un margen superior */
+  margin: 30px auto;
   background-color: #f8f8f8;
   border-radius: 10px;
   overflow: hidden;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
   font-family: 'Segoe UI', sans-serif;
-  padding: 10px 10px 10px 10px; /* Añadido padding de 10px a izquierda y derecha */
+  padding: 10px 10px 10px 10px;
 }
 
 th, td {
@@ -123,33 +123,44 @@ td {
   font-size: 0.8rem;
 }
 
+/* Encabezado del formulario con título y botones */
 .encabezado-formulario {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
-  padding-right: 20px; /* Espacio para que se vea mejor el borde */
-  border-right: 4px solid #1a237e; /* Borde derecho azul rey */
+  padding-right: 20px;
+  border-right: 4px solid #1a237e;
 }
 
+/* Estilo para el título dentro del encabezado */
 .encabezado-formulario h2 {
+  flex-grow: 1;
+  text-align: center;
   font-size: 24px;
-  color: #1a237e; /* Azul rey */
+  color: #1a237e;
   margin: 0;
 }
 
+/* Contenedor de botones (opcional si quieres organizar más fácil) */
+.botones-acciones {
+  display: flex;
+  gap: 10px;
+}
+
+/* Botones de descarga e importar */
 .boton-descarga {
-  background-color: #1a237e; /* Azul rey */
+  background-color: #1a237e;
   color: white;
   padding: 10px 50px;
   text-decoration: none;
   border-radius: 5px;
   font-weight: bold;
   transition: background-color 0.3s;
-  margin-top: 20px;    /* Margen arriba */
-  margin-right: 22px;  /* Margen derecha */
+  margin-top: 20px;
+  margin-right: 20px;
 }
 
 .boton-descarga:hover {
-  background-color: #0d164d; /* Azul más oscuro al pasar el mouse */
+  background-color: #0d164d;
 }
