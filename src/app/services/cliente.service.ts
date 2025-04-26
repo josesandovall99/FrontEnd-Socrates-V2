@@ -7,7 +7,7 @@ import { Cliente } from '../models/cliente.model'; // Asegúrate de que la ruta 
   providedIn: 'root',
 })
 export class ClienteService {
-  private apiUrl = 'http://localhost:8080/api/v1/clientes'; // Asegúrate de que la URL sea correcta
+  private apiUrl = 'http://localhost:8080/api/v1/clientes'; // URL base
 
   constructor(private http: HttpClient) {}
 
@@ -41,6 +41,11 @@ export class ClienteService {
     return this.http.get<boolean>(`${this.apiUrl}/verificar-cedula/${cedula}`);
   }
 
+  // ✅ Importar clientes desde un archivo Excel
+  importarClientesDesdeExcel(file: File): Observable<string> {
+    const formData = new FormData();
+    formData.append('file', file);
 
-
+    return this.http.post(`${this.apiUrl}/importar-excel`, formData, { responseType: 'text' });
+  }
 }

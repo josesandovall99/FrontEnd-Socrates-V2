@@ -5,6 +5,11 @@ import { ClienteService } from '../../services/cliente.service';
 import { Cliente } from '../../models/cliente.model';
 import { CommonModule } from '@angular/common';
 
+interface Notification {
+  message: string;
+  type: 'success' | 'error' | 'info';
+}
+
 @Component({
   selector: 'app-cliente',
   standalone: true,
@@ -13,7 +18,6 @@ import { CommonModule } from '@angular/common';
   imports: [ReactiveFormsModule, CommonModule]
 })
 export class ClienteComponent implements OnInit {
-
   servicioForm: FormGroup;
   clienteId: number | null = null;
   isEditMode: boolean = false;
@@ -26,6 +30,11 @@ export class ClienteComponent implements OnInit {
     'barrio', 'tipoCliente', 'estado', 'fechaRegistro', 'descripcion', 'acciones'
   ];
   isLoading: boolean = false;
+  notification: Notification | null = null;
+
+  // Variables para la importación de Excel
+  selectedFile: File | null = null;
+  isExcelFile: boolean = false;
 
   @ViewChild('primerNombreInput') primerNombreInput!: ElementRef;
 
@@ -54,8 +63,8 @@ export class ClienteComponent implements OnInit {
       direccionCasa: ['', Validators.required],
       barrio: ['', Validators.required],
       tipoCliente: ['', Validators.required],
-      estado: [{ value: true, disabled: true }, Validators.required], // Deshabilitado siempre
-      fechaRegistro: [{ value: this.today, disabled: true }, Validators.required], // Deshabilitado siempre
+      estado: [{ value: true, disabled: true }, Validators.required],
+      fechaRegistro: [{ value: this.today, disabled: true }, Validators.required],
     });
   }
 
@@ -70,6 +79,61 @@ export class ClienteComponent implements OnInit {
       this.loadClientes();
     }
   }
+
+  onFileSelected(event: any): void {
+    const file = event.target.files[0];
+    if (file) {
+      this.selectedFile = file;
+      const isExcel = file.name.endsWith('.xlsx') || file.name.endsWith('.xls');
+      this.isExcelFile = isExcel;
+      
+      if (isExcel) {
+        this.showNotification('Archivo Excel seleccionado correctamente', 'info');
+      } else {
+        this.showNotification('Por favor, seleccione un archivo Excel válido (.xlsx, .xls)', 'error');
+        this.selectedFile = null;
+        event.target.value = '';
+      }
+    } else {
+      this.selectedFile = null;
+      this.isExcelFile = false;
+    }
+  }
+
+  importClientes(): void {
+    if (!this.selectedFile || !this.isExcelFile) {
+      this.showNotification('Por favor, seleccione un archivo Excel válido', 'error');
+      return;
+    }
+  
+    this.isLoading = true;
+    this.clienteService.importarClientesDesdeExcel(this.selectedFile).subscribe(
+      (response) => {
+        this.isLoading = false;
+        this.showNotification('Clientes importados correctamente', 'success');
+        this.loadClientes();
+        
+        // Limpiar el input de archivo y las variables relacionadas
+        this.selectedFile = null;
+        this.isExcelFile = false;
+        const fileInput = document.getElementById('importarArchivo') as HTMLInputElement;
+        if (fileInput) fileInput.value = '';
+      },
+      (error) => {
+        this.isLoading = false;
+        console.error('Error al importar el archivo:', error);
+        
+        // Mostrar detalles del error en la notificación
+        if (error?.status === 400) {
+          this.showNotification('Archivo no válido o error en el formato de datos', 'error');
+        } else {
+          this.showNotification('Error al importar clientes: ' + (error?.message || 'Desconocido'), 'error');
+        }
+      }
+    );
+  }
+  
+  
 
   loadClientes(): void {
     this.isLoading = true;
@@ -105,11 +169,10 @@ export class ClienteComponent implements OnInit {
             direccionCasa: cliente.direccionCasa,
             barrio: cliente.barrio,
             tipoCliente: cliente.tipoCliente,
-            estado: cliente.estado, // estado como booleano
+            estado: cliente.estado,
             fechaRegistro: fechaFormateada,
           });
 
-          // Deshabilitar campos si es modo edición
           this.servicioForm.get('primerNombre')?.disable();
           this.servicioForm.get('segundoNombre')?.disable();
           this.servicioForm.get('primerApellido')?.disable();
@@ -117,8 +180,8 @@ export class ClienteComponent implements OnInit {
           this.servicioForm.get('tipoIdentificacion')?.disable();
           this.servicioForm.get('numeroIdentificacion')?.disable();
           this.servicioForm.get('sexo')?.disable();
-          this.servicioForm.get('estado')?.disable(); // Deshabilitar estado
-          this.servicioForm.get('fechaRegistro')?.disable(); // Deshabilitar fechaRegistro
+          this.servicioForm.get('estado')?.disable();
+          this.servicioForm.get('fechaRegistro')?.disable();
 
           this.isLoading = false;
         },
@@ -129,7 +192,7 @@ export class ClienteComponent implements OnInit {
         }
       );
     } else {
-      alert('ID de cliente no válido');
+      this.showNotification('ID de cliente no válido', 'error');
       this.router.navigate(['/clientes']);
     }
   }
@@ -149,21 +212,18 @@ export class ClienteComponent implements OnInit {
 
   async onSubmit(): Promise<void> {
     this.verificarCedulaExistente();
-  
+
     if (this.servicioForm.valid && !this.cedulaExistente) {
       const formData = this.servicioForm.getRawValue();
       formData.fechaRegistro = formData.fechaRegistro?.split('T')[0] || this.today;
-  
+
       this.isLoading = true;
-  
+
       if (this.isEditMode && this.clienteId !== null) {
-        console.log("Cliente ID para edición:", this.clienteId);
-        console.log("Datos del formulario:", formData);
-  
         this.clienteService.actualizarCliente(this.clienteId, formData).subscribe(
           (clienteActualizado) => {
             this.isLoading = false;
-            alert('Cliente actualizado exitosamente');
+            this.showNotification('Cliente actualizado exitosamente', 'success');
             this.router.navigate(['/clientes']);
           },
           (error) => {
@@ -172,19 +232,15 @@ export class ClienteComponent implements OnInit {
           }
         );
       } else {
-        console.log("Creando nuevo cliente");
-  
         this.clienteService.crearCliente(formData).subscribe(
           (nuevoCliente) => {
             this.isLoading = false;
-            alert('Cliente creado exitosamente');
+            this.showNotification('Cliente creado exitosamente', 'success');
             this.loadClientes();
-            this.router.navigate(['/clientes']);
-            
-            // Limpiar el formulario después de crear el cliente, excepto estado y fechaRegistro
+
             this.servicioForm.reset({
-              estado: true, // Mantener estado como verdadero (activo)
-              fechaRegistro: this.today, // Mantener la fecha actual por defecto
+              estado: true,
+              fechaRegistro: this.today,
             });
           },
           (error) => {
@@ -194,37 +250,20 @@ export class ClienteComponent implements OnInit {
         );
       }
     } else {
-      alert('Formulario inválido. Revisa los campos requeridos.');
+      this.showNotification('Formulario inválido. Revisa los campos requeridos.', 'error');
     }
   }
-  
+
   editarCliente(clienteId: number): void {
     if (clienteId != null) {
       this.router.navigate([`/clientes/editar/${clienteId}`]);
     } else {
-      alert('ID de cliente no válido');
-    }
-  }
-
-  eliminarCliente(clienteId: number): void {
-    if (confirm('¿Estás seguro de que deseas eliminar este cliente?')) {
-      this.clienteService.eliminarCliente(clienteId).subscribe(
-        () => {
-          alert('Cliente eliminado exitosamente');
-          this.loadClientes();
-        },
-        (error) => {
-          this.handleError(error, 'Error al eliminar cliente');
-        }
-      );
+      this.showNotification('ID de cliente no válido', 'error');
     }
   }
 
   cambiarEstadoCliente(cliente: Cliente): void {
-    // Crear una copia del cliente y cambiar su estado
     const clienteActualizado = { ...cliente, estado: !cliente.estado };
-    
-    // Mostrar mensaje de confirmación con el nuevo estado
     const nuevoEstado = clienteActualizado.estado ? 'Activo' : 'Inactivo';
     
     if (confirm(`¿Estás seguro de que deseas cambiar el estado del cliente a ${nuevoEstado}?`)) {
@@ -233,8 +272,7 @@ export class ClienteComponent implements OnInit {
       this.clienteService.actualizarCliente(cliente.id!, clienteActualizado).subscribe(
         () => {
           this.isLoading = false;
-          alert(`Cliente actualizado a estado: ${nuevoEstado}`);
-          // Recargar la lista de clientes para reflejar el cambio
+          this.showNotification(`Cliente actualizado a estado: ${nuevoEstado}`, 'success');
           this.loadClientes();
         },
         (error) => {
@@ -247,6 +285,19 @@ export class ClienteComponent implements OnInit {
 
   handleError(error: any, message: string): void {
     console.error(message, error);
-    alert(message);
+    this.showNotification(message, 'error');
+  }
+
+  showNotification(message: string, type: 'success' | 'error' | 'info'): void {
+    this.notification = { message, type };
+    setTimeout(() => {
+      if (this.notification && this.notification.message === message) {
+        this.notification = null;
+      }
+    }, 5000);
+  }
+
+  closeNotification(): void {
+    this.notification = null;
   }
 }

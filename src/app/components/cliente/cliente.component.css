@@ -122,3 +122,34 @@ td {
   color: red;
   font-size: 0.8rem;
 }
+
+.encabezado-formulario {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-right: 20px; /* Espacio para que se vea mejor el borde */
+  border-right: 4px solid #1a237e; /* Borde derecho azul rey */
+}
+
+.encabezado-formulario h2 {
+  font-size: 24px;
+  color: #1a237e; /* Azul rey */
+  margin: 0;
+}
+
+.boton-descarga {
+  background-color: #1a237e; /* Azul rey */
+  color: white;
+  padding: 10px 50px;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: bold;
+  transition: background-color 0.3s;
+  margin-top: 20px;    /* Margen arriba */
+  margin-right: 22px;  /* Margen derecha */
+}
+
+.boton-descarga:hover {
+  background-color: #0d164d; /* Azul más oscuro al pasar el mouse */
+}

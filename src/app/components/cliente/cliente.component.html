@@ -1,5 +1,22 @@
 <div class="container">
-  <h2>{{ isEditMode ? 'Editar Cliente' : 'Registrar Cliente' }}</h2>
+  <!-- Botón de descarga arriba a la derecha -->
+  <div class="encabezado-formulario">
+    <h2>{{ isEditMode ? 'Editar Cliente' : 'Registrar Cliente' }}</h2>
+    <a href="assets/ClientesEjemplo.xlsx" download class="boton-descarga">
+      Descargar plantilla Excel
+    </a>
+
+    <div class="campo-importar">
+      <label for="importarArchivo" class="label-importar">Importar Plantilla Excel</label>
+      <input type="file" id="importarArchivo" (change)="onFileSelected($event)" accept=".xlsx, .xls" />
+      <div *ngIf="selectedFile" class="file-info">
+        <span>{{ selectedFile.name }}</span>
+        <button *ngIf="isExcelFile" (click)="importClientes()" class="btn-cargar" [disabled]="isLoading">
+          {{ isLoading ? 'Cargando...' : 'Cargar' }}
+        </button>
+      </div>
+    </div>
+  </div>
 
   <form [formGroup]="servicioForm" (ngSubmit)="onSubmit()" class="formulario">
     <div class="columna">
@@ -31,11 +48,11 @@
         <option value="TI">Tarjeta de Identidad</option>
       </select>
     </div>
-    
 
     <div class="columna">
       <label for="numeroIdentificacion">Número Identificación *</label>
-      <input id="numeroIdentificacion" formControlName="numeroIdentificacion" type="text" (blur)="verificarCedulaExistente()">
+      <input id="numeroIdentificacion" formControlName="numeroIdentificacion" type="text"
+        (blur)="verificarCedulaExistente()">
       <div *ngIf="cedulaExistente" class="error-message">Esta identificación ya está registrada</div>
     </div>
 
@@ -46,7 +63,7 @@
         <option value="MASCULINO">Masculino</option>
         <option value="FEMENINO">Femenino</option>
         <option value="OTRO">Otro</option>
-      </select>
+      </select> 
     </div>
 
     <div class="columna">
@@ -86,15 +103,14 @@
 
     <div class="columna">
       <label for="estado">Estado *</label>
-      <input id="estado" type="text" [value]="servicioForm.get('estado')?.value ? 'Activo' : 'Inactivo'" [disabled]="true" />
+      <input id="estado" type="text" [value]="servicioForm.get('estado')?.value ? 'Activo' : 'Inactivo'"
+        [disabled]="true" />
     </div>
-    
-    
+
     <div class="columna">
       <label for="fechaRegistro">Fecha Registro *</label>
       <input id="fechaRegistro" formControlName="fechaRegistro" type="date" [max]="today" [disabled]="isEditMode">
     </div>
-    
 
     <button type="submit" [disabled]="!servicioForm.valid || cedulaExistente || isLoading">
       {{ isLoading ? 'Guardando...' : isEditMode ? 'Actualizar' : 'Guardar' }}
@@ -133,16 +149,13 @@
         <td>{{ cliente.estado ? 'Activo' : 'Inactivo' }}</td>
         <td>
           <button (click)="editarCliente(cliente.id!)" style="background-color: #0056b3; margin-right: 5px">
-            <i class="fas fa-edit"></i> 
+            <i class="fas fa-edit"></i>
           </button>
-          <button 
-            (click)="cambiarEstadoCliente(cliente)" 
-            [style.background-color]="cliente.estado ? '#dc3545' : '#28a745'"
-            style="margin-right: 5px">
-            <i [class]="cliente.estado ? 'fas fa-ban' : 'fas fa-check-circle'"></i> 
+          <button (click)="cambiarEstadoCliente(cliente)"
+            [style.background-color]="cliente.estado ? '#dc3545' : '#28a745'" style="margin-right: 5px">
+            <i [class]="cliente.estado ? 'fas fa-ban' : 'fas fa-check-circle'"></i>
           </button>
         </td>
-        
       </tr>
     </tbody>
   </table>
@@ -151,5 +164,14 @@
     <p *ngIf="!isLoading" style="text-align: center; margin-top: 20px;">No hay clientes registrados</p>
   </ng-template>
 
-  <div *ngIf="isLoading" style="text-align: center; margin-top: 20px;">Cargando...</div>
+  <!-- Mostrar el spinner de carga cuando se esté cargando un archivo -->
+  <div *ngIf="isLoading" class="loading-spinner">
+    <div class="spinner"></div> Cargando...
+  </div>
+
+  <!-- Notificaciones de éxito o error -->
+  <div *ngIf="notification" [ngClass]="['notification', notification.type]">
+    {{ notification.message }}
+    <button class="close-notification" (click)="closeNotification()">&times;</button>
+  </div>
 </div>
