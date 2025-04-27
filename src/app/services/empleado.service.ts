@@ -9,6 +9,7 @@ import { Observable } from 'rxjs';
 export class EmpleadoService {
 
   private baseUrl = 'http://localhost:8080/api/v1/empleados'; // Ajusta si tu backend usa otro path
+  private GeneralUrl = 'http://localhost:8080/api/v1'; 
 
   constructor(private http: HttpClient) {}
 
@@ -39,4 +40,21 @@ export class EmpleadoService {
   getTecnicos(): Observable<Empleado[]> {
     return this.http.get<Empleado[]>(`http://localhost:8080/api/v1/empleados?cargo=Tecnico`);
   }
+
+  
+  /*subirHojaDeVida(id: number, fileData: FormData): Observable<string> {
+    return this.http.post(`${this.baseUrl}/${id}/hoja-vida`, fileData, { responseType: 'text' });
+  }
+  
+  subirHojaDeVidaTemporal(fileData: FormData): Observable<string> {
+    return this.http.post(`${this.baseUrl}/hoja-vida`, fileData, { responseType: 'text' });
+  }*/
+    subirArchivo(archivo: File): Observable<any> {
+      const formData = new FormData();
+      formData.append('archivo', archivo);
+  
+      return this.http.post(`${this.GeneralUrl}/subir-pdf`, formData);
+    }
+  
+  
 }
