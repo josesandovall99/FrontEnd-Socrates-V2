@@ -143,8 +143,45 @@
   <div class="seccion-titulo">Emergencias y Referencias</div>
   <div class="fila">
     <div class="columna">
-      <label for="hojaDeVida">Hoja de Vida (URL):</label>
-      <input type="text" id="hojaDeVida" formControlName="hojaDeVida">
+      
+
+    <!--<label for="hojaDeVida">Hoja de Vida (PDF):</label>
+      <input 
+        type="file" 
+        id="hojaDeVida" 
+        (change)="onFileSelected($event)" 
+        accept="application/pdf" 
+        id="hojaDeVida" formControlName="hojaDeVida" 
+      />-->
+      
+      <!-- Mostrar enlace si estamos en modo edición y ya existe un PDF  (npm install ngx-extended-pdf-viewer --save) y (npm install ng2-pdf-viewer)-->
+      <!-- Mostrar enlace solo si existe una hoja de vida cargada -->
+<!--<div *ngIf="isEditMode && empleadoSeleccionado?.hojaDeVida">
+  <h4>Vista previa de la Hoja de Vida:</h4>
+  
+  <pdf-viewer 
+  [src]="'http://localhost:8080' + (empleadoSeleccionado?.hojaDeVida?.replace('/uploads', '/archivos'))" 
+  [render-text]="true"
+  style="display: block; height: 600px;"
+></pdf-viewer>
+
+  <a [href]="'http://localhost:8080' + empleadoSeleccionado?.hojaDeVida" target="_blank" rel="noopener noreferrer">
+    Ver / Descargar Hoja de Vida
+  </a>
+</div>
+-->
+      
+<!--<div *ngIf="isEditMode && empleadoSeleccionado?.hojaDeVida">
+  <a [href]="empleadoSeleccionado?.hojaDeVida" target="_blank" download="HojaDeVida.pdf">Descargar Hoja de Vida Actual</a>
+</div>-->
+
+
+
+<label for="hojaDeVida">Hoja de Vida (PDF):</label>
+<input type="file" (change)="onFileSelected($event)" accept="application/pdf" id="hojaDeVida" formControlName="hojaDeVida" />
+
+<button  *ngIf="isEditMode" type="button" (click)="verPDF(nombreArchivo)">Ver PDF</button>
+
 
       <label for="referenciaLaboral">Referencia Laboral:</label>
       <input type="text" id="referenciaLaboral" formControlName="referenciaLaboral">

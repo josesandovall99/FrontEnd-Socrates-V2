@@ -20,7 +20,7 @@ export interface Empleado {
     codigoEmpleado: string;
     cargo: string;
     tipoContrato: string;
-    hojaDeVida: string;
+    hojaDeVida: string | undefined;
     referenciaLaboral: string;
     contactoEmergenciaNombre: string;
     contactoEmergenciaParentesco: string;

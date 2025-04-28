@@ -20,6 +20,11 @@ export class EmpleadoComponent implements OnInit {
   today: string = new Date().toISOString().split('T')[0];
   cedulaExistente: boolean = false;
   empleados: Empleado[] = [];
+  /*pdfSrc: string = '';
+    selectedFile: File | null = null;
+    selectedFileName: string = '';*/
+    archivoSeleccionado: File | null = null;
+    nombreArchivo: string = '';
 
   constructor(
     private fb: FormBuilder,
@@ -47,9 +52,9 @@ this.servicioForm = this.fb.group({
   barrio: ['', Validators.required],
   estado: [{ value: true, disabled: true }],
   codigoEmpleado: ['', [Validators.required, Validators.minLength(3)]],
-  cargo: ['', [Validators.required, Validators.pattern(soloLetras)]],
+  cargo: ['', Validators.required],
   tipoContrato: ['', Validators.required],
-  hojaDeVida: ['', Validators.required],
+  hojaDeVida: [''],
   referenciaLaboral: ['', Validators.required],
   contactoEmergenciaNombre: ['', [Validators.required, Validators.pattern(soloLetras)]],
   contactoEmergenciaParentesco: ['', [Validators.required, Validators.pattern(soloLetras)]],
@@ -87,10 +92,36 @@ this.servicioForm = this.fb.group({
       this.empleadoService.obtenerEmpleadoPorId(this.empleadoId).subscribe(
         (empleado: Empleado) => {
           const fechaFormateada = empleado.fechaNacimiento?.split('T')[0];
+  
           this.servicioForm.patchValue({
-            ...empleado,
-            fechaNacimiento: fechaFormateada
+            // Se pasan manualmente los campos que sí quieres actualizar
+            primerNombre: empleado.primerNombre,
+            segundoNombre: empleado.segundoNombre,
+            primerApellido: empleado.primerApellido,
+            segundoApellido: empleado.segundoApellido,
+            tipoIdentificacion: empleado.tipoIdentificacion,
+            numeroIdentificacion: empleado.numeroIdentificacion,
+            sexo: empleado.sexo,
+            correoElectronico: empleado.correoElectronico,
+            telefono: empleado.telefono,
+            fechaNacimiento: fechaFormateada,
+            lugarResidencia: empleado.lugarResidencia,
+            direccionCasa: empleado.direccionCasa,
+            barrio: empleado.barrio,
+            estado: empleado.estado,
+            codigoEmpleado: empleado.codigoEmpleado,
+            cargo: empleado.cargo,
+            tipoContrato: empleado.tipoContrato,
+            referenciaLaboral: empleado.referenciaLaboral,
+            contactoEmergenciaNombre: empleado.contactoEmergenciaNombre,
+            contactoEmergenciaParentesco: empleado.contactoEmergenciaParentesco,
+            contactoEmergenciaTelefono: empleado.contactoEmergenciaTelefono,
+            // hojaDeVida NO se pone aquí
           });
+  
+          console.log(empleado.hojaDeVida);
+          this.nombreArchivo = empleado.hojaDeVida?.split('fakepath/').pop() || '';
+          console.log("nombre de archivo: "+ this.nombreArchivo);
         },
         (error) => {
           console.error('Error al cargar el empleado', error);
@@ -100,6 +131,7 @@ this.servicioForm = this.fb.group({
       );
     }
   }
+  
 
   verificarCedulaExistente(): void {
     const numeroIdentificacion = this.servicioForm.get('numeroIdentificacion')?.value;
@@ -116,12 +148,24 @@ this.servicioForm = this.fb.group({
 
   async onSubmit(): Promise<void> {
     this.verificarCedulaExistente();
-
+  
+    
+  
     if (this.servicioForm.valid && !this.cedulaExistente) {
       const formData: Empleado = this.servicioForm.getRawValue();
       formData.fechaNacimiento = formData.fechaNacimiento?.split('T')[0] || this.today;
-
+  
+      
+  
       if (this.isEditMode && this.empleadoId !== null) {
+        if (this.archivoSeleccionado) {
+          this.empleadoService.subirArchivo(this.archivoSeleccionado)
+            .subscribe(response => {
+              console.log('Archivo subido exitosamente', response);
+            }, error => {
+              console.error('Error al subir archivo', error);
+            });
+        }
         this.empleadoService.actualizarEmpleado(this.empleadoId, formData).subscribe(
           () => {
             alert('Empleado actualizado exitosamente.');
@@ -129,19 +173,29 @@ this.servicioForm = this.fb.group({
           },
           (error) => {
             console.error('Error al actualizar empleado', error);
-            alert('Error al actualizar empleado');
+            alert('Error al actualizar empleado.');
           }
         );
       } else {
+        if (this.archivoSeleccionado) {
+          this.empleadoService.subirArchivo(this.archivoSeleccionado)
+            .subscribe(response => {
+              console.log('Archivo subido exitosamente', response);
+            }, error => {
+              console.error('Error al subir archivo', error);
+            });
+        }
         this.empleadoService.crearEmpleado(formData).subscribe(
           () => {
             alert('Empleado registrado exitosamente.');
             this.servicioForm.reset();
+            /*this.selectedFile = null;
+            this.selectedFileName = '';*/
             this.loadEmpleados();
           },
           (error) => {
             console.error('Error al crear empleado', error);
-            alert('Error al crear empleado');
+            alert('Error al crear empleado.');
           }
         );
       }
@@ -149,6 +203,7 @@ this.servicioForm = this.fb.group({
       alert('Formulario inválido. Revisa los campos requeridos.');
     }
   }
+  
 
   editarEmpleado(empleadoId: number): void {
     if (empleadoId != null) {
@@ -187,5 +242,57 @@ this.servicioForm = this.fb.group({
       }
     );
   }
+
+  
+  
+ // empleadoSeleccionado: Empleado | null = null;
+/*
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      this.selectedFile = input.files[0];
+      // Ya NO hagas patchValue aquí
+  
+      // Si quieres mostrar el nombre en pantalla, puedes guardarlo en otra variable
+      
+    }
+      
+  }
+  
+  */
+  subirArchivo() {
+    if (this.archivoSeleccionado) {
+      this.empleadoService.subirArchivo(this.archivoSeleccionado)
+        .subscribe(response => {
+          console.log('Archivo subido exitosamente', response);
+        }, error => {
+          console.error('Error al subir archivo', error);
+        });
+    }
+  }
+
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (file && file.type === 'application/pdf') {
+      this.archivoSeleccionado = file;
+      this.nombreArchivo = file.name;
+    } else {
+      alert('Solo se permite archivos PDF.');
+    }
+  }
+
+  verPDF(nombreArchivo: string) {
+    
+    nombreArchivo = nombreArchivo.replace("C:\\fakepath\\", "");
+    const url = `http://localhost:8080/api/v1/ver-pdf/${encodeURIComponent(nombreArchivo)}`;
+    console.log("URL QUE SE ENVIA: "+url)
+    if (!nombreArchivo) {
+      alert('No hay archivo para visualizar.');
+      return;
+    }
+    window.open(url, '_blank');
+  }
+  
+  
   
 }
