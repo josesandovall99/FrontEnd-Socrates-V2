@@ -5,15 +5,17 @@
     <a href="assets/ClientesEjemplo.xlsx" download class="boton-descarga">
       Descargar plantilla Excel
     </a>
-
     <div class="campo-importar">
-      <label for="importarArchivo" class="label-importar">Importar Plantilla Excel</label>
+      
       <input type="file" id="importarArchivo" (change)="onFileSelected($event)" accept=".xlsx, .xls" />
       <div *ngIf="selectedFile" class="file-info">
         <span>{{ selectedFile.name }}</span>
         <button *ngIf="isExcelFile" (click)="importClientes()" class="btn-cargar" [disabled]="isLoading">
           {{ isLoading ? 'Cargando...' : 'Cargar' }}
         </button>
+        <div *ngIf="isLoading" class="loading-spinner">
+          <div class="spinner"></div> Cargando...
+        </div>
       </div>
     </div>
   </div>
@@ -51,8 +53,7 @@
 
     <div class="columna">
       <label for="numeroIdentificacion">Número Identificación *</label>
-      <input id="numeroIdentificacion" formControlName="numeroIdentificacion" type="text"
-        (blur)="verificarCedulaExistente()">
+      <input id="numeroIdentificacion" formControlName="numeroIdentificacion" type="text" (blur)="verificarCedulaExistente()">
       <div *ngIf="cedulaExistente" class="error-message">Esta identificación ya está registrada</div>
     </div>
 
@@ -63,7 +64,7 @@
         <option value="Masculino">Masculino</option>
         <option value="Femenino">Femenino</option>
         <option value="Otro">Otro</option>
-      </select> 
+      </select>
     </div>
 
     <div class="columna">
@@ -103,8 +104,7 @@
 
     <div class="columna">
       <label for="estado">Estado *</label>
-      <input id="estado" type="text" [value]="servicioForm.get('estado')?.value ? 'Activo' : 'Inactivo'"
-        [disabled]="true" />
+      <input id="estado" type="text" [value]="servicioForm.get('estado')?.value ? 'Activo' : 'Inactivo'" [disabled]="true" />
     </div>
 
     <div class="columna">
@@ -116,6 +116,14 @@
       {{ isLoading ? 'Guardando...' : isEditMode ? 'Actualizar' : 'Guardar' }}
     </button>
   </form>
+
+  <!-- Notificaciones de éxito o error -->
+  <div *ngIf="notification" class="notification-container">
+    <div [ngClass]="['notification', notification.type]">
+      {{ notification.message }}
+      <button class="close-notification" (click)="closeNotification()">&times;</button>
+    </div>
+  </div>
 
   <h2>Listado de Clientes</h2>
 
@@ -151,8 +159,7 @@
           <button (click)="editarCliente(cliente.id!)" style="background-color: #0056b3; margin-right: 5px">
             <i class="fas fa-edit"></i>
           </button>
-          <button (click)="cambiarEstadoCliente(cliente)"
-            [style.background-color]="cliente.estado ? '#dc3545' : '#28a745'" style="margin-right: 5px">
+          <button (click)="cambiarEstadoCliente(cliente)" [style.background-color]="cliente.estado ? '#dc3545' : '#28a745'" style="margin-right: 5px">
             <i [class]="cliente.estado ? 'fas fa-ban' : 'fas fa-check-circle'"></i>
           </button>
         </td>
@@ -170,8 +177,10 @@
   </div>
 
   <!-- Notificaciones de éxito o error -->
-  <div *ngIf="notification" [ngClass]="['notification', notification.type]">
-    {{ notification.message }}
-    <button class="close-notification" (click)="closeNotification()">&times;</button>
+  <div *ngIf="notification" class="notification-container">
+    <div [ngClass]="['notification', notification.type]">
+      {{ notification.message }}
+      <button class="close-notification" (click)="closeNotification()">&times;</button>
+    </div>
   </div>
 </div>
