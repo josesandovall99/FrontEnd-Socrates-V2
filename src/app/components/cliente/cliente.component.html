@@ -27,7 +27,7 @@
     </div>
 
     <div class="columna">
-      <label for="segundoNombre">Segundo Nombre</label>
+      <label for="segundoNombre">Segundo Nombre *</label>
       <input id="segundoNombre" formControlName="segundoNombre" type="text">
     </div>
 
@@ -37,7 +37,7 @@
     </div>
 
     <div class="columna">
-      <label for="segundoApellido">Segundo Apellido</label>
+      <label for="segundoApellido">Segundo Apellido *</label>
       <input id="segundoApellido" formControlName="segundoApellido" type="text">
     </div>
 
@@ -103,12 +103,12 @@
     </div>
 
     <div class="columna">
-      <label for="estado">Estado *</label>
+      <label for="estado">Estado </label>
       <input id="estado" type="text" [value]="servicioForm.get('estado')?.value ? 'Activo' : 'Inactivo'" [disabled]="true" />
     </div>
 
     <div class="columna">
-      <label for="fechaRegistro">Fecha Registro *</label>
+      <label for="fechaRegistro">Fecha Registro </label>
       <input id="fechaRegistro" formControlName="fechaRegistro" type="date" [max]="today" [disabled]="isEditMode">
     </div>
 

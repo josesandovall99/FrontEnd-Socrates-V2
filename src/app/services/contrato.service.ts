@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Contrato } from '../models/contrato.model';
 
@@ -9,7 +9,7 @@ import { Contrato } from '../models/contrato.model';
 export class ContratoService {
   private apiUrl = 'http://localhost:8080/api/v1/contratos';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   // Obtener todos los contratos
   getContratos(): Observable<Contrato[]> {
@@ -30,6 +30,10 @@ export class ContratoService {
   eliminarContrato(id: number): Observable<Contrato> {
     return this.http.patch<Contrato>(`${this.apiUrl}/${id}`, { estado: false });
   }
-}
 
-  
+  // Método para importar contratos desde un archivo
+  importContratos(data: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/importar-excel`, data);
+  }
+
+}
