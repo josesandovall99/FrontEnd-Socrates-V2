@@ -1,0 +1,103 @@
+<div class="contenedor">
+    <!-- Sección 1: Formulario de Contrato -->
+    <div class="seccion-formulario">
+      <h2>Administración de Contratos</h2>
+      <form [formGroup]="contratoForm" (ngSubmit)="onSubmit()" class="formulario">
+        <div class="columna">
+          <label>Cliente:</label>
+          <select formControlName="cliente" required>
+            <option value="">Seleccionar cliente</option>
+            <option *ngFor="let cliente of listaClientes" [value]="cliente.id">
+              {{ cliente.primerNombre }} - {{ cliente.numeroIdentificacion }}
+            </option>
+          </select>
+  
+          <label>Servicio:</label>
+          <select formControlName="servicio" required>
+            <option value="">Seleccionar servicio</option>
+            <option *ngFor="let servicio of listaServicios" [value]="servicio.id">
+              {{ servicio.descripcion }} - {{ servicio.fechaServicio }}
+            </option>
+          </select>
+  
+          <label for="fechaInicio">Fecha Inicio:</label>
+          <input
+            type="date"
+            id="fechaInicio"
+            formControlName="fechaInicio"
+            [min]="fechaMinima"
+          />
+  
+          <label for="fechaFin">Fecha Fin:</label>
+          <input type="date" id="fechaFin" formControlName="fechaFin" readonly />
+  
+          <label for="duracion">Duración</label>
+      <select id="duracion" formControlName="duracion">
+        <option value="">Seleccione duración</option>
+        <option *ngFor="let duracion of duraciones" [value]="duracion">
+          {{ duracion }} meses
+        </option>
+      </select>
+      <div *ngIf="contratoForm.get('duracion')?.invalid && contratoForm.get('duracion')?.touched" class="error">
+        <small>Seleccione la duración.</small>
+      </div>
+  
+          <label>Estado:</label>
+          <input type="text" formControlName="estado" [disabled]="true" />
+        </div>
+  
+        <div class="columna">
+          <button type="submit" *ngIf="!contratoSeleccionado">Registrar Contrato</button>
+          <button type="button" *ngIf="contratoSeleccionado" (click)="guardarEdicion()">Guardar cambios</button>
+        </div>
+      </form>
+    </div>
+  
+    <!-- Sección 2: Tabla de Contratos -->
+    <div class="seccion-tabla">
+      <h2>Lista de Contratos</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Cliente</th>
+            <th>Servicio</th>
+            <th>Fecha de Inicio</th>
+            <th>Fecha de Fin</th>
+            <th>Duración</th>
+            <th>Estado</th>
+            <th>Temporal</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let contrato of listaContratos">
+            <td>
+              {{ contrato.cliente ? contrato.cliente.primerNombre + ' - ' + contrato.cliente.numeroIdentificacion : 'No asignado' }}
+            </td>
+            <td>
+              {{ contrato.servicio ? contrato.servicio.descripcion : 'No asignado' }}
+            </td>
+            <td>{{ contrato.fechaInicio }}</td>
+            <td>{{ contrato.fechaFin }}</td>
+            <td>{{ contrato.duracion }}</td>
+            <td>{{ contrato.estado ? 'Activo' : 'Inactivo' }}</td>
+            <td>{{ getEstadoTemporal(contrato.fechaInicio, contrato.fechaFin) }}</td>
+            <td>
+              <button (click)="editarContrato(contrato)" [disabled]="!esEditable(contrato)">
+                <i class="fas fa-pencil-alt"></i>
+              </button>
+  
+              <button *ngIf="contrato.estado === true" (click)="cambiarEstado(contrato, false)">
+                <i class="fas fa-trash"></i>
+              </button>
+  
+              <button *ngIf="!contrato.estado" (click)="cambiarEstado(contrato, true)">
+                <i class="fas fa-check-circle"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  
