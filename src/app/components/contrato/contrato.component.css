@@ -1,0 +1,156 @@
+/* Estilo para el formulario de contratos */
+
+.contenedor {
+    max-width: 1200px; /* o 1000px si prefieres más estrecho */
+    margin: 0 auto;
+    padding: 1rem;
+  }
+.formulario {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    font-family: Arial, sans-serif;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+  }
+  
+  .columna {
+    flex: 1 1 calc(25% - 1rem);
+    min-width: 220px;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  label {
+    margin-bottom: 0.3rem;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  input, select, textarea {
+    padding: 0.5rem;
+    font-size: 0.9rem;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    transition: border-color 0.3s;
+  }
+  
+  input:focus, select:focus, textarea:focus {
+    border-color: #007bff;
+    outline: none;
+  }
+  
+  button {
+    padding: 0.8rem 1.5rem;
+    background-color: #1a237e;
+    border: none;
+    color: white;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #0056b3;
+  }
+  
+  .error small {
+    color: red;
+    font-size: 0.75rem;
+    margin-top: 0.2rem;
+  }
+  
+  .seccion-formulario h2,
+  .seccion-tabla h2 {
+    font-size: 1.4rem;
+    font-weight: bold;
+    border-bottom: 2px solid #1a237e;
+    padding-bottom: 0.3rem;
+    color: #1a237e;
+    margin-bottom: 1rem;
+  }
+  
+  /* Tabla de contratos */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #f8f8f8;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    font-family: 'Segoe UI', sans-serif;
+    margin-top: 1rem;
+  }
+  
+  thead {
+    background-color: #1a237e;
+    color: white;
+  }
+  
+  th, td {
+    padding: 14px 18px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    font-size: 15px;
+  }
+  
+  tbody tr:hover {
+    background-color: #f0f8ff;
+  }
+  
+  td:last-child {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+  
+  td:last-child button {
+    padding: 10px;
+    border-radius: 6px;
+    font-size: 14px;
+    background-color: #1a237e;
+    box-shadow: 0 2px 6px rgba(52, 152, 219, 0.2);
+  }
+  
+  td:last-child button:hover {
+    background-color: #2980b9;
+  }
+  
+  td:last-child button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+  
+  i {
+    pointer-events: none;
+  }
+  
+  /* Responsive design */
+  @media (max-width: 992px) {
+    .columna {
+      flex: 1 1 calc(50% - 1rem);
+    }
+  }
+  
+  @media (max-width: 600px) {
+    .columna {
+      flex: 1 1 100%;
+    }
+  
+    th, td {
+      font-size: 13px;
+      padding: 10px;
+    }
+  
+    td:last-child {
+      flex-wrap: wrap;
+      justify-content: flex-start;
+    }
+  }
+  
