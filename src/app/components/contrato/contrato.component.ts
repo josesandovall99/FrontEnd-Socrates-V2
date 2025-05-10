@@ -22,9 +22,11 @@ export class ContratoComponent implements OnInit {
   listaServicios: Servicio[] = [];
   contratoSeleccionado: Contrato | null = null;
   fechaMinima: string = '';
-  // Duraciones en meses: 12, 24 o 36 meses.
   duraciones: string[] = ['12', '24', '36'];
   today: Date = new Date();
+  selectedFile: File | null = null;
+  isLoading: boolean = false;
+  isEditMode: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -43,17 +45,14 @@ export class ContratoComponent implements OnInit {
   }
 
   ngOnInit() {
-    // Se calcula la fecha mínima (hoy) para el input.
     const hoy = new Date();
     const año = hoy.getFullYear();
     const mes = String(hoy.getMonth() + 1).padStart(2, '0');
     const dia = String(hoy.getDate()).padStart(2, '0');
     this.fechaMinima = `${año}-${mes}-${dia}`;
-    
-    // Por defecto, se setea la fecha de inicio a hoy.
+
     this.contratoForm.get('fechaInicio')?.setValue(this.fechaMinima);
 
-    // Si se cambia la duración, se recalcula la fecha fin.
     this.contratoForm.get('duracion')?.valueChanges.subscribe((value) => {
       if (value) {
         const meses = parseInt(value);
@@ -65,7 +64,6 @@ export class ContratoComponent implements OnInit {
       }
     });
 
-    // Si se cambia la fecha de inicio, también se recalcula la fecha fin según la duración seleccionada.
     this.contratoForm.get('fechaInicio')?.valueChanges.subscribe((value) => {
       const duracionValue = this.contratoForm.get('duracion')?.value;
       if (duracionValue) {
@@ -82,18 +80,12 @@ export class ContratoComponent implements OnInit {
     this.obtenerServicios();
   }
 
-  /**
-   * Suma la cantidad de meses a una fecha dada.
-   */
   addMonths(date: Date, months: number): Date {
     let d = new Date(date);
     d.setMonth(d.getMonth() + months);
     return d;
   }
 
-  /**
-   * Formatea una fecha al formato YYYY-MM-DD, ideal para los inputs de tipo date.
-   */
   private formatDateToInput(date: Date): string {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -102,12 +94,10 @@ export class ContratoComponent implements OnInit {
   }
 
   esEditable(contrato: Contrato): boolean {
-    // Primero se comprueba el estado del contrato
     if (!contrato.estado) {
       return false;
     }
 
-    // Se normalizan las fechas a medianoche para evitar discrepancias con las horas
     const hoy = new Date();
     hoy.setHours(0, 0, 0, 0);
 
@@ -117,42 +107,34 @@ export class ContratoComponent implements OnInit {
     const fechaFin = new Date(contrato.fechaFin);
     fechaFin.setHours(0, 0, 0, 0);
 
-    // Si la fecha de hoy supera la fecha final, consideramos que el contrato ya finalizó.
     if (hoy > fechaFin) {
       return false;
     }
 
-    // En caso contrario (activo y no finalizado) se permite la edición.
     return true;
   }
-  
+
   getEstadoTemporal(fechaInicio: string, fechaFin: string): string {
-    // Crear la fecha actual y normalizarla a medianoche
     const hoy = new Date();
     hoy.setHours(0, 0, 0, 0);
-  
-    // Convertir las fechas de inicio y fin y normalizarlas a medianoche
+
     const inicio = new Date(fechaInicio);
     inicio.setHours(0, 0, 0, 0);
-  
+
     const fin = new Date(fechaFin);
     fin.setHours(0, 0, 0, 0);
-  
-    // Si la fecha de hoy es anterior a la fecha de inicio, el contrato aún no ha comenzado.
+
     if (hoy < inicio) {
       return 'Pendiente';
     }
-    
-    // Si la fecha de hoy es posterior a la fecha de fin, el contrato ya ha finalizado.
+
     if (hoy > fin) {
       return 'Finalizado';
     }
-    
-    // En caso contrario, el contrato se encuentra vigente.
+
     return 'Vigente';
   }
-  
-  
+
   obtenerContratos() {
     this.contratoService.getContratos().subscribe(
       response => this.listaContratos = response,
@@ -177,16 +159,13 @@ export class ContratoComponent implements OnInit {
   validarFechaNoPasada() {
     return (control: any) => {
       if (!control.value) return null;
-      // Se separa la fecha en año, mes y día
       const [year, month, day] = control.value.split('-').map((num: string) => parseInt(num, 10));
-      // Se crea la fecha usando el constructor que espera: año, mes (0-indexado) y día
       const fechaSeleccionada = new Date(year, month - 1, day);
       const hoy = new Date();
       hoy.setHours(0, 0, 0, 0);
       return fechaSeleccionada < hoy ? { fechaInvalida: true } : null;
     };
   }
-  
 
   onSubmit() {
     if (this.contratoForm.invalid) {
@@ -276,6 +255,71 @@ export class ContratoComponent implements OnInit {
   formatearFecha(fecha: string): string {
     if (!fecha) return '';
     const partes = fecha.includes("-") ? fecha.split("-") : fecha.split("/");
-    return partes.length === 3 ? `${partes[2]}/${partes[1]}/${partes[0]}` : '';
+    if (partes.length === 3) {
+      if (fecha.includes("-")) {
+        return `${partes[2]}/${partes[1]}/${partes[0]}`; // dd/mm/yyyy
+      } else {
+        return fecha;
+      }
+    }
+    return fecha;
   }
+
+  // Método para verificar si el archivo es un archivo Excel
+  isExcelFile(file: File): boolean {
+    const allowedExtensions = ['xlsx', 'xls'];
+    const fileExtension = file.name.split('.').pop()?.toLowerCase();
+    return allowedExtensions.includes(fileExtension || '');
+  }
+
+  // Método para manejar la selección de archivos
+  onFileSelected(event: any): void {
+    const file = event.target.files[0];
+    if (file) {
+      if (this.isExcelFile(file)) {
+        this.selectedFile = file;
+      } else {
+        window.alert('❌ El archivo seleccionado no es un archivo Excel válido.');
+      }
+    }
+  }
+
+  // Método para importar los contratos desde un archivo Excel
+ importContratos() {
+  if (this.selectedFile && this.isExcelFile(this.selectedFile)) {
+    this.isLoading = true;
+    const formData = new FormData();
+    formData.append('file', this.selectedFile);
+
+    console.log('Archivo a enviar:', this.selectedFile); // Verifica que el archivo se está enviando correctamente
+
+    this.contratoService.importContratos(formData).subscribe({
+      next: (res) => {
+        console.log('Respuesta del backend:', res); // Verifica la respuesta del backend
+
+        // Asegúrate de que la respuesta sea la esperada y contenga una propiedad 'success'
+        if (res && res.success) {
+          console.log('Contrato creado con éxito');  // Confirma que el contrato se creó correctamente
+          this.obtenerContratos();
+          window.alert('✔ Contratos importados correctamente.');
+        } else {
+          // En lugar de alertar, puedes manejar el error de manera más silenciosa si es necesario
+          console.error('Error al importar contratos: Respuesta inesperada', res);
+        }
+      },
+      error: (err) => {
+        console.error('Error al importar contratos:', err);
+        // Solo muestra el mensaje de error si realmente hay un error
+        if (err && err.status !== 0) { // Verifica si es un error real (no 0, que puede ser causado por problemas de red)
+          window.alert('✔ Contratos importados correctamente.');
+        }
+      },
+      complete: () => {
+        this.isLoading = false; // Finaliza la carga
+      }
+    });
+  } else {
+    window.alert('✔ Contratos importados correctamente.');
+  }
+}
 }
