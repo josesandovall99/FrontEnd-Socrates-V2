@@ -1,0 +1,84 @@
+<div class="container">
+  <!-- Formulario de Producto -->
+  <div class="seccion-formulario">
+    <h2>{{ productoForm.value.id ? 'Editar Producto' : 'Registrar Producto' }}</h2>
+    <form [formGroup]="productoForm" (ngSubmit)="onSubmit()" class="formulario">
+      <div class="columna">
+        <label for="nombre">Nombre *</label>
+        <input id="nombre" formControlName="nombre" type="text" required />
+        <div *ngIf="productoForm.get('nombre')?.invalid && productoForm.get('nombre')?.touched" class="error">
+          Nombre es requerido
+        </div>
+      </div>
+
+      <div class="columna">
+        <label for="descripcion">Descripción *</label>
+        <input id="descripcion" formControlName="descripcion" type="text" required />
+        <div *ngIf="productoForm.get('descripcion')?.invalid && productoForm.get('descripcion')?.touched" class="error">
+          Descripción es requerida
+        </div>
+      </div>
+
+      <div class="columna">
+        <label for="cantidad">Cantidad *</label>
+        <input id="cantidad" formControlName="cantidad" type="number" required min="1" />
+        <div *ngIf="productoForm.get('cantidad')?.invalid && productoForm.get('cantidad')?.touched" class="error">
+          Cantidad es requerida y debe ser mayor a 0
+        </div>
+      </div>
+
+      <div class="columna">
+        <label for="precio">Precio U *</label>
+        <input id="precio" formControlName="precio" type="number" required min="0" />
+        <div *ngIf="productoForm.get('precio')?.invalid && productoForm.get('precio')?.touched" class="error">
+          Precio es requerido y debe ser mayor o igual a 0
+        </div>
+      </div>
+
+      <div class="columna">
+        <label for="fechaIngreso">Fecha de Ingreso *</label>
+        <input id="fechaIngreso" formControlName="fechaIngreso" type="date" required [disabled]="true"/>
+        <div *ngIf="productoForm.get('fechaIngreso')?.invalid && productoForm.get('fechaIngreso')?.touched" class="error">
+          Fecha de ingreso es requerida
+        </div>
+      </div>
+
+      <button type="submit" [disabled]="productoForm.invalid || isLoading">
+        {{ isLoading ? 'Guardando...' : (productoForm.value.id ? 'Actualizar' : 'Guardar') }}
+      </button>
+    </form>
+  </div>
+
+  <!-- Lista de productos -->
+  <div class="seccion-tabla">
+    <h2>Lista de Productos</h2>
+    <table *ngIf="productos.length > 0; else noData">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Descripción</th>
+          <th>Cantidad</th>
+          <th>Precio</th>
+          <th>Fecha de Ingreso</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let producto of productos">
+          <td>{{ producto.nombre }}</td>
+          <td>{{ producto.descripcion }}</td>
+          <td>{{ producto.cantidad }}</td>
+          <td>{{ producto.precio }}</td>
+          <td>{{ producto.fechaIngreso }}</td>
+          <td class="actions">
+            <button class="edit" (click)="editarProducto(producto)">Editar</button>
+            <button class="delete" (click)="eliminarProducto(producto.id!)">Eliminar</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <ng-template #noData>
+      <p class="no-data">No hay productos registrados.</p>
+    </ng-template>
+  </div>
+</div>

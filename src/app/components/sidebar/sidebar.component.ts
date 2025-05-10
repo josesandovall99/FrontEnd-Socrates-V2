@@ -83,6 +83,7 @@ export class SidebarComponent {
     { path: '/clientes', icon: 'fa-users', label: 'Gestionar Clientes' },
     { path: '/solicitudservicio', icon: 'fa-clipboard-list', label: 'Solicitud de Servicios' },
     { path: '/tipo-plan', icon: 'fa-file-alt', label: 'Tipo Plan' },
+    { path: '/productos', icon: 'fa-file-alt', label: 'Productos' },
     { path: '/empleados', icon: 'fa-file-alt', label: 'Gestionar empleados' },
     { path: '/contratos', icon: 'fa-file-alt', label: 'Gestionar contratos' },
   ];
