@@ -7,6 +7,7 @@ import { Cliente } from 'src/app/models/cliente.model';
 import { ClienteService } from 'src/app/services/cliente.service';
 import { Servicio } from 'src/app/models/servicio.model';
 import { ServicioService } from 'src/app/services/servicio.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-contrato',
@@ -32,11 +33,12 @@ export class ContratoComponent implements OnInit {
     private fb: FormBuilder,
     private contratoService: ContratoService,
     private clienteService: ClienteService,
-    private servicioService: ServicioService
+    private servicioService: ServicioService,
+    private route: ActivatedRoute  // Inyecta ActivatedRoute
   ) {
     this.contratoForm = this.fb.group({
-      cliente: [null, Validators.required],
-      servicio: [null, Validators.required],
+      cliente: [{ value: null, disabled: true }, Validators.required], // Se deshabilita el campo
+      servicio: [{ value: null, disabled: true }, Validators.required], // Se deshabilita el campo
       fechaInicio: ['', [Validators.required, this.validarFechaNoPasada()]],
       fechaFin: ['', Validators.required],
       duracion: ['', [Validators.required, Validators.maxLength(50)]],
@@ -50,6 +52,43 @@ export class ContratoComponent implements OnInit {
     const mes = String(hoy.getMonth() + 1).padStart(2, '0');
     const dia = String(hoy.getDate()).padStart(2, '0');
     this.fechaMinima = `${año}-${mes}-${dia}`;
+    this.contratoForm.get('fechaInicio')?.setValue(this.fechaMinima);
+
+    const clienteIdParam = this.route.snapshot.paramMap.get('clienteId');
+    const servicioIdParam = this.route.snapshot.paramMap.get('servicioId');
+    console.log("clienteIdParam:", clienteIdParam);
+    console.log("servicioIdParam:", servicioIdParam);
+
+    // Recibe ambos parámetros: clienteId y servicioId
+    this.route.paramMap.subscribe(params => {
+      const clienteIdParam = params.get('clienteId');
+      const servicioIdParam = params.get('servicioId');
+      
+      if (clienteIdParam) {
+        const clienteId = Number(clienteIdParam);
+        // Habilitar temporalmente, asignar y luego deshabilitar:
+        const ctrlCliente = this.contratoForm.get('cliente');
+        if (ctrlCliente) {
+          ctrlCliente.enable();
+          ctrlCliente.patchValue(clienteId);
+          console.log("Valor asignado a 'cliente':", ctrlCliente.value); // Verifica aquí
+          ctrlCliente.disable();
+        }
+      }
+      
+      if (servicioIdParam) {
+        const servicioId = Number(servicioIdParam);
+        const ctrlServicio = this.contratoForm.get('servicio');
+        if (ctrlServicio) {
+          ctrlServicio.enable();
+          ctrlServicio.patchValue(servicioId);
+          console.log("Valor asignado a 'servicio':", ctrlServicio.value); // Verifica aquí
+          ctrlServicio.disable();
+        }
+      }
+    });
+    
+    
 
     this.contratoForm.get('fechaInicio')?.setValue(this.fechaMinima);
 
@@ -173,12 +212,13 @@ export class ContratoComponent implements OnInit {
       return;
     }
 
+    const rawData = this.contratoForm.getRawValue();
     const contratoNuevo: Contrato = {
-      ...this.contratoForm.value,
-      fechaInicio: this.formatearFecha(this.contratoForm.value.fechaInicio),
-      fechaFin: this.formatearFecha(this.contratoForm.value.fechaFin),
-      cliente: { id: this.contratoForm.value.cliente },
-      servicio: { id: this.contratoForm.value.servicio },
+      ...rawData,
+      fechaInicio: this.formatearFecha(rawData.fechaInicio),
+      fechaFin: this.formatearFecha(rawData.fechaFin),
+      cliente: { id: rawData.cliente },
+      servicio: { id: rawData.servicio },
       estado: true
     };
 

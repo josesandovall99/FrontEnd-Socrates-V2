@@ -212,14 +212,15 @@ export class ClienteComponent implements OnInit {
 
   async onSubmit(): Promise<void> {
     this.verificarCedulaExistente();
-
+  
     if (this.servicioForm.valid && !this.cedulaExistente) {
       const formData = this.servicioForm.getRawValue();
       formData.fechaRegistro = formData.fechaRegistro?.split('T')[0] || this.today;
-
+  
       this.isLoading = true;
-
+  
       if (this.isEditMode && this.clienteId !== null) {
+        // Lógica de actualización.
         this.clienteService.actualizarCliente(this.clienteId, formData).subscribe(
           (clienteActualizado) => {
             this.isLoading = false;
@@ -236,12 +237,10 @@ export class ClienteComponent implements OnInit {
           (nuevoCliente) => {
             this.isLoading = false;
             this.showNotification('Cliente creado exitosamente', 'success');
-            this.loadClientes();
-
-            this.servicioForm.reset({
-              estado: true,
-              fechaRegistro: this.today,
-            });
+            // Se asume que el objeto nuevoCliente tiene una propiedad id.
+            const clienteId = nuevoCliente.id;
+            // Redirige a la sección de servicio, pasando el clienteId como parámetro de ruta.
+            this.router.navigate(['/solicitudservicio', clienteId]);
           },
           (error) => {
             this.isLoading = false;
@@ -253,6 +252,7 @@ export class ClienteComponent implements OnInit {
       this.showNotification('Formulario inválido. Revisa los campos requeridos.', 'error');
     }
   }
+  
 
   editarCliente(clienteId: number): void {
     if (clienteId != null) {

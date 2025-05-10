@@ -11,11 +11,11 @@ import { AdministradorDashboardComponent } from './components/administrador/admi
 
 
 export const routes: Routes = [
-  { path: 'solicitudservicio', component: ServicioComponent },
+  { path: 'solicitudservicio/:clienteId', component: ServicioComponent },
   { path: 'tipo-plan', component: TipoPlanComponent },
   { path: 'clientes', component: ClienteComponent},
   { path: 'empleados', component: EmpleadoComponent},
-  { path: 'contratos', component: ContratoComponent},
+  { path: 'contratos/:clienteId/:servicioId', component: ContratoComponent},
   { 
     path: 'secretaria-dashboard', 
     component: SecretariaDashboardComponent, 
