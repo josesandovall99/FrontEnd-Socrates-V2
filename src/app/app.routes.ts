@@ -6,6 +6,7 @@ import { ClienteComponent } from './components/cliente/cliente.component';
 import { EmpleadoComponent } from './components/empleado/empleado.component';
 import { ContratoComponent } from './components/contrato/contrato.component';
 import { SecretariaDashboardComponent } from './components/secretaria/secretaria.component';
+import { ProductoComponent } from './components/Producto/producto.component';
 import { AuthGuard } from './auth.guard';
 import { AdministradorDashboardComponent } from './components/administrador/administrador.dashboard';
 
@@ -16,6 +17,8 @@ export const routes: Routes = [
   { path: 'clientes', component: ClienteComponent},
   { path: 'empleados', component: EmpleadoComponent},
   { path: 'contratos', component: ContratoComponent},
+  { path: 'productos', component: ProductoComponent},
+  
   { 
     path: 'secretaria-dashboard', 
     component: SecretariaDashboardComponent, 
