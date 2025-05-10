@@ -5,6 +5,8 @@ import { TipoPlanComponent } from './components/tipo-plan/tipo-plan.component';
 import { ClienteComponent } from './components/cliente/cliente.component';
 import { EmpleadoComponent } from './components/empleado/empleado.component';
 import { ContratoComponent } from './components/contrato/contrato.component';
+import { SecretariaDashboardComponent } from './components/secretaria/secretaria.component';
+import { AuthGuard } from './auth.guard';
 
 
 export const routes: Routes = [
@@ -13,6 +15,12 @@ export const routes: Routes = [
   { path: 'clientes', component: ClienteComponent},
   { path: 'empleados', component: EmpleadoComponent},
   { path: 'contratos', component: ContratoComponent},
+  { 
+    path: 'secretaria-dashboard', 
+    component: SecretariaDashboardComponent, 
+    canActivate: [AuthGuard], 
+    data: { userType: 'secretaria' } 
+  },
 
 
   // Ruta por defecto redirige al formulario de servicio

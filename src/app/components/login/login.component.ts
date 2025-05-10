@@ -287,34 +287,46 @@ export class LoginComponent {
 
       
     //LOGIN CON TIPOS DE CARGO
-    login() {
-        this.authService.login(this.codigoEmpleado, this.password).subscribe(
-            response => {
-                console.log(response.message)
-                console.log(response.userType)
-                if (response.message === 'Login successful') {
-                    localStorage.setItem('authToken', 'true'); // Guarda el token
-                    localStorage.setItem('userType', response.userType); // Guarda el tipo de usuario
+    // login.component.ts
 
-                    // Actualiza el estado de autenticación en AuthService
-                    this.authService.updateAuthStatus(true);
-                    console.log(response.userType)
-                    // Redirige al dashboard adecuado según el tipo de usuario
-                    if (response.userType === 'admin') {
-                        this.router.navigate(['/solicitudservicio']);
-                    } else if (response.userType === 'secretaria') {
-                        this.router.navigate(['/solicitudservicio']);
-                    }
-                } else {
-                    this.message = 'Credenciales ERRONEAS';
-                }
-            },
-            error => {
-                console.error('Error:', error);
-                this.message = 'Error en el servidor o credenciales incorrectas.';
-            }
-        );
-    }
+login() {
+    this.authService.login(this.codigoEmpleado, this.password).subscribe(
+      response => {
+        console.log(response.message);
+        console.log(response.userType);
+  
+        if (response.message === 'Login successful') {
+          // Guardar el token y el tipo de usuario
+          localStorage.setItem('authToken', 'true');
+          localStorage.setItem('userType', response.userType);
+  
+          // Suponiendo que la respuesta incluye 'primerNombre' y 'primerApellido'
+          const userData = {
+            primerNombre: response.primerNombre,  // Por ejemplo "Ana"
+            primerApellido: response.primerApellido  // Por ejemplo "González"
+          };
+          // Guardamos el objeto en localStorage (se transforma a JSON string)
+          localStorage.setItem('userData', JSON.stringify(userData));
+  
+          // Actualiza el estado de autenticación en AuthService y redirecciona
+          this.authService.updateAuthStatus(true);
+          // Redirige al dashboard adecuado según el tipo de usuario
+          if (response.userType.toLowerCase() === 'secretaria') {
+            this.router.navigate(['/secretaria-dashboard']);
+          } else if (response.userType.toLowerCase() === 'admin') {
+            this.router.navigate(['/solicitudservicio']);
+          }
+        } else {
+          this.message = 'Credenciales ERRONEAS';
+        }
+      },
+      error => {
+        console.error('Error:', error);
+        this.message = 'Error en el servidor o credenciales incorrectas.';
+      }
+    );
+  }
+  
 
 
     isPasswordVisible: boolean = false;
