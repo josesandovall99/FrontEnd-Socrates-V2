@@ -17,6 +17,7 @@ export const routes: Routes = [
   { path: 'clientes', component: ClienteComponent},
   { path: 'empleados', component: EmpleadoComponent},
   { path: 'contratos/:clienteId/:servicioId', component: ContratoComponent},
+   { path: 'productos', component: ProductoComponent},
   { 
     path: 'secretaria-dashboard', 
     component: SecretariaDashboardComponent, 
