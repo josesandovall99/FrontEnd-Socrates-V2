@@ -7,6 +7,7 @@ import { EmpleadoComponent } from './components/empleado/empleado.component';
 import { ContratoComponent } from './components/contrato/contrato.component';
 import { SecretariaDashboardComponent } from './components/secretaria/secretaria.component';
 import { AuthGuard } from './auth.guard';
+import { AdministradorDashboardComponent } from './components/administrador/administrador.dashboard';
 
 
 export const routes: Routes = [
@@ -20,6 +21,13 @@ export const routes: Routes = [
     component: SecretariaDashboardComponent, 
     canActivate: [AuthGuard], 
     data: { userType: 'secretaria' } 
+  },
+
+  { 
+    path: 'administrador-dashboard', 
+    component: AdministradorDashboardComponent, 
+    canActivate: [AuthGuard], 
+    data: { userType: 'admin' } 
   },
 
 

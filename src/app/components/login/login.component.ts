@@ -251,8 +251,8 @@ body {
     `]
 })
 export class LoginComponent {
-    codigoEmpleado: string = '777';
-    password: string = '777';
+    codigoEmpleado: string = '';
+    password: string = '';
     message: string = '';
 
     constructor(private authService: AuthService, private router: Router) { }
@@ -314,7 +314,7 @@ login() {
           if (response.userType.toLowerCase() === 'secretaria') {
             this.router.navigate(['/secretaria-dashboard']);
           } else if (response.userType.toLowerCase() === 'admin') {
-            this.router.navigate(['/solicitudservicio']);
+            this.router.navigate(['/administrador-dashboard']);
           }
         } else {
           this.message = 'Credenciales ERRONEAS';
