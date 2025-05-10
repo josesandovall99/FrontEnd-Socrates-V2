@@ -7,6 +7,7 @@ import { TipoPlan } from 'src/app/models/tipo-plan.model';
 import { TipoPlanService } from 'src/app/services/tipo-plan.service';
 import { Empleado } from 'src/app/models/empleado.model';
 import { EmpleadoService } from 'src/app/services/empleado.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-servicio',
@@ -21,8 +22,9 @@ export class ServicioComponent implements OnInit {
   listaTipoPlanes: TipoPlan[] = [];
   listaTecnicos: Empleado[] = []; // 🔥 Ahora activamos los técnicos
   servicioSeleccionado: Servicio | null = null;
+  
 
-  constructor(private fb: FormBuilder, private servicioService: ServicioService, private tipoPlanService: TipoPlanService, private empleadoService: EmpleadoService) {
+  constructor(private fb: FormBuilder, private servicioService: ServicioService, private tipoPlanService: TipoPlanService, private empleadoService: EmpleadoService,private router: Router) {
     this.servicioForm = this.fb.group({
       fechaServicio: ['', [Validators.required, this.validarFechaServicio()]],
       descripcion: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(200)]],
@@ -136,6 +138,9 @@ export class ServicioComponent implements OnInit {
         window.alert('✔ Servicio registrado correctamente.');
         this.obtenerServicios();
         this.servicioForm.reset();
+        // Redirigir a la URL /contratos
+        this.router.navigate(['/contratos']);
+        alert('Por favor registre el contrato del nuevo servicio');
       },
       error => {
         console.error('❌ Error al registrar el servicio:', error);

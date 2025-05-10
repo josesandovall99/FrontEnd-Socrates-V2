@@ -4,6 +4,7 @@ import { LoginComponent } from './components/login/login.component';
 import { TipoPlanComponent } from './components/tipo-plan/tipo-plan.component';
 import { ClienteComponent } from './components/cliente/cliente.component';
 import { EmpleadoComponent } from './components/empleado/empleado.component';
+import { ContratoComponent } from './components/contrato/contrato.component';
 
 
 export const routes: Routes = [
@@ -11,6 +12,7 @@ export const routes: Routes = [
   { path: 'tipo-plan', component: TipoPlanComponent },
   { path: 'clientes', component: ClienteComponent},
   { path: 'empleados', component: EmpleadoComponent},
+  { path: 'contratos', component: ContratoComponent},
 
 
   // Ruta por defecto redirige al formulario de servicio
