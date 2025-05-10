@@ -10,7 +10,7 @@ import { TipoPlanComponent } from "./components/tipo-plan/tipo-plan.component";
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, SidebarComponent, HeaderComponent, TipoPlanComponent],
+  imports: [CommonModule, RouterOutlet, SidebarComponent, HeaderComponent],
   template: `
     <!-- Muestra los componentes según la autenticación y la ruta -->
     <ng-container *ngIf="!isLoginRoute; else loginOnly">
