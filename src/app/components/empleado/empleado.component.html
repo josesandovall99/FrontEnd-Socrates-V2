@@ -7,27 +7,27 @@
   <div class="fila">
     <div class="columna">
       <label for="primerNombre">Primer Nombre:</label>
-      <input type="text" id="primerNombre" formControlName="primerNombre" required />
+      <input type="text" id="primerNombre" formControlName="primerNombre" required  [readonly]="isEditMode"  [ngClass]="{ 'readonly-style': isEditMode }"/>
       <div class="error" *ngIf="servicioForm.get('primerNombre')?.touched && servicioForm.get('primerNombre')?.errors">
         <small *ngIf="servicioForm.get('primerNombre')?.errors?.['required']">Requerido</small>
         <small *ngIf="servicioForm.get('primerNombre')?.errors?.['pattern']">Solo letras</small>
       </div>
 
       <label for="segundoNombre">Segundo Nombre:</label>
-      <input type="text" id="segundoNombre" formControlName="segundoNombre" />
+      <input type="text" id="segundoNombre" formControlName="segundoNombre"  [readonly]="isEditMode"  [ngClass]="{ 'readonly-style': isEditMode }"/>
       <div class="error" *ngIf="servicioForm.get('segundoNombre')?.touched && servicioForm.get('segundoNombre')?.errors">
         <small *ngIf="servicioForm.get('segundoNombre')?.errors?.['pattern']">Solo letras</small>
       </div>
 
       <label for="primerApellido">Primer Apellido:</label>
-      <input type="text" id="primerApellido" formControlName="primerApellido" required />
+      <input type="text" id="primerApellido" formControlName="primerApellido" required  [readonly]="isEditMode"  [ngClass]="{ 'readonly-style': isEditMode }"/>
       <div class="error" *ngIf="servicioForm.get('primerApellido')?.touched && servicioForm.get('primerApellido')?.errors">
         <small *ngIf="servicioForm.get('primerApellido')?.errors?.['required']">Requerido</small>
         <small *ngIf="servicioForm.get('primerApellido')?.errors?.['pattern']">Solo letras</small>
       </div>
 
       <label for="segundoApellido">Segundo Apellido:</label>
-      <input type="text" id="segundoApellido" formControlName="segundoApellido" />
+      <input type="text" id="segundoApellido" formControlName="segundoApellido"  [readonly]="isEditMode"  [ngClass]="{ 'readonly-style': isEditMode }"/>
       <div class="error" *ngIf="servicioForm.get('segundoApellido')?.touched && servicioForm.get('segundoApellido')?.errors">
         <small *ngIf="servicioForm.get('segundoApellido')?.errors?.['pattern']">Solo letras</small>
       </div>
@@ -35,7 +35,8 @@
 
     <div class="columna">
       <label for="sexo">Sexo:</label>
-      <select id="sexo" formControlName="sexo" required>
+      <select id="sexo" formControlName="sexo" required [disabled]="isEditMode"
+  [ngClass]="{ 'readonly-style': isEditMode }">
         <option value="">Selecciona</option>
         <option value="Masculino">Masculino</option>
         <option value="Femenino">Femenino</option>
@@ -43,7 +44,8 @@
       </select>
 
       <label for="fechaNacimiento">Fecha de Nacimiento:</label>
-      <input type="date" id="fechaNacimiento" formControlName="fechaNacimiento" required [max]="today">
+      <input type="date" id="fechaNacimiento" formControlName="fechaNacimiento" required [max]="today" [disabled]="isEditMode"
+  [ngClass]="{ 'readonly-style': isEditMode }">
     </div>
   </div>
 
@@ -52,7 +54,8 @@
   <div class="fila">
     <div class="columna">
       <label for="tipoIdentificacion">Tipo de Identificación</label>
-      <select formControlName="tipoIdentificacion" id="tipoIdentificacion">
+      <select formControlName="tipoIdentificacion" id="tipoIdentificacion" required [disabled]="isEditMode"
+  [ngClass]="{ 'readonly-style': isEditMode }">
         <option value="">Seleccione</option>
         <option value="CC">Cédula de Ciudadanía</option>
         <option value="TI">Tarjeta de Identidad</option>
@@ -61,7 +64,8 @@
       </select>
 
       <label for="numeroIdentificacion">Número de Identificación:</label>
-      <input type="text" id="numeroIdentificacion" formControlName="numeroIdentificacion" required />
+      <input type="text" id="numeroIdentificacion" formControlName="numeroIdentificacion" required [disabled]="isEditMode"
+  [ngClass]="{ 'readonly-style': isEditMode }"/>
       <div class="error" *ngIf="servicioForm.get('numeroIdentificacion')?.touched && servicioForm.get('numeroIdentificacion')?.errors">
         <small *ngIf="servicioForm.get('numeroIdentificacion')?.errors?.['required']">Requerido</small>
         <small *ngIf="servicioForm.get('numeroIdentificacion')?.errors?.['pattern']">Solo números</small>
@@ -108,15 +112,19 @@
   <div class="seccion-titulo">Datos Laborales</div>
   <div class="fila">
     <div class="columna">
-      <label for="codigoEmpleado">Código de Empleado:</label>
-      <input type="text" id="codigoEmpleado" formControlName="codigoEmpleado" required>
-      <div class="error" *ngIf="servicioForm.get('codigoEmpleado')?.touched && servicioForm.get('codigoEmpleado')?.errors">
-        <small *ngIf="servicioForm.get('codigoEmpleado')?.errors?.['required']">Requerido</small>
-        <small *ngIf="servicioForm.get('codigoEmpleado')?.errors?.['minlength']">Mínimo 3 caracteres</small>
-      </div>
+      <!--<label for="codigoEmpleado">Código de Empleado:</label>
+    <input type="text" id="codigoEmpleado" formControlName="codigoEmpleado" required>
+    <div class="error" *ngIf="servicioForm.get('codigoEmpleado')?.touched && servicioForm.get('codigoEmpleado')?.errors">
+      <small *ngIf="servicioForm.get('codigoEmpleado')?.errors?.['required']">Requerido</small>
+      <small *ngIf="servicioForm.get('codigoEmpleado')?.errors?.['minlength']">Mínimo 3 caracteres</small>
+    </div>-->
+    <label for="codigoEmpleado">Código de Empleado:</label>
+    <input type="text" id="codigoEmpleado" formControlName="codigoEmpleado" readonly  [disabled]="isEditMode"
+  [ngClass]="{ 'readonly-style': isEditMode }">
 
       <label for="cargo">Cargo</label>
-      <select formControlName="cargo" id="cargo">
+      <select formControlName="cargo" id="cargo" [disabled]="isEditMode"
+  [ngClass]="{ 'readonly-style': isEditMode }">
         <option value="">Seleccione</option>
         <option value="admin">Administrador</option>
         <option value="secretaria">Secretaria</option>
@@ -124,7 +132,8 @@
       </select>
 
       <label for="tipoContrato">Tipo de Contrato:</label>
-      <select id="tipoContrato" formControlName="tipoContrato" required>
+      <select id="tipoContrato" formControlName="tipoContrato" required [disabled]="isEditMode"
+        [ngClass]="{ 'readonly-style': isEditMode }">
         <option value="">Selecciona</option>
         <option value="Término Fijo">Término Fijo</option>
         <option value="Término Indefinido">Término Indefinido</option>
@@ -136,6 +145,16 @@
         <option [value]="true">Activo</option>
         <option [value]="false">Inactivo</option>
       </select>
+
+      <label for="fechaIngreso">Fecha de Ingreso:</label>
+    <input type="date" id="fechaIngreso" formControlName="fechaIngreso">
+
+    <label for="fechaRetiro">Fecha de Retiro:</label>
+    <input type="date" id="fechaRetiro" formControlName="fechaRetiro">
+
+    <label for="sueldo">Sueldo:</label>
+    <input type="number" id="sueldo" formControlName="sueldo" min="0">
+
     </div>
   </div>
 
@@ -245,14 +264,15 @@
         </button>
 
         <!-- Botón de eliminar (solo si está activo) -->
-        <button *ngIf="empleado.estado" (click)="eliminarEmpleado(empleado)">
+         <!--<button *ngIf="empleado.estado" (click)="eliminarEmpleado(empleado)">
           <i class="fas fa-trash"></i>
-        </button>
-
-        <!-- Botón de reactivar (solo si está inactivo) -->
-        <button *ngIf="!empleado.estado" (click)="reactivarEmpleado(empleado)">
+        </button>-->
+        
+        <!--<button *ngIf="!empleado.estado" (click)="reactivarEmpleado(empleado)">
           <i class="fas fa-check-circle"></i>
-        </button>
+        </button>-->
+        <!-- Botón de reactivar (solo si está inactivo) -->
+        
       </td>
     </tr>
   </tbody>

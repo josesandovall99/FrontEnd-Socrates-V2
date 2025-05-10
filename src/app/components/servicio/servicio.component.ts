@@ -89,7 +89,8 @@ export class ServicioComponent implements OnInit {
                 tipoIdentificacion: '', numeroIdentificacion: 'N/A', sexo: '', correoElectronico: '', telefono: '', 
                 fechaNacimiento: '', lugarResidencia: '', direccionCasa: '', barrio: '', estado: false, 
                 codigoEmpleado: '', cargo: '', tipoContrato: '', hojaDeVida: '', referenciaLaboral: '', 
-                contactoEmergenciaNombre: '', contactoEmergenciaParentesco: '', contactoEmergenciaTelefono: '' 
+                contactoEmergenciaNombre: '', contactoEmergenciaParentesco: '', contactoEmergenciaTelefono: '' , fechaIngreso: '',
+                fechaRetiro: '', sueldo: 0 
               }
         }));
       },

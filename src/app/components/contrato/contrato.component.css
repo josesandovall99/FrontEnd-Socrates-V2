@@ -152,5 +152,12 @@
       flex-wrap: wrap;
       justify-content: flex-start;
     }
+
+     .readonly-style {
+  background-color: #f3f3f3;
+  opacity: 0.7;
+  color: #555;
+  pointer-events: none; /* evita interacción si es necesario */
+}
   }
   

@@ -25,5 +25,8 @@ export interface Empleado {
     contactoEmergenciaNombre: string;
     contactoEmergenciaParentesco: string;
     contactoEmergenciaTelefono: string;
+    fechaIngreso: string; 
+    fechaRetiro: string; 
+    sueldo: number;
   }
   

@@ -55,6 +55,10 @@ export class EmpleadoService {
   
       return this.http.post(`${this.GeneralUrl}/subir-pdf`, formData);
     }
+
+    getNuevoCodigoEmpleado(): Observable<string> {
+  return this.http.get<string>(`${this.GeneralUrl}/empleados/nuevo-codigo`);
+}
   
   
 }

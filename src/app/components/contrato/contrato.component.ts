@@ -39,6 +39,7 @@ export class ContratoComponent implements OnInit {
     this.contratoForm = this.fb.group({
       cliente: [{ value: null, disabled: true }, Validators.required], // Se deshabilita el campo
       servicio: [{ value: null, disabled: true }, Validators.required], // Se deshabilita el campo
+      fechaRegistro: ['', Validators.required],
       fechaInicio: ['', [Validators.required, this.validarFechaNoPasada()]],
       fechaFin: ['', Validators.required],
       duracion: ['', [Validators.required, Validators.maxLength(50)]],
@@ -215,6 +216,7 @@ export class ContratoComponent implements OnInit {
     const rawData = this.contratoForm.getRawValue();
     const contratoNuevo: Contrato = {
       ...rawData,
+      fechaRegistro: this.today.toISOString().split('T')[0], // Formato YYYY-MM-DD
       fechaInicio: this.formatearFecha(rawData.fechaInicio),
       fechaFin: this.formatearFecha(rawData.fechaFin),
       cliente: { id: rawData.cliente },
@@ -246,8 +248,9 @@ export class ContratoComponent implements OnInit {
     this.contratoForm.patchValue({
       cliente: contrato.cliente.id,
       servicio: contrato.servicio.id,
-      fechaInicio: this.formatearFecha(contrato.fechaInicio),
-      fechaFin: this.formatearFecha(contrato.fechaFin),
+      fechaRegistro: this.formatDateToInput(new Date(contrato.fechaRegistro)),
+      fechaInicio: this.formatDateToInput(new Date(contrato.fechaInicio)),
+      fechaFin: this.formatDateToInput(new Date(contrato.fechaFin)),
       duracion: contrato.duracion
     });
   }
@@ -258,6 +261,7 @@ export class ContratoComponent implements OnInit {
     const contratoActualizado: Contrato = {
       ...this.contratoSeleccionado,
       ...this.contratoForm.value,
+      fechaRegistro: this.today.toISOString().split('T')[0], // Formato YYYY-MM-DD
       fechaInicio: this.formatearFecha(this.contratoForm.value.fechaInicio),
       fechaFin: this.formatearFecha(this.contratoForm.value.fechaFin),
       cliente: { id: this.contratoForm.value.cliente },

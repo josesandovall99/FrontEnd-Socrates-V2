@@ -51,14 +51,17 @@ this.servicioForm = this.fb.group({
   direccionCasa: ['', Validators.required],
   barrio: ['', Validators.required],
   estado: [{ value: true, disabled: true }],
-  codigoEmpleado: ['', [Validators.required, Validators.minLength(3)]],
+  codigoEmpleado: [''],
   cargo: ['', Validators.required],
   tipoContrato: ['', Validators.required],
   hojaDeVida: [''],
   referenciaLaboral: ['', Validators.required],
   contactoEmergenciaNombre: ['', [Validators.required, Validators.pattern(soloLetras)]],
   contactoEmergenciaParentesco: ['', [Validators.required, Validators.pattern(soloLetras)]],
-  contactoEmergenciaTelefono: ['', [Validators.required, Validators.pattern(soloNumeros), Validators.minLength(10), Validators.maxLength(10)]]
+  contactoEmergenciaTelefono: ['', [Validators.required, Validators.pattern(soloNumeros), Validators.minLength(10), Validators.maxLength(10)]],
+  fechaIngreso: [''],
+  fechaRetiro: [''],
+  sueldo: ['', [Validators.min(0)]]
 });
 
   }
@@ -72,8 +75,26 @@ this.servicioForm = this.fb.group({
       this.loadEmpleado();
     } else {
       this.loadEmpleados();
+
+      this.empleadoService.getNuevoCodigoEmpleado().subscribe(res => {
+      this.servicioForm.patchValue({ codigoEmpleado: res });
+    });
     }
+    this.servicioForm.get('fechaIngreso')?.valueChanges.subscribe(() => this.actualizarEstadoAutomatico());
+    this.servicioForm.get('fechaRetiro')?.valueChanges.subscribe(() => this.actualizarEstadoAutomatico());
   }
+
+  actualizarEstadoAutomatico(): void {
+  const fechaIngreso = this.servicioForm.get('fechaIngreso')?.value;
+  const fechaRetiro = this.servicioForm.get('fechaRetiro')?.value;
+  const hoy = new Date().toISOString().split('T')[0];
+
+  if (fechaIngreso && (!fechaRetiro || fechaRetiro >= hoy)) {
+    this.servicioForm.get('estado')?.setValue(true);  // Activo
+  } else {
+    this.servicioForm.get('estado')?.setValue(false); // Inactivo
+  }
+}
 
   loadEmpleados(): void {
     this.empleadoService.obtenerEmpleados().subscribe(
@@ -116,6 +137,9 @@ this.servicioForm = this.fb.group({
             contactoEmergenciaNombre: empleado.contactoEmergenciaNombre,
             contactoEmergenciaParentesco: empleado.contactoEmergenciaParentesco,
             contactoEmergenciaTelefono: empleado.contactoEmergenciaTelefono,
+            fechaIngreso: empleado.fechaIngreso,
+            fechaRetiro: empleado.fechaRetiro,
+            sueldo: empleado.sueldo
             // hojaDeVida NO se pone aquí
           });
   
@@ -147,6 +171,15 @@ this.servicioForm = this.fb.group({
   }
 
   async onSubmit(): Promise<void> {
+    console.log(this.servicioForm);
+console.log(this.servicioForm.invalid);
+console.log(this.servicioForm.errors);
+Object.keys(this.servicioForm.controls).forEach(field => {
+  const control = this.servicioForm.get(field);
+  if (control && control.invalid) {
+    console.warn(`Campo con error: ${field}`, control.errors);
+  }
+});
     this.verificarCedulaExistente();
   
     
