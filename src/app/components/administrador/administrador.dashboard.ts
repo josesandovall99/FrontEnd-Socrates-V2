@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { DashboardService } from 'src/app/services/dashboard.service';
 
 interface StatCard {
   icon: string;
@@ -74,12 +75,12 @@ export class AdministradorDashboardComponent implements OnInit {
   lastName: string = '';
 
   stats: StatCard[] = [
-    { icon: 'fa-users', count: 25, label: 'Gestionar Clientes', route: '/clientes' },
-    { icon: 'fa-clipboard-list', count: 10, label: 'Gestionar Tipos de Planes', route: '/tipo-plan' },
-    { icon: 'fa-user-tie', count: 5, label: 'Gestionar empleados', route: '/empleados' }
+    { icon: 'fa-users', count: 0, label: 'Gestionar Clientes', route: '/clientes' },
+    { icon: 'fa-clipboard-list', count: 0, label: 'Gestionar tipos de planes', route: '/tipo-plan' },
+    { icon: 'fa-user-tie', count: 0, label: 'Gestionar empleados', route: '/empleados' }
   ];
   
-  constructor(private router: Router) {}
+  constructor(private router: Router, private dashboardService: DashboardService) {}
 
   ngOnInit(): void {
     // Recupera el objeto almacenado en localStorage
@@ -89,6 +90,28 @@ export class AdministradorDashboardComponent implements OnInit {
       this.firstName = user.primerNombre;
       this.lastName = user.primerApellido;
     }
+
+      // Obtener la cantidad 
+      this.dashboardService.getTiposPlanesCount().subscribe(count => {
+          const TiposPlanesCard = this.stats.find(stat => stat.label === 'Gestionar tipos de planes');
+          if (TiposPlanesCard) {
+              TiposPlanesCard.count = count;
+          }
+      });
+
+      this.dashboardService.getClientesCount().subscribe(count => {
+          const ClientesCard = this.stats.find(stat => stat.label === 'Gestionar Clientes');
+          if (ClientesCard) {
+              ClientesCard.count = count;
+          }
+      });
+
+        this.dashboardService.getEmpleadosCount().subscribe(count => {
+            const EmpleadosCard = this.stats.find(stat => stat.label === 'Gestionar empleados');
+            if (EmpleadosCard) {
+                EmpleadosCard.count = count;
+            }
+        });
   }
 
   navigate(stat: StatCard): void {

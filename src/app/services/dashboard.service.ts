@@ -23,4 +23,10 @@ export class DashboardService {
       .get(`${this.API_URL}/clientes/count`, { responseType: 'text' })
       .pipe(map(response => Number(response)));
   }
+
+    getEmpleadosCount(): Observable<number> {
+        return this.http
+        .get(`${this.API_URL}/empleados/count`, { responseType: 'text' })
+        .pipe(map(response => Number(response)));
+    }
 }
