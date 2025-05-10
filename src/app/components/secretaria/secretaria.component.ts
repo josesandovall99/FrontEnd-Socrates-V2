@@ -1,8 +1,9 @@
 // secretaria-dashboard.component.ts
-
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { DashboardService } from 'src/app/services/dashboard.service';
+// Ajusta la ruta del servicio
 
 interface StatCard {
   icon: string;
@@ -18,7 +19,7 @@ interface StatCard {
   template: `
     <div class="dashboard">
       <h1>SECRETARIA</h1>
-      <p>Bienvenida, {{ firstName }} {{ lastName }}.</p>
+      <p>Bienvenida <strong>{{ firstName }} {{ lastName }}</strong>, por favor selecciona una opción:</p>
       
       <div class="stats-grid">
         <div *ngFor="let stat of stats" class="stat-card" (click)="navigate(stat)">
@@ -32,9 +33,7 @@ interface StatCard {
     </div>
   `,
   styles: [`
-    .dashboard {
-      padding: 2rem;
-    }
+    .dashboard { padding: 2rem; }
     .stats-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -52,46 +51,50 @@ interface StatCard {
       cursor: pointer;
       transition: background-color 0.3s ease;
     }
-    .stat-card:hover {
-      background-color: #f0f0f0;
-    }
+    .stat-card:hover { background-color: #f0f0f0; }
     .stat-card i {
       font-size: 2rem;
       color: #1a237e;
     }
-    .stat-info h3 {
-      margin: 0;
-      font-size: 1.5rem;
-      color: #1a237e;
-    }
-    .stat-info p {
-      margin: 0.5rem 0 0;
-      color: #666;
-    }
+    .stat-info h3 { margin: 0; font-size: 1.5rem; color: #1a237e; }
+    .stat-info p { margin: 0.5rem 0 0; color: #666; }
   `]
 })
 export class SecretariaDashboardComponent implements OnInit {
-  // Variables que almacenan el primer nombre y apellido de la secretaria
   firstName: string = '';
   lastName: string = '';
 
   stats: StatCard[] = [
-    { icon: 'fa-user-plus', count: 25, label: 'Gestionar Clientes', route: '/clientes' },
-    { icon: 'fa-file-alt', count: 10, label: 'Gestionar Tipos de Planes', route: '/tipo-plan' },
-    { icon: 'fa-phone', count: 5, label: 'Llamadas Pendientes', route: '/llamadas-pendientes' },
-    { icon: 'fa-calendar-check', count: 8, label: 'Programar Citas', route: '/programar-citas' }
+    { icon: 'fa-users', count: 0, label: 'Gestionar Clientes', route: '/clientes' },
+    { icon: 'fa-clipboard-list', count: 0, label: 'Gestionar tipos de planes', route: '/tipo-plan' },
+    { icon: 'fa-calendar-check', count: 0, label: 'Programar mantenimientos', route: '/programar-citas' },
   ];
   
-  constructor(private router: Router) {}
+  constructor(private router: Router, private dashboardService: DashboardService) {}
 
   ngOnInit(): void {
-    // Recupera el objeto almacenado en localStorage
+    // Recuperar datos del usuario para el saludo, en caso de que lo hayas guardado previamente
     const userData = localStorage.getItem('userData');
     if (userData) {
       const user = JSON.parse(userData);
       this.firstName = user.primerNombre;
       this.lastName = user.primerApellido;
     }
+
+    // Obtener la cantidad 
+    this.dashboardService.getTiposPlanesCount().subscribe(count => {
+      const TiposPlanesCard= this.stats.find(stat => stat.label === 'Gestionar tipos de planes');
+      if (TiposPlanesCard) {
+        TiposPlanesCard.count = count;
+      }
+    });
+
+    this.dashboardService.getClientesCount().subscribe(count => {
+        const ClientesCard= this.stats.find(stat => stat.label === 'Gestionar Clientes');
+        if (ClientesCard) {
+            ClientesCard.count = count;
+        }
+      });
   }
 
   navigate(stat: StatCard): void {
