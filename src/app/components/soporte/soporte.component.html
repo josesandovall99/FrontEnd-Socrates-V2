@@ -1,0 +1,80 @@
+<div class="contenedor">
+  <!-- Sección 1: Formulario de Soporte -->
+  <div class="contenedor">
+    <div class="seccion-formulario">
+      <h2>Administración de Soportes</h2>
+      <form [formGroup]="soporteForm" (ngSubmit)="onSubmit()" class="formulario">
+        <div class="columna">
+          <label>Fecha de Solicitud:</label>
+          <input type="date" formControlName="fechaSolicitud" required>
+          <small *ngIf="soporteForm.controls['fechaSolicitud'].hasError('fechaInvalida')">
+            ⚠ La fecha de solicitud no puede ser anterior a la fecha actual.
+          </small>
+
+          <label>Descripción:</label>
+          <textarea formControlName="descripcion" required></textarea>
+        </div>
+
+        <div class="columna">
+          <label>Estado:</label>
+          <input type="text" formControlName="estado" [disabled]="true">
+
+          <label>Técnico:</label>
+          <select formControlName="tecnico">
+            <option value="">Seleccionar técnico</option>
+            <option *ngFor="let tecnico of listaTecnicos" [value]="tecnico.id">
+              {{ tecnico.primerNombre }} - {{ tecnico.numeroIdentificacion }}
+            </option>
+          </select>
+
+          <label>Fecha de Registro:</label>
+          <input type="text" formControlName="fechaRegistro" [disabled]="true">
+        </div>
+
+        <button type="submit" *ngIf="!soporteSeleccionado">Registrar Soporte</button>
+        <button type="button" *ngIf="soporteSeleccionado" (click)="guardarEdicion()">Guardar cambios</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Sección 2: Tabla de Soportes -->
+  <div class="seccion-tabla">
+    <h2>Lista de Soportes</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Fecha de Registro</th>
+          <th>Fecha de Solicitud</th>
+          <th>Descripción</th>
+          <th>Estado</th>
+          <th>Técnico</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let soporte of listaSoportes">
+          <td>{{ soporte.fechaRegistro }}</td> 
+          <td>{{ soporte.fechaSolicitud }}</td> 
+          <td>{{ soporte.descripcion }}</td>
+          <td>{{ soporte.estado }}</td>
+          <td>
+            {{ soporte.tecnico ? soporte.tecnico.primerNombre + ' - ' + soporte.tecnico.numeroIdentificacion : 'No asignado' }}
+          </td> 
+          <td>
+            <button (click)="editarSoporte(soporte)" [disabled]="soporte.estado === 'Cerrado'">
+              <i class="fas fa-pencil-alt"></i> <!-- Ícono de lápiz -->
+            </button>
+  
+            <button *ngIf="soporte.estado === 'Pendiente'" (click)="cambiarEstado(soporte, 'Cerrado')">
+              <i class="fas fa-trash"></i> <!-- Ícono de basura -->
+            </button>
+  
+            <button *ngIf="soporte.estado === 'Cerrado'" (click)="cambiarEstado(soporte, 'Pendiente')">
+              <i class="fas fa-check-circle"></i> <!-- Ícono verde de check -->
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
