@@ -86,34 +86,35 @@ export class SoporteComponent implements OnInit {
     };
   }
 
-  onSubmit(): void {
-    if (this.soporteForm.invalid) {
-      window.alert('❌ No se pudo registrar el soporte. Verifica las validaciones.');
-      return;
-    }
-
-    const nuevoSoporte: Soporte = {
-      ...this.soporteForm.value,
-      fechaSolicitud: this.soporteForm.value.fechaSolicitud,
-      fechaRegistro: this.getFechaActual(),
-      tecnico: this.soporteForm.value.tecnico ? { id: this.soporteForm.value.tecnico } : null,
-      estado: 'Pendiente'
-    };
-
-    console.log("JSON enviado al backend:", nuevoSoporte);
-
-    this.soporteService.createSoporte(nuevoSoporte).subscribe(
-      response => {
-        window.alert('✔ Soporte registrado correctamente.');
-        this.obtenerSoportes();
-        this.soporteForm.reset();
-      },
-      error => {
-        console.error('❌ Error al registrar el soporte:', error);
-        window.alert('❌ Hubo un problema al registrar el soporte. Revisa la consola para más detalles.');
-      }
-    );
+  
+onSubmit(): void {
+  if (this.soporteForm.invalid) {
+    window.alert('❌ No se pudo registrar el soporte. Verifica las validaciones.');
+    return;
   }
+
+  const nuevoSoporte: Soporte = {
+    ...this.soporteForm.value,
+    fechaSolicitud: this.formatFecha(this.soporteForm.value.fechaSolicitud),
+    fechaRegistro: this.getFechaActual(),
+    tecnico: this.soporteForm.value.tecnico ? { id: this.soporteForm.value.tecnico } : null,
+    estado: 'Pendiente'
+  };
+
+  console.log("JSON enviado al backend:", nuevoSoporte);
+
+  this.soporteService.createSoporte(nuevoSoporte).subscribe(
+    response => {
+      window.alert('✔ Soporte registrado correctamente.');
+      this.obtenerSoportes();
+      this.soporteForm.reset();
+    },
+    error => {
+      console.error('❌ Error al registrar el soporte:', error);
+      window.alert('❌ Hubo un problema al registrar el soporte. Revisa la consola para más detalles.');
+    }
+  );
+}
 
   editarSoporte(soporte: Soporte): void {
     this.soporteSeleccionado = soporte;
@@ -121,34 +122,44 @@ export class SoporteComponent implements OnInit {
   }
 
   guardarEdicion(): void {
-    if (this.soporteSeleccionado) {
-      const soporteActualizado: Soporte = {
-        ...this.soporteSeleccionado,
-        ...this.soporteForm.value,
-        fechaRegistro: this.soporteSeleccionado.fechaRegistro,
-        tecnico: this.soporteForm.value.tecnico ? { id: this.soporteForm.value.tecnico } : null
-      };
+  if (this.soporteSeleccionado) {
+    const soporteActualizado: Soporte = {
+      ...this.soporteSeleccionado,
+      ...this.soporteForm.value,
+      fechaSolicitud: this.formatFecha(this.soporteForm.value.fechaSolicitud),
+      fechaRegistro: this.soporteSeleccionado.fechaRegistro,
+      tecnico: this.soporteForm.value.tecnico ? { id: this.soporteForm.value.tecnico } : null
+    };
 
-      console.log("JSON enviado al backend:", soporteActualizado);
+    console.log("JSON enviado al backend:", soporteActualizado);
 
-      if (soporteActualizado.id !== undefined) {
-        this.soporteService.updateSoporte(soporteActualizado.id, soporteActualizado).subscribe(
-          response => {
-            window.alert('✔ Soporte actualizado correctamente.');
-            this.obtenerSoportes();
-            this.soporteSeleccionado = null;
-            this.soporteForm.reset();
-          },
-          error => {
-            console.error('❌ Error al actualizar el soporte:', error);
-            window.alert('❌ Hubo un problema al actualizar el soporte. Revisa la consola para más detalles.');
-          }
-        );
-      } else {
-        window.alert('❌ No se puede actualizar el soporte: ID no definido.');
-      }
+    if (soporteActualizado.id !== undefined) {
+      this.soporteService.updateSoporte(soporteActualizado.id, soporteActualizado).subscribe(
+        response => {
+          window.alert('✔ Soporte actualizado correctamente.');
+          this.obtenerSoportes();
+          this.soporteSeleccionado = null;
+          this.soporteForm.reset();
+        },
+        error => {
+          console.error('❌ Error al actualizar el soporte:', error);
+          window.alert('❌ Hubo un problema al actualizar el soporte. Revisa la consola para más detalles.');
+        }
+      );
+    } else {
+      window.alert('❌ No se puede actualizar el soporte: ID no definido.');
     }
   }
+}
+
+  formatFecha(fecha: string | Date): string {
+  if (!fecha) return '';
+  const dateObj = new Date(fecha);
+  const dia = dateObj.getDate().toString().padStart(2, '0');
+  const mes = (dateObj.getMonth() + 1).toString().padStart(2, '0');
+  const año = dateObj.getFullYear();
+  return `${dia}/${mes}/${año}`;
+}
 
     cambiarEstado(soporte: Soporte, estado: string): void {
     const soporteActualizado: Soporte = { ...soporte, estado };

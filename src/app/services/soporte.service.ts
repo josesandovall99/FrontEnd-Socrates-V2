@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class SoporteService {
-  private baseUrl = 'http://localhost:8080/api/soportes'; // Ajusta al endpoint real
+  private baseUrl = 'http://localhost:8080/api/v1/soportes'; // Ajusta al endpoint real
 
   constructor(private http: HttpClient) {}
 

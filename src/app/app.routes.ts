@@ -9,6 +9,7 @@ import { SecretariaDashboardComponent } from './components/secretaria/secretaria
 import { ProductoComponent } from './components/Producto/producto.component';
 import { AuthGuard } from './auth.guard';
 import { AdministradorDashboardComponent } from './components/administrador/administrador.dashboard';
+import { SoporteComponent } from './components/soporte/soporte.component';
 
 
 export const routes: Routes = [
@@ -30,6 +31,12 @@ export const routes: Routes = [
     component: AdministradorDashboardComponent, 
     canActivate: [AuthGuard], 
     data: { userType: 'admin' } 
+  },
+  { 
+    path: 'soportes', 
+    component: SoporteComponent, 
+    canActivate: [AuthGuard], 
+    data: { userType: 'secretaria' } 
   },
 
 
