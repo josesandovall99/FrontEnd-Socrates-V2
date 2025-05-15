@@ -1,0 +1,66 @@
+.mantenimiento-container {
+  width: 60%;
+  margin: auto;
+  background: #fff;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+h2, h3 {
+  text-align: center;
+  color: #1a237e;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  font-weight: bold;
+}
+
+input, select, textarea {
+  padding: 0.8rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+}
+
+.btn-submit {
+  width: 100%;
+  padding: 1rem;
+  background: #1e2875;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-submit:hover {
+  background: #142166;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 2rem;
+}
+
+th, td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+button {
+  padding: 0.5rem 1rem;
+  border: none;
+  background: #38b6ff;
+  color: white;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #1a237e;
+}

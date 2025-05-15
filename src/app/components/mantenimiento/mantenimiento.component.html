@@ -1,0 +1,63 @@
+<div class="mantenimiento-container">
+  <h2>Gestión de Mantenimiento</h2>
+
+  <form [formGroup]="mantenimientoForm" (ngSubmit)="saveMantenimiento()">
+    <div class="form-group">
+      <label for="soporte">Soporte:</label>
+      <input id="soporte" formControlName="soporte" required />
+    </div>
+
+    <div class="form-group">
+      <label for="descripcion">Descripción:</label>
+      <textarea id="descripcion" formControlName="descripcion" required></textarea>
+    </div>
+
+    <div class="form-group">
+      <label for="fechaProgramada">Fecha Programada:</label>
+      <input id="fechaProgramada" formControlName="fechaProgramada" required type="date" />
+    </div>
+
+    <div class="form-group">
+      <label for="estado">Estado:</label>
+      <select id="estado" formControlName="estado" required>
+        <option value="Pendiente">Pendiente</option>
+        <option value="Completado">Completado</option>
+        <option value="En proceso">En proceso</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="tecnico">Técnico:</label>
+      <input id="tecnico" formControlName="tecnico" required />
+    </div>
+
+    <button type="submit" class="btn-submit" [disabled]="mantenimientoForm.invalid">
+      Guardar
+    </button>
+  </form>
+
+  <h3>Lista de Mantenimientos</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Descripción</th>
+        <th>Fecha Programada</th>
+        <th>Estado</th>
+        <th>Técnico</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let mantenimiento of mantenimientos">
+        <td>{{ mantenimiento.descripcion }}</td>
+        <td>{{ mantenimiento.fechaProgramada | date:'shortDate' }}</td>
+        <td>{{ mantenimiento.estado }}</td>
+        <td>{{ mantenimiento.tecnico.nombre }}</td>
+        <td>
+          <button (click)="editMantenimiento(mantenimiento)">Editar</button>
+          <button (click)="deleteMantenimiento(mantenimiento.id)">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
