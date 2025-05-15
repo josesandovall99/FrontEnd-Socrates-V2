@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Mantenimiento } from '../../models/mantenimiento.model';
-import { MantenimientoService } from '../../services/mantenimiento.service';
+import { MantenimientoService } from 'src/app/services/mantenimiento.service';
 
 @Component({
   selector: 'app-mantenimiento',
@@ -9,11 +9,18 @@ import { MantenimientoService } from '../../services/mantenimiento.service';
   styleUrls: ['./mantenimiento.component.css']
 })
 export class MantenimientoComponent implements OnInit {
-  mantenimientoForm: FormGroup;
+  mantenimientoForm!: FormGroup; // ✅ Usa "!" para indicar que se inicializará antes de ser usado
   mantenimientos: Mantenimiento[] = [];
   editingMantenimiento: Mantenimiento | null = null;
 
-  constructor(private fb: FormBuilder, private mantenimientoService: MantenimientoService) {
+  constructor(private fb: FormBuilder, private mantenimientoService: MantenimientoService) {}
+
+  ngOnInit(): void {
+    this.initForm(); // ✅ Separa la inicialización del formulario en una función aparte
+    this.loadMantenimientos();
+  }
+
+  initForm() {
     this.mantenimientoForm = this.fb.group({
       soporte: ['', Validators.required],
       descripcion: ['', Validators.required],
@@ -22,10 +29,6 @@ export class MantenimientoComponent implements OnInit {
       tecnico: ['', Validators.required],
       productos: ['']
     });
-  }
-
-  ngOnInit(): void {
-    this.loadMantenimientos();
   }
 
   loadMantenimientos() {

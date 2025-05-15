@@ -1,10 +1,10 @@
-//import { Soporte } from './soporte.model';
 import { Empleado } from './empleado.model';
 import { Producto } from './producto.model';
+import { Soporte } from './soporte.model';
 
 export interface Mantenimiento {
   id: number;
-  //soporte: Soporte;
+  soporte: Soporte;
   descripcion: string;
   fechaProgramada: Date;
   estado: string;
