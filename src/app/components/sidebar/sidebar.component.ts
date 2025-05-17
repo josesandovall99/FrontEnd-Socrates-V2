@@ -87,6 +87,7 @@ export class SidebarComponent {
     { path: '/empleados', icon: 'fa-file-alt', label: 'Gestionar empleados' },
     { path: '/contratos', icon: 'fa-file-alt', label: 'Gestionar contratos' },
     { path: '/soportes', icon: 'fa-file-alt', label: 'Gestionar Soportes' },
+    { path: '/mantenimientos', icon: 'fa-file-alt', label: 'Gestionar Mantenimientos' },
   ];
 
  

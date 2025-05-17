@@ -1,66 +1,168 @@
-.mantenimiento-container {
-  width: 60%;
-  margin: auto;
-  background: #fff;
+/* Contenedor principal */
+.formulario {
+  max-width: 1200px;
+  margin: 2rem auto;
   padding: 2rem;
-  border-radius: 10px;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-h2, h3 {
-  text-align: center;
-  color: #1a237e;
-}
-
-.form-group {
   display: flex;
   flex-direction: column;
-  margin-bottom: 1rem;
+  gap: 2rem;
+  font-family: Arial, sans-serif;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  background-color: #f9f9f9;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
 }
 
-.form-group label {
+/* Fila de campos */
+.fila {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+/* Columna individual */
+.columna {
+  flex: 1 1 calc(25% - 1rem); /* Hasta 4 columnas por fila */
+  min-width: 220px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Etiquetas de campos */
+label {
+  margin-bottom: 0.3rem;
   font-weight: bold;
+  color: #333;
 }
 
+/* Inputs, selects y textareas */
 input, select, textarea {
-  padding: 0.8rem;
-  border: 1px solid #ddd;
-  border-radius: 6px;
+  padding: 0.5rem;
+  font-size: 0.9rem;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  transition: border-color 0.3s;
 }
 
-.btn-submit {
+input:focus, select:focus, textarea:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+/* Mensajes de error */
+.error small {
+  color: red;
+  font-size: 0.75rem;
+  margin-top: 0.2rem;
+}
+
+/* Botón */
+.boton-contenedor {
+  display: flex;
+  justify-content: center;
   width: 100%;
-  padding: 1rem;
-  background: #1e2875;
-  color: #fff;
+  margin-top: 2rem;
+}
+
+button {
+  padding: 0.8rem 1.5rem;
+  background-color: #1a237e;
   border: none;
+  color: white;
+  border-radius: 5px;
+  font-size: 1rem;
   cursor: pointer;
 }
 
-.btn-submit:hover {
-  background: #142166;
+button:hover {
+  background-color: #0056b3;
+}
+
+/* Tabla de mantenimientos */
+.seccion-tabla {
+  max-width: 1200px;
+  margin: 2rem auto;
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 2rem;
+  background-color: #f8f8f8;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+thead {
+  background-color: #1a237e;
+  color: white;
 }
 
 th, td {
-  padding: 1rem;
+  padding: 14px 18px;
   text-align: left;
   border-bottom: 1px solid #ddd;
+  font-size: 15px;
 }
 
-button {
-  padding: 0.5rem 1rem;
+tbody tr:hover {
+  background-color: #f0f8ff;
+}
+
+td:last-child {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+/* Estilos de botones en la tabla */
+td button {
+  background-color: #1a237e;
   border: none;
-  background: #38b6ff;
   color: white;
+  padding: 10px;
+  border-radius: 6px;
   cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
 }
 
-button:hover {
-  background: #1a237e;
+td button:hover {
+  background-color: #2980b9;
+}
+
+td button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+/* Estilos adicionales */
+.titulo-tabla {
+  text-align: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: #2c3e50;
+  margin-top: 40px;
+  margin-bottom: 20px;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* Responsive */
+@media (max-width: 800px) {
+  th, td {
+    padding: 10px;
+    font-size: 13px;
+  }
+
+  td:last-child {
+    flex-wrap: wrap;
+  }
+}
+
+/* Estilos para campos solo lectura */
+.readonly-style {
+  background-color: #f3f3f3;
+  opacity: 0.7;
+  color: #555;
+  pointer-events: none;
 }

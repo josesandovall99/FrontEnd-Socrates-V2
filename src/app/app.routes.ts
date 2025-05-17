@@ -10,6 +10,7 @@ import { ProductoComponent } from './components/Producto/producto.component';
 import { AuthGuard } from './auth.guard';
 import { AdministradorDashboardComponent } from './components/administrador/administrador.dashboard';
 import { SoporteComponent } from './components/soporte/soporte.component';
+import { MantenimientoComponent } from './components/mantenimiento/mantenimiento.component';
 
 
 export const routes: Routes = [
@@ -35,6 +36,12 @@ export const routes: Routes = [
   { 
     path: 'soportes', 
     component: SoporteComponent, 
+    canActivate: [AuthGuard], 
+    data: { userType: 'secretaria' } 
+  },
+  { 
+    path: 'mantenimientos', 
+    component: MantenimientoComponent, 
     canActivate: [AuthGuard], 
     data: { userType: 'secretaria' } 
   },

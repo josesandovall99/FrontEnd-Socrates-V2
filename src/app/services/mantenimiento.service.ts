@@ -7,7 +7,7 @@ import { Mantenimiento } from '../models/mantenimiento.model';
   providedIn: 'root'
 })
 export class MantenimientoService {
-  private apiUrl = 'https://backendsocrates.onrender.com/api/mantenimientos'; // URL del backend
+  private apiUrl = 'http://localhost:8080/api/v1/mantenimientos'; // URL del backend
 
   constructor(private http: HttpClient) {}
 

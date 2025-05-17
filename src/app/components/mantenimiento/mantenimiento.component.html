@@ -1,40 +1,47 @@
 <div class="contenedor">
   <!-- Sección 1: Formulario de Mantenimiento -->
-  <div class="seccion-formulario">
-    <h2>Administración de Mantenimientos</h2>
-    <form [formGroup]="mantenimientoForm" (ngSubmit)="saveMantenimiento()" class="formulario">
-      
-      <div class="columna">
-        <label>Soporte:</label>
-        <input type="text" formControlName="soporte" required>
+  <div class="contenedor">
+    <div class="seccion-formulario">
+      <h2>Administración de Mantenimientos</h2>
+      <form [formGroup]="mantenimientoForm" (ngSubmit)="onSubmit()" class="formulario">
+        <div class="columna">
+          <label>Fecha Programada:</label>
+          <input type="date" formControlName="fechaProgramada" required>
+          <small *ngIf="mantenimientoForm.controls['fechaProgramada'].hasError('fechaInvalida')">
+            ⚠ La fecha del mantenimiento no puede ser anterior a la fecha actual.
+          </small>
 
-        <label>Descripción:</label>
-        <textarea formControlName="descripcion" required></textarea>
+          <label>Descripción:</label>
+          <textarea formControlName="descripcion" required></textarea>
+        </div>
 
-        <label>Fecha Programada:</label>
-        <input type="date" formControlName="fechaProgramada" required>
-      </div>
+        <div class="columna">
+          <label>Estado:</label>
+          <input type="text" formControlName="estado" [disabled]="true">
 
-      <div class="columna">
-        <label>Estado:</label>
-        <select formControlName="estado">
-          <option value="Pendiente">Pendiente</option>
-          <option value="En proceso">En proceso</option>
-          <option value="Completado">Completado</option>
-        </select>
+          <label>Soporte:</label>
+          <select formControlName="soporte">
+            <option *ngFor="let soporte of listaSoportes" [value]="soporte.id">{{ soporte.descripcion }}</option>
+          </select>
 
-        <label>Técnico:</label>
-        <select formControlName="tecnico">
-          <option value="">Seleccionar técnico</option>
-          <option *ngFor="let tecnico of listaTecnicos" [value]="tecnico.id">
-            {{ tecnico.nombre }} - {{ tecnico.numeroDocumento }}
-          </option>
-        </select>
-      </div>
+          <label>Técnico:</label>
+          <select formControlName="tecnico">
+            <option value="">Seleccionar técnico</option>
+            <option *ngFor="let tecnico of listaTecnicos" [value]="tecnico.id">
+              {{ tecnico.primerNombre }} - {{ tecnico.numeroIdentificacion }}
+            </option>
+          </select>
 
-      <button type="submit" *ngIf="!editingMantenimiento">Registrar Mantenimiento</button>
-      <button type="button" *ngIf="editingMantenimiento" (click)="saveMantenimiento()">Guardar cambios</button>
-    </form>
+          <label>Productos utilizados:</label>
+          <select formControlName="productos" multiple>
+            <option *ngFor="let producto of listaProductos" [value]="producto.id">{{ producto.nombre }}</option>
+          </select>
+        </div>
+
+        <button type="submit" *ngIf="!mantenimientoSeleccionado">Registrar Mantenimiento</button>
+        <button type="button" *ngIf="mantenimientoSeleccionado" (click)="guardarEdicion()">Guardar cambios</button>
+      </form>
+    </div>
   </div>
 
   <!-- Sección 2: Tabla de Mantenimientos -->
@@ -46,25 +53,37 @@
           <th>Fecha Programada</th>
           <th>Descripción</th>
           <th>Estado</th>
+          <th>Soporte</th>
           <th>Técnico</th>
+          <th>Productos</th>
           <th>Acciones</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let mantenimiento of mantenimientos">
-          <td>{{ mantenimiento.fechaProgramada | date:'shortDate' }}</td>
+        <tr *ngFor="let mantenimiento of listaMantenimientos">
+          <td>{{ mantenimiento.fechaProgramada }}</td> 
           <td>{{ mantenimiento.descripcion }}</td>
           <td>{{ mantenimiento.estado }}</td>
+          <td>{{ mantenimiento.soporte ? mantenimiento.soporte.descripcion : 'No asignado' }}</td>
           <td>
-            {{ mantenimiento.tecnico ? mantenimiento.tecnico.nombre + ' - ' + mantenimiento.tecnico.numeroDocumento : 'No asignado' }}
+            {{ mantenimiento.tecnico ? mantenimiento.tecnico.primerNombre + ' - ' + mantenimiento.tecnico.numeroIdentificacion : 'No asignado' }}
           </td>
           <td>
-            <button (click)="editMantenimiento(mantenimiento)" [disabled]="mantenimiento.estado === 'Completado'">
-              <i class="fas fa-pencil-alt"></i> <!-- Ícono de lápiz -->
+            <ul>
+              <li *ngFor="let producto of mantenimiento.productos">{{ producto.nombre }}</li>
+            </ul>
+          </td>
+          <td>
+            <button (click)="editarMantenimiento(mantenimiento)" [disabled]="mantenimiento.estado === 'Finalizado'">
+              <i class="fas fa-pencil-alt"></i> 
             </button>
-
-            <button *ngIf="mantenimiento.estado !== 'Completado'" (click)="deleteMantenimiento(mantenimiento.id)">
-              <i class="fas fa-trash"></i> <!-- Ícono de basura -->
+  
+            <button *ngIf="mantenimiento.estado === 'Pendiente'" (click)="cambiarEstado(mantenimiento, 'Finalizado')">
+              <i class="fas fa-trash"></i> 
+            </button>
+  
+            <button *ngIf="mantenimiento.estado === 'Finalizado'" (click)="cambiarEstado(mantenimiento, 'Pendiente')">
+              <i class="fas fa-check-circle"></i> 
             </button>
           </td>
         </tr>
