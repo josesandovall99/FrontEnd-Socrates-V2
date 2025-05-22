@@ -90,36 +90,47 @@ export class MantenimientoComponent implements OnInit {
     };
   }
 
-  onSubmit(): void {
-    if (this.mantenimientoForm.invalid) {
-      window.alert('❌ No se pudo registrar el mantenimiento. Verifica las validaciones.');
-      return;
-    }
-
-    const nuevoMantenimiento: Mantenimiento = {
-  ...this.mantenimientoForm.value,
-  fechaProgramada: this.formatearFecha(new Date(this.mantenimientoForm.value.fechaProgramada)),
-  estado: 'Pendiente',
-  soporte: { id: this.mantenimientoForm.value.soporte }, // ✅ Enviar un objeto con el ID del soporte
-  tecnico: { id: this.mantenimientoForm.value.tecnico }, // ✅ Enviar técnico como objeto
-  productos: this.mantenimientoForm.value.productos.map((id: number) => ({ id })) // ✅ Asegurar que los productos sean objetos con ID
-};
-
-
-    console.log("JSON enviado al backend:", nuevoMantenimiento);
-
-    this.mantenimientoService.create(nuevoMantenimiento).subscribe(
-      response => {
-        window.alert('✔ Mantenimiento registrado correctamente.');
-        this.obtenerMantenimientos();
-        this.mantenimientoForm.reset();
-      },
-      error => {
-        console.error('❌ Error al registrar el mantenimiento:', error);
-        window.alert('❌ Hubo un problema al registrar el mantenimiento. Revisa la consola para más detalles.');
-      }
-    );
+onSubmit(): void {
+  if (this.mantenimientoForm.invalid) {
+    window.alert('❌ No se pudo registrar el mantenimiento. Verifica las validaciones.');
+    return;
   }
+
+  const productosSeleccionados = this.mantenimientoForm.value.productos;
+  const sinStock = productosSeleccionados.some((id: number) => {
+    const producto = this.listaProductos.find(p => p.id === id);
+    return producto && producto.cantidad < 1;
+  });
+
+  if (sinStock) {
+    window.alert('❌ Uno o más productos seleccionados no tienen stock disponible.');
+    return;
+  }
+
+  const nuevoMantenimiento: Mantenimiento = {
+    ...this.mantenimientoForm.value,
+    fechaProgramada: this.formatearFecha(new Date(this.mantenimientoForm.value.fechaProgramada)),
+    estado: 'Pendiente',
+    soporte: { id: this.mantenimientoForm.value.soporte },
+    tecnico: { id: this.mantenimientoForm.value.tecnico },
+    productos: this.mantenimientoForm.value.productos.map((id: number) => ({ id }))
+  };
+
+  console.log("JSON enviado al backend:", nuevoMantenimiento);
+
+  this.mantenimientoService.create(nuevoMantenimiento).subscribe(
+    response => {
+      window.alert('✔ Mantenimiento registrado correctamente.');
+      this.obtenerMantenimientos();
+      this.mantenimientoForm.reset();
+    },
+    error => {
+      console.error('❌ Error al registrar el mantenimiento:', error);
+      window.alert('❌ Hubo un problema al registrar el mantenimiento. Revisa la consola para más detalles.');
+    }
+  );
+}
+
 
   editarMantenimiento(mantenimiento: Mantenimiento): void {
     this.mantenimientoSeleccionado = mantenimiento;
@@ -130,29 +141,39 @@ export class MantenimientoComponent implements OnInit {
   }
 
   guardarEdicion(): void {
-    if (this.mantenimientoSeleccionado) {
-      const mantenimientoActualizado: Mantenimiento = {
-        ...this.mantenimientoSeleccionado,
-        ...this.mantenimientoForm.value,
-        fechaProgramada: this.formatearFecha(new Date(this.mantenimientoForm.value.fechaProgramada))
-      };
+  if (this.mantenimientoSeleccionado) {
+    const formValue = this.mantenimientoForm.value;
 
-      console.log("JSON enviado al backend:", mantenimientoActualizado);
+    const productosIds = Array.isArray(formValue.productos)
+      ? formValue.productos
+      : [formValue.productos]; // convertir a array si es valor único
 
-      this.mantenimientoService.update(mantenimientoActualizado.id, mantenimientoActualizado).subscribe(
-        response => {
-          window.alert('✔ Mantenimiento actualizado correctamente.');
-          this.obtenerMantenimientos();
-          this.mantenimientoSeleccionado = null;
-          this.mantenimientoForm.reset();
-        },
-        error => {
-          console.error('❌ Error al actualizar el mantenimiento:', error);
-          window.alert('❌ Hubo un problema al actualizar el mantenimiento. Revisa la consola para más detalles.');
-        }
-      );
-    }
+    const mantenimientoActualizado: Mantenimiento = {
+      ...this.mantenimientoSeleccionado,
+      ...formValue,
+      fechaProgramada: this.formatearFecha(new Date(formValue.fechaProgramada)),
+      soporte: { id: +formValue.soporte },
+      tecnico: { id: +formValue.tecnico },
+      productos: productosIds.map((id: number) => ({ id: +id }))
+    };
+
+    console.log("JSON enviado al backend:", mantenimientoActualizado);
+
+    this.mantenimientoService.update(mantenimientoActualizado.id, mantenimientoActualizado).subscribe(
+      response => {
+        window.alert('✔ Mantenimiento actualizado correctamente.');
+        this.obtenerMantenimientos();
+        this.mantenimientoSeleccionado = null;
+        this.mantenimientoForm.reset();
+      },
+      error => {
+        console.error('❌ Error al actualizar el mantenimiento:', error);
+        window.alert('❌ Hubo un problema al actualizar el mantenimiento. Revisa la consola para más detalles.');
+      }
+    );
   }
+}
+
 
   cambiarEstado(mantenimiento: Mantenimiento, estado: string): void {
     const mantenimientoActualizado: Mantenimiento = { ...mantenimiento, estado };
